@@ -1,0 +1,45 @@
+apply plugin: 'idea'
+apply plugin: 'java-library'
+
+group 'fr.hyriode'
+version '1.0.0'
+archivesBaseName = 'HyriBedWars'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+
+    maven {
+        name = 'Hyrame_maven'
+        url = 'https://maven.pkg.github.com/Hyriode/Hyrame/'
+
+        credentials {
+            username System.getenv('USERNAME')
+            password System.getenv('TOKEN')
+        }
+    }
+}
+
+dependencies {
+    implementation group: 'org.spigotmc', name: 'spigot', version: '1.8.8-R0.1-SNAPSHOT'
+    implementation 'fr.hyriode:hyrame:1.1.5'
+}
+
+processResources {
+    filter {
+        it.replace('@version@', project.version)
+    }
+}

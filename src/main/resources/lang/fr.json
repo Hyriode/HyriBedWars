@@ -1,0 +1,21 @@
+{
+  "team.blue.display": "&9Bleu",
+  "team.red.display": "&cRouge",
+  "team.green.display": "&aVert",
+  "team.yellow.display": "&eJaune",
+  "team.aqua.display": "&bAqua",
+  "team.pink.display": "&dRose",
+  "team.white.display": "&fBlanc",
+  "team.gray.display": "&8Gris",
+
+  "scoreboard.you.display": "&7(TOI)",
+
+  "game.next-event.diamond.II": "&bDiamant II",
+  "game.next-event.diamond.III": "&bDiamant III",
+  "game.next-event.emerald.II": "&aEmeraude II",
+  "game.next-event.emerald.III": "&aEmeraude III",
+  "game.next-event.beds-destroy": "&cLits détruits",
+  "game.next-event.dragons-spawn": "&cApparition des dragons",
+  "game.next-event.game-end": "&cFin de la partie"
+
+}

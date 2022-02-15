@@ -1,0 +1,21 @@
+{
+  "team.blue.display": "&9Blue",
+  "team.red.display": "&cRed",
+  "team.green.display": "&aGreen",
+  "team.yellow.display": "&eYellow",
+  "team.aqua.display": "&bAqua",
+  "team.pink.display": "&dPink",
+  "team.white.display": "&fWhite",
+  "team.gray.display": "&8Gray",
+
+  "scoreboard.you.display": "&7(YOU)",
+
+
+  "game.next-event.diamond.II": "&bDiamond II",
+  "game.next-event.diamond.III": "&bDiamond III",
+  "game.next-event.emerald.II": "&aEmerald II",
+  "game.next-event.emerald.III": "&aEmerald III",
+  "game.next-event.beds-destroy": "&cBeds destroy",
+  "game.next-event.dragons-spawn": "&cDragons spawn",
+  "game.next-event.game-end": "&cGame end"
+}
