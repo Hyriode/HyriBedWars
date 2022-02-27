@@ -10,12 +10,171 @@
 
   "scoreboard.you.display": "&7(YOU)",
 
-
   "game.next-event.diamond.II": "&bDiamond II",
   "game.next-event.diamond.III": "&bDiamond III",
   "game.next-event.emerald.II": "&aEmerald II",
   "game.next-event.emerald.III": "&aEmerald III",
   "game.next-event.beds-destroy": "&cBeds destroy",
   "game.next-event.dragons-spawn": "&cDragons spawn",
-  "game.next-event.game-end": "&cGame end"
+  "game.next-event.game-end": "&cGame end",
+
+  "npc.shop.name": "ITEM SHOP",
+  "npc.upgrade.name": "UPGRADES",
+
+  "tier.1": "I",
+  "tier.2": "II",
+  "tier.3": "III",
+  "tier.4": "IV",
+  "tier.5": "V",
+
+  "inv.shop.navbar.separator.title": "Categories",
+  "inv.shop.navbar.separator.lore": "Items",
+  "inv.shop.click.view": "Click to view!",
+  "inv.shop.navbar.quick_buy.title": "Quick Buy",
+  "inv.shop.navbar.blocks.title": "Blocks",
+  "inv.shop.navbar.melee.title": "Melee",
+  "inv.shop.navbar.armor.title": "Armor",
+  "inv.shop.navbar.tools.title": "Tools",
+  "inv.shop.navbar.ranged.title": "Ranged",
+  "inv.shop.navbar.potions.title": "Potions",
+  "inv.shop.navbar.utility.title": "Utility",
+
+  "inv.shop.quick_buy.tracker.name": "Tracker Shop",
+  "inv.shop.quick_buy.tracker.lore1": "Purchase tracking upgrade for",
+  "inv.shop.quick_buy.tracker.lore2": "your compass which will track",
+  "inv.shop.quick_buy.tracker.lore3": "each player on a specific team",
+  "inv.shop.quick_buy.tracker.lore4": "until you die",
+
+  "inv.shop.quick_buy.hotbar.name": "Hotbar Manager",
+  "inv.shop.quick_buy.hotbar.lore1": "Edit preferred slots for your",
+  "inv.shop.quick_buy.hotbar.lore2": "items per category",
+  "inv.shop.click.edit": "Click to edit!",
+
+  "inv.shop.empty.name": "Empty Slot!",
+  "inv.shop.empty.lore1": "This is a Quick Buy Slot!",
+  "inv.shop.empty.lore2": "any item in the",
+  "inv.shop.empty.lore3": "shop to add it here",
+  "inv.shop.sneack.click": "Sneack Click",
+
+  "inv.shop.enough.item": "You don't have enough",
+  "inv.shop.click.purchase": "Click to purchase!",
+
+  "shop.item.iron.name": "Iron",
+  "shop.item.gold.name": "Gold",
+  "shop.item.diamond.name": "Diamond",
+  "shop.item.emerald.name": "Emerald",
+  "shop.item.coal.name": "Coal",
+
+  "shop.item.wool.name": "Wool",
+  "shop.item.wool.lore": "Great for bridging across\nislands. Turns into your team's\ncolor.",
+
+  "shop.item.hard_clay.name": "Hardened Clay",
+  "shop.item.hard_clay.lore": "Basic block to defend your bed.",
+
+  "shop.item.glass.name": "Blast-Proof Glass",
+  "shop.item.glass.lore": "Immune to explosions.",
+
+  "shop.item.end_stone.name": "End Stone",
+  "shop.item.end_stone.lore": "Solid block to defend your bed.",
+
+  "shop.item.ladder.name": "Ladder",
+  "shop.item.ladder.lore": "Useful to save cats stuck in\ntrees.",
+
+  "shop.item.wood.name": "Wood",
+  "shop.item.wood.lore": "Good block to defend your bed.\nStrong against pickaxes.",
+
+  "shop.item.obsidian.name": "Obsidian",
+  "shop.item.obsidian.lore": "Extreme protection for your bed.",
+
+  "shop.item.stone_sword.name": "Stone Sword",
+  "shop.item.iron_sword.name": "Iron Sword",
+  "shop.item.diamond_sword.name": "Diamond Sword",
+  "shop.item.stick.name": "Stick (Knockback I)",
+
+  "shop.item.chainmail_armor.name": "Permanent Chainmail Armor",
+  "shop.item.chainmail_armor.lore": "Chainmail leggings and boots\nwhich you will always spawn\nwith.",
+
+  "shop.item.iron_armor.name": "Permanent Iron Armor",
+  "shop.item.iron_armor.lore": "Iron leggings and boots which\nyou will always spawn with",
+
+  "shop.item.diamond_armor.name": "Permanent Diamond Armor",
+  "shop.item.diamond_armor.lore": "Diamond leggings and boots which\nyou will always spawn with",
+
+  "shop.item.shears.name": "Permanent Shears",
+  "shop.item.shears.lore": "Great to get rid of wool. You\nwill always spawn with these\nshears.",
+
+  "shop.item.pickaxe_tier1.name": "Wooden Pickaxe (Efficiency I)",
+  "shop.item.pickaxe_tier2.name": "Iron Pickaxe (Efficiency II)",
+  "shop.item.pickaxe_tier3.name": "Gold Pickaxe (Efficiency III, Sharpness II)",
+  "shop.item.pickaxe_tier4.name": "Diamond Pickaxe (Efficiency III)",
+  "shop.item.pickaxe.lore": "This is an upgradable item.\nIt will lose 1 tier upon death!\n\nYou will permanently respawn\nwith at least the lower tier.",
+
+  "shop.item.axe_tier1.name": "Wooden Axe (Efficiency I)",
+  "shop.item.axe_tier2.name": "Iron Axe (Efficiency I)",
+  "shop.item.axe_tier3.name": "Gold Axe (Efficiency II)",
+  "shop.item.axe_tier4.name": "Diamond Axe (Efficiency III)",
+  "shop.item.axe.lore": "This is an upgradable item.\nIt will lose 1 tier upon death!\n\nYou will permanently respawn\nwith at least the lower tier.",
+
+  "shop.item.arrow.name": "Arrow",
+  "shop.item.bow.name": "Bow",
+  "shop.item.bow_power.name": "Bow (Power I)",
+  "shop.item.bow_punch.name": "Bow (Power I, Punch I)",
+
+  "shop.item.potion_speed.name": "Potion of Speed II (45 seconds)",
+  "shop.item.potion_jump.name": "Potion of Speed V (45 seconds)",
+  "shop.item.potion_invisibility.name": "Potion of Invisibility (30 seconds)",
+
+  "shop.item.golden_apple.name": "Golden Apple",
+  "shop.item.golden_apple.lore": "Well-rounded healing",
+  "shop.item.bedbug.name": "Bedbug",
+  "shop.item.bedbug.lore": "Spawns silverfish where the\nsnowball lands to distract your\nenemies. Lasts 15 seconds",
+  "shop.item.dream_defender.name": "Dream Defender",
+  "shop.item.dream_defender.lore": "Iron Golem to help defend your\nbase. Lasts 4 minutes.",
+  "shop.item.fireball.name": "Fireball",
+  "shop.item.fireball.lore": "Right-click to launch! Great to\nknock back enemies walking on\nthin bridges.",
+  "shop.item.tnt.name": "TNT",
+  "shop.item.tnt.lore": "Instantly ignites, appropriate\nto explode things!",
+  "shop.item.ender_pearl.name": "Ender Pearl",
+  "shop.item.ender_pearl.lore": "The quickest way to invade enemy\nbases.",
+  "shop.item.water_bucket.name": "Water Bucket",
+  "shop.item.water_bucket.lore": "Great to slow down approaching\nenemies. Can also protect\nagainst TNT.",
+  "shop.item.bridge_egg.name": "Bridge Egg",
+  "shop.item.bridge_egg.lore": "This egg creates a bridge in its\ntrail after being thrown.",
+  "shop.item.magic_milk.name": "Magic Milk",
+  "shop.item.magic_milk.lore": "Avoid triggering traps for 30\nseconds after consuming.",
+  "shop.item.sponge.name": "Sponge",
+  "shop.item.sponge.lore": "Great for soaking up water.",
+  "shop.item.compact_tower.name": "Compact Pop-up Tower",
+  "shop.item.compact_tower.lore": "Place a pop-up defence!",
+
+  "inv.upgrade.separator.title": "Purchasable",
+  "inv.upgrade.separator.lore": "Traps Queue",
+
+  "upgrade.sharpness.name": "Sharpened Swords",
+  "upgrade.sharpness.lore": "Your team permanently gains\nSharpness I on all swords and\naxes!",
+
+  "upgrade.reinforced_armor.name": "Reinforced Armor",
+  "upgrade.reinforced_armor.lore": "Your team permanently gains\nProtection on all armor pieces!",
+  "upgrade.protection1.name": "Protection I",
+  "upgrade.protection2.name": "Protection II",
+  "upgrade.protection3.name": "Protection III",
+  "upgrade.protection4.name": "Protection IV",
+
+  "upgrade.maniac_miner.name": "Maniac Miner",
+  "upgrade.maniac_miner.lore": "All players on your team\npermanently gain Haste!",
+  "upgrade.haste1.name": "Haste I",
+  "upgrade.haste2.name": "Haste II",
+
+  "upgrade.forge.name": "Iron Forge",
+  "upgrade.forge.lore": "Upgrade resource spawning on\nyour island!",
+  "upgrade.forge1.name": "+50% Resources",
+  "upgrade.forge2.name": "+100% Resources",
+  "upgrade.forge3.name": "Spawn emeralds",
+  "upgrade.forge4.name": "+200% Resources",
+
+  "upgrade.heal_pool.name": "Heal Pool",
+  "upgrade.heal_pool.lore": "Creates a Regeneration field\naround your base!",
+
+  "upgrade.dragon_buff.name": "Dragon Buff",
+  "upgrade.dragon_buff.lore": "Your team will have 2 dragons\ninstead of 1 during deathmatch!"
 }

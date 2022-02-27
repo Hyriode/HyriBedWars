@@ -20,6 +20,7 @@ repositories {
     mavenCentral()
     mavenLocal()
 
+    maven { url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/' }
     maven { url = 'https://oss.sonatype.org/content/groups/public/' }
 
     maven {
@@ -34,12 +35,21 @@ repositories {
 }
 
 dependencies {
-    implementation group: 'org.spigotmc', name: 'spigot', version: '1.8.8-R0.1-SNAPSHOT'
-    implementation 'fr.hyriode:hyrame:1.1.5'
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'fr.hyriode:hyrame:1.1.6'
 }
 
 processResources {
     filter {
         it.replace('@version@', project.version)
+    }
+}
+
+task deploy(dependsOn: build) {
+    doLast {
+        copy {
+            from "$buildDir/libs/HyriBedWars-1.0.0.jar"
+            into "$buildDir/libs/BWServerTest/plugins"
+        }
     }
 }

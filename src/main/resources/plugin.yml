@@ -1,5 +1,5 @@
 name: HyriBedWars
-main: fr.hyriode.hyribedwars.HyriBedWars
-author: Akkashi
+main: fr.hyriode.bedwars.HyriBedWars
+author: Akkashi, KinjerBueno
 depend: [Hyrame]
 version: 1.0.0

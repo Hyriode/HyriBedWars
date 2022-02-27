@@ -8,7 +8,7 @@
   "team.white.display": "&fBlanc",
   "team.gray.display": "&8Gris",
 
-  "scoreboard.you.display": "&7(TOI)",
+  "scoreboard.you.display": "&7(VOUS)",
 
   "game.next-event.diamond.II": "&bDiamant II",
   "game.next-event.diamond.III": "&bDiamant III",
@@ -16,6 +16,59 @@
   "game.next-event.emerald.III": "&aEmeraude III",
   "game.next-event.beds-destroy": "&cLits détruits",
   "game.next-event.dragons-spawn": "&cApparition des dragons",
-  "game.next-event.game-end": "&cFin de la partie"
+  "game.next-event.game-end": "&cFin de la partie",
+
+  "npc.shop.name": "BOUTIQUE D'OBJETS",
+  "npc.upgrade.name": "AMELIORATIONS",
+
+  "inv.shop.navbar.separator.title": "Categories",
+  "inv.shop.navbar.separator.lore": "Items",
+  "inv.shop.navbar.lore": "Clique pour voir !",
+  "inv.shop.navbar.quick_buy.title": "Achat Rapide",
+  "inv.shop.navbar.blocks.title": "Blocs",
+  "inv.shop.navbar.melee.title": "Mêlée",
+  "inv.shop.navbar.armor.title": "Armures",
+  "inv.shop.navbar.tools.title": "Outils",
+  "inv.shop.navbar.ranged.title": "Distance",
+  "inv.shop.navbar.potions.title": "Potions",
+  "inv.shop.navbar.utility.title": "Utilitaire",
+
+  "inv.shop.quick_buy.tracker.name": "Tracker Shop",
+  "inv.shop.quick_buy.tracker.lore1": "Purchase tracking upgrade for",
+  "inv.shop.quick_buy.tracker.lore2": "your compass which will track",
+  "inv.shop.quick_buy.tracker.lore3": "each player on a specific team",
+  "inv.shop.quick_buy.tracker.lore4": "until you die",
+
+  "inv.shop.quick_buy.hotbar.name": "Gestionnaire de la Hotbar",
+  "inv.shop.quick_buy.hotbar.lore1": "Modifiez vos slots préférés pour vos",
+  "inv.shop.quick_buy.hotbar.lore2": "items par categorie",
+  "inv.shop.click.edit": "Click to edit!",
+
+  "inv.shop.empty.name": "Slot Vide !",
+  "inv.shop.empty.lore1": "Ceci est un Slot d'achat rapide!",
+  "inv.shop.empty.lore2": "n'importe quel item dans la",
+  "inv.shop.empty.lore3": "boutique pour l'ajouter ici",
+  "inv.shop.sneack.click": "Sneack Clique",
+
+  "shop.item.wool.name": "Wool",
+  "shop.item.wool.lore": "Great for bridging across islands. Turns into your team's color.",
+
+  "shop.item.hard_clay.name": "Hardened Clay",
+  "shop.item.hard_clay.lore": "Basic block to defend your bed.",
+
+  "shop.item.glass.name": "Blast-Proof Glass",
+  "shop.item.glass.lore": "Immune to explosions.",
+
+  "shop.item.end_stone.name": "End Stone",
+  "shop.item.end_stone.lore": "Solid block to defend your bed.",
+
+  "shop.item.ladder.name": "Ladder",
+  "shop.item.ladder.lore": "Useful to save cats stuck in trees.",
+
+  "shop.item.wood.name": "Wood",
+  "shop.item.wood.lore": "Good block to defend your bed. Strong against pickaxes.",
+
+  "shop.item.obsidian.name": "Obsidian",
+  "shop.item.obsidian.lore": "Extreme protection for your bed."
 
 }
