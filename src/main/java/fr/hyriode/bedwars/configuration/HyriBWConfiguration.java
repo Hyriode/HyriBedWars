@@ -12,6 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Supplier;
+import java.util.stream.Collectors;
 
 public class HyriBWConfiguration implements IHyriConfiguration {
 
@@ -35,6 +36,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
     private Location killLoc;
     private final LocationEntry killLocEntry;
+
+    private List<Location> diamondLocs;
+    private final ListEntry diamondLocsEntry;
 
     private final FileConfiguration config;
     private final HyriBedWars plugin;
@@ -64,6 +68,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.killLoc = DEFAULT_LOCATION.get();
         this.killLocEntry = new LocationEntry("kill-location", this.config);
 
+        this.diamondLocs = new ArrayList<>();
+        this.diamondLocsEntry = new ListEntry("diamond-locations", this.config);
+
         this.registerTeamsConfig();
     }
 
@@ -83,6 +90,8 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.gameAreaPos2Entry.setDefault(this.gameAreaPos2);
 
         this.killLocEntry.setDefault(this.killLoc);
+
+        this.diamondLocsEntry.setDefault(this.diamondLocs);
 
         this.createTeamsConfig();
 
@@ -108,6 +117,8 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
         this.killLoc = this.killLocEntry.get();
 
+        this.diamondLocs = this.diamondLocsEntry.get().stream().map(o -> (Location)o).collect(Collectors.toList());
+
         this.loadTeamConfig();
     }
 
@@ -130,6 +141,8 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
         this.killLocEntry.set(this.killLoc);
 
+        this.diamondLocsEntry.set(this.diamondLocs);
+
         this.saveTeamConfig();
 
         this.plugin.saveConfig();
@@ -151,11 +164,7 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     }
 
     public Team getTeam(String teamName){
-        return this.teams.stream().filter(team1 -> {
-            System.out.println(teamName);
-            System.out.println(team1);
-            return team1.getName().equals(teamName);
-        }).findFirst().get();
+        return this.teams.stream().filter(team1 -> team1.getName().equals(teamName)).findFirst().get();
     }
 
     public Location getWaitingSpawn() {
@@ -182,6 +191,10 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         return killLoc;
     }
 
+    public List<Location> getDiamondLocations() {
+        return diamondLocs;
+    }
+
     public class Team implements IHyriConfiguration {
 
         private final String name;
@@ -206,9 +219,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
         private Location respawnLocation;
         private final LocationEntry respawnLocationEntry;
-
-        private Location bedLocation;
-        private final LocationEntry bedLocationEntry;
 
         public Team(String key, String name) {
             key += ".";
@@ -242,9 +252,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
             this.upgradeNPCLocation = DEFAULT_LOCATION.get();
             this.upgradeNPCLocationEntry = new LocationEntry(npcKey + "upgrade.location", this.getConfig());
-
-            this.bedLocation = DEFAULT_LOCATION.get();
-            this.bedLocationEntry = new LocationEntry(baseKey + "bed.location", this.getConfig());
         }
 
         @Override
@@ -259,7 +266,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
             this.respawnLocationEntry.setDefault(this.respawnLocation);
             this.shopNPCLocationEntry.setDefault(this.shopNPCLocation);
             this.upgradeNPCLocationEntry.setDefault(this.upgradeNPCLocation);
-            this.bedLocationEntry.setDefault(this.bedLocation);
         }
 
         @Override
@@ -274,7 +280,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
             this.respawnLocation = this.respawnLocationEntry.get();
             this.shopNPCLocation = this.shopNPCLocationEntry.get();
             this.upgradeNPCLocation = this.upgradeNPCLocationEntry.get();
-            this.bedLocation = this.bedLocationEntry.get();
         }
 
         @Override
@@ -289,7 +294,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
             this.respawnLocationEntry.set(this.respawnLocation);
             this.shopNPCLocationEntry.set(this.shopNPCLocation);
             this.upgradeNPCLocationEntry.set(this.upgradeNPCLocation);
-            this.bedLocationEntry.set(this.bedLocation);
         }
 
         @Override
@@ -331,10 +335,6 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
         public Location getRespawnLocation() {
             return respawnLocation;
-        }
-
-        public Location getBedLocation() {
-            return bedLocation;
         }
 
         public Area getBaseArea(){

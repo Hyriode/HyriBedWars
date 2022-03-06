@@ -1,8 +1,9 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable;
 
-import fr.hyriode.bedwars.game.npc.inventory.EHyriBWShopNavBar;
-import fr.hyriode.bedwars.game.npc.inventory.shop.ItemShop;
-import fr.hyriode.bedwars.game.npc.inventory.shop.ItemShopStack;
+import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShop;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 
@@ -10,11 +11,11 @@ public class ArmorBW extends ItemShop {
 
     private final int level;
 
-    private ItemStack leggings;
-    private ItemStack boots;
+    private Material leggings;
+    private Material boots;
 
-    public ArmorBW(int level, Material material, String keyName, boolean permanent, ItemShopStack... price) {
-        super(new ItemStack(material), keyName, EHyriBWShopNavBar.ARMOR, permanent, null, price);
+    public ArmorBW(int level, Material material, String keyName, OreStack... price) {
+        super(keyName, new ItemStack(material), BWShopCategory.ARMOR, true, price);
         this.level = level;
     }
 
@@ -22,21 +23,25 @@ public class ArmorBW extends ItemShop {
         return level;
     }
 
-    public ArmorBW setLeggings(ItemStack leggings) {
+    public ArmorBW setLeggings(Material leggings) {
         this.leggings = leggings;
         return this;
     }
 
-    public ArmorBW setBoots(ItemStack boots) {
+    public ArmorBW setBoots(Material boots) {
         this.boots = boots;
         return this;
     }
 
-    public ItemStack getLeggings() {
+    public Material getLeggings() {
         return this.leggings;
     }
 
-    public ItemStack getBoots() {
+    public Material getBoots() {
         return this.boots;
+    }
+
+    public ArmorBW setHyriMaterial(BWMaterial material){
+        return (ArmorBW) super.setHyriMaterial(material);
     }
 }

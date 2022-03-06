@@ -1,7 +1,10 @@
 package fr.hyriode.bedwars.game;
 
 import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
-import fr.hyriode.bedwars.game.npc.inventory.BWUpgradeGui;
+import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
+import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
+import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
+import fr.hyriode.bedwars.game.npc.inventory.upgrade.BWUpgradeGui;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
@@ -19,9 +22,8 @@ import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.api.player.cosmetic.HyriBWNPCCosmetic;
 import fr.hyriode.bedwars.game.event.BWNextEvent;
-import fr.hyriode.bedwars.game.generator.BWGenerator;
-import fr.hyriode.bedwars.game.npc.EHyriBWNPCType;
-import fr.hyriode.bedwars.game.npc.inventory.pages.BWShopQuickBuy;
+import fr.hyriode.bedwars.game.npc.BWNPCType;
+import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWShopQuickBuy;
 import fr.hyriode.bedwars.game.scoreboard.BWGameScoreboard;
 import fr.hyriode.bedwars.game.tasks.BWGameTask;
 import fr.hyriode.bedwars.game.team.EBWGameTeam;
@@ -29,6 +31,7 @@ import fr.hyriode.bedwars.game.team.BWGameTeam;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 import java.util.*;
@@ -82,6 +85,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         p.setLevel(0);
         p.setExp(0.0F);
         p.teleport(this.plugin.getConfiguration().getWaitingSpawn());
+        p.getActivePotionEffects().forEach(potionEffect -> p.removePotionEffect(potionEffect.getType()));
 
         HyriGameItems.TEAM_CHOOSER.give(this.hyrame, p, 0);
         HyriGameItems.LEAVE_ITEM.give(this.hyrame, p, 8);
@@ -108,13 +112,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         this.teleportTeams();
 
-        this.teams.forEach(team -> {
-            if(team.getPlayers().size() == 0) {
-                ((BWGameTeam) team).setHasBed(false);
-                ((BWGameTeam) team).setEliminated(true);
-            }
-        });
-
         this.setScoreboardForPlayers();
     }
 
@@ -129,8 +126,10 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private void teleportTeams() {
         this.teams.forEach(gameTeam -> {
             gameTeam.getPlayers().forEach(player -> {
-                this.getPlayer(player.getUUID()).giveArmor();
+                this.getPlayer(player.getUUID()).respawn();
+                player.getPlayer().setGameMode(GameMode.SURVIVAL);
                 player.getPlayer().teleport(this.plugin.getConfiguration().getTeam(gameTeam.getName()).getRespawnLocation());
+
             });
         });
 
@@ -140,30 +139,42 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         for(HyriBWConfiguration.Team team : this.plugin.getConfiguration().getTeams()){
             Location loc = team.getGeneratorLocation();
 
-            Arrays.asList(BWGenerator.BASE_TIER_I.getGenerator().getItemsToGen()).forEach(generatorTier -> {
-                HyriGenerator generator = new HyriGenerator.Builder(this.plugin, loc, generatorTier).withItem(generatorTier.getItemStack()).build();
-                generator.create();
-            });
+            HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseIronGenerator.BASE_I)
+                    .withItem(BWGameOre.IRON.getItemStack()).build();
+            ironGenerator.create();
+            HyriGenerator goldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseGoldGenerator.BASE_I)
+                    .withItem(BWGameOre.GOLD.getItemStack()).build();
+            goldGenerator.create();
+        }
+
+        for(Location loc : this.plugin.getConfiguration().getDiamondLocations()){
+            HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
+                    .withItem(BWGameOre.DIAMOND.getItemStack())
+                    .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
+                    .build();
+            ironGenerator.create();
         }
     }
 
     private void spawnNPCs(){
         for(HyriGameTeam team : this.plugin.getGame().getTeams()) {
-            final Location locShop = this.plugin.getConfiguration().getTeam("blue").getShopNPCLocation();
-            final Location locUpgrade = this.plugin.getConfiguration().getTeam("blue").getUpgradeNPCLocation();
+            final Location locShop = ((BWGameTeam)team).getNPCShopLocation();
+            final Location locUpgrade = ((BWGameTeam)team).getNPCUpgradeLocation();
 
             final NPCSkin npcShopSkin = this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : EHyriBWNPCType.SHOP.getDefaultSkin();
+                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : BWNPCType.SHOP.getDefaultSkin();
             final NPCSkin npcUpgradeSkin = this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : EHyriBWNPCType.UPGRADE.getDefaultSkin();
+                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : BWNPCType.UPGRADE.getDefaultSkin();
 
             for (HyriGamePlayer player : this.players) {
                 final HyriLanguage language = HyriAPI.get().getPlayerSettingsManager()
                         .getPlayerSettings(player.getUUID()).getLanguage();
                 final NPC shop = NPCManager.createNPC(locShop, npcShopSkin,
-                        Collections.singletonList(ChatColor.BOLD + EHyriBWNPCType.SHOP.getLanguageName().getValue(language)));
+                        Collections.singletonList(ChatColor.BOLD + BWNPCType.SHOP.getLanguageName().getValue(language)));
                 final NPC upgrade = NPCManager.createNPC(locUpgrade, npcUpgradeSkin,
-                        Collections.singletonList(ChatColor.BOLD + EHyriBWNPCType.UPGRADE.getLanguageName().getValue(language)));
+                        Collections.singletonList(ChatColor.BOLD + BWNPCType.UPGRADE.getLanguageName().getValue(language)));
+                shop.setShowingToAll(false);
+                upgrade.setShowingToAll(false);
                 shop.addPlayer(player.getPlayer());
                 upgrade.addPlayer(player.getPlayer());
                 shop.setInteractCallback((rightClick, clicker) -> {

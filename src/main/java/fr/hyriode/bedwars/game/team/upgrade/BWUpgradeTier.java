@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.team.upgrade;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.ItemShopStack;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,9 +13,9 @@ public class BWUpgradeTier {
     private final String keyName;
     private final int tier;
     private final ItemStack itemStack;
-    private final List<ItemShopStack> price;
+    private final List<OreStack> price;
 
-    public BWUpgradeTier(int tier, String keyName, ItemStack itemStack, ItemShopStack... price){
+    public BWUpgradeTier(int tier, String keyName, ItemStack itemStack, OreStack... price){
         this.tier = tier;
         this.keyName = keyName;
         this.itemStack = itemStack;
@@ -38,7 +38,7 @@ public class BWUpgradeTier {
         return itemStack;
     }
 
-    public List<ItemShopStack> getPrice() {
+    public List<OreStack> getPrice() {
         return price;
     }
 }

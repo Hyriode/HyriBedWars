@@ -1,19 +1,21 @@
 package fr.hyriode.bedwars.game;
 
+import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.team.upgrade.BWUpgrade;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.EHyriBWShopNavBar;
-import fr.hyriode.bedwars.game.npc.inventory.shop.BWMaterial;
-import fr.hyriode.bedwars.game.npc.inventory.shop.ItemShop;
-import fr.hyriode.bedwars.game.npc.inventory.shop.ItemShopUpgradable;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShopUpgradable;
 import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
 import fr.hyriode.bedwars.game.scoreboard.BWGameScoreboard;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import org.bukkit.Material;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
@@ -27,8 +29,8 @@ public class BWGamePlayer extends HyriGamePlayer {
     private BWGameScoreboard scoreboard;
 
     private BWMaterial permanentArmor;
-    private final List<ItemShopUpgradable> itemsUpgradable = new ArrayList<>();
-    private boolean permanentShears;
+    private final List<ItemShopUpgradable> upgradableItems = new ArrayList<>();
+    private final List<BWMaterial> permanentItems = new ArrayList<>();
 
     public BWGamePlayer(HyriGame<?> game, Player player) {
         super(game, player);
@@ -36,22 +38,55 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public void respawn(){
         this.player.getInventory().addItem(new ItemStack(Material.WOOD_SWORD));
-        giveItemsPermanent();
-        giveArmor();
+        this.giveArmor();
+        this.giveItemsPermanent();
+        this.setUpgradesTeam();
+    }
+
+    public void setUpgradesTeam(){
+        this.getHyriTeam().getUpgrades().getUpgrades().forEach((upgrade, bwUpgradeTier) ->
+                this.setUpgradesTeam(upgrade, bwUpgradeTier.getTier()));
+    }
+
+    public void setUpgradesTeam(BWUpgrade upgrade, int tier){
+        switch (upgrade.getEUpgrade()){
+            case SHARPNESS:
+                InventoryBWUtils.changeItemsSlot(this.player, itemStack -> itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1),
+                        new ItemStack(Material.WOOD_SWORD), BWMaterial.STONE_SWORD.getItemShop().getItemStack(), BWMaterial.IRON_SWORD.getItemShop().getItemStack(), BWMaterial.DIAMOND_SWORD.getItemShop().getItemStack());
+                break;
+            case HASTE:
+                if(this.player.hasPotionEffect(PotionEffectType.FAST_DIGGING))
+                    this.player.removePotionEffect(PotionEffectType.FAST_DIGGING);
+                this.player.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 99999 * 20, tier));
+                break;
+            case PROTECTION_ARMOR:
+                for (ItemStack armor : this.player.getInventory().getArmorContents()) {
+                    armor.addEnchantment(Enchantment.PROTECTION_ENVIRONMENTAL, tier + 1);
+                }
+                break;
+        }
+    }
+
+    public void setUpgradesTeam(BWUpgrade upgrade){
+        if(this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade.getKeyName()) != null)
+            this.setUpgradesTeam(upgrade, this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade.getKeyName()).getTier());
     }
 
     public void giveItemsPermanent(){
-        //TODO à refaire un peu mieux
         Arrays.asList(BWMaterial.values()).forEach(material -> {
-            if(material.isUpgradable() && itemsUpgradable.contains((ItemShopUpgradable) material.getItemShop().getItem())){
+            if(!material.isItemUpgradable() && material.getItemShop().isPermanent() && this.hasPermanentItem(material)){
+                //TODO à faire selon les slots récents :c
                 this.player.getInventory().addItem(material.getItemShop().getItemStack());
+            }else if(material.isItemUpgradable() && upgradableItems.contains(material.getItemUpgradable())){
+                this.player.getInventory().addItem(this.getItemUpgradable(material).getTierItem().getItemStack());
             }
         });
     }
 
     public void giveArmor(){
         this.player.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET)
-                .withLeatherArmorColor(this.getTeam().getColor().getDyeColor().getColor()).build());
+                .withLeatherArmorColor(this.getTeam().getColor().getDyeColor().getColor())
+                .withEnchant(Enchantment.WATER_WORKER).build());
         this.player.getInventory().setChestplate(new ItemBuilder(Material.LEATHER_CHESTPLATE)
                 .withLeatherArmorColor(this.getTeam().getColor().getDyeColor().getColor()).build());
         if(permanentArmor == null){
@@ -60,14 +95,15 @@ public class BWGamePlayer extends HyriGamePlayer {
             this.player.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS)
                     .withLeatherArmorColor(this.getTeam().getColor().getDyeColor().getColor()).build());
         }else{
-            ArmorBW armorBW = ((ArmorBW)permanentArmor.getItemShop().getItem());
-            this.player.getInventory().setLeggings(armorBW.getLeggings());
-            this.player.getInventory().setBoots(armorBW.getBoots());
+            ArmorBW armorBW = permanentArmor.getArmor();
+            this.player.getInventory().setLeggings(new ItemStack(armorBW.getLeggings()));
+            this.player.getInventory().setBoots(new ItemStack(armorBW.getBoots()));
         }
+        this.player.updateInventory();
     }
 
     public void giveArmor(BWMaterial material){
-        this.setPermanentArmor(material);
+        this.setPermanentArmor(material.getArmor());
         if(!this.player.hasPotionEffect(PotionEffectType.INVISIBILITY))
             this.giveArmor();
     }
@@ -76,24 +112,25 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.scoreboard = scoreboard;
     }
 
-    public void setPermanentArmor(BWMaterial material){
-        ItemShop itemShop = material.getItemShop().getItem();
-        if(material.getCategory() == EHyriBWShopNavBar.ARMOR && itemShop instanceof ArmorBW){
-            if(this.permanentArmor == null || ((ArmorBW) this.permanentArmor.getItemShop().getItem()).getLevel() < ((ArmorBW)itemShop).getLevel())
-                this.permanentArmor = material;
-        }
+    public void setPermanentArmor(ArmorBW armor){
+        if(this.permanentArmor == null || this.permanentArmor.getArmor().getLevel() < armor.getLevel())
+            this.permanentArmor = armor.getHyriMaterial();
     }
 
     public BWMaterial getPermanentArmor() {
         return permanentArmor;
     }
 
-    public boolean hasPermanentShears() {
-        return permanentShears;
+    public boolean hasPermanentItem(BWMaterial material) {
+        return this.permanentItems.stream().anyMatch(oreStack -> oreStack.getItemShop().getHyriMaterial() == material);
     }
 
-    public void setPermanentShears(boolean hasPermanentShears) {
-        this.permanentShears = hasPermanentShears;
+    public void addPermanentItem(BWMaterial material) {
+        this.permanentItems.add(material);
+    }
+
+    public List<BWMaterial> getPermanentItems() {
+        return permanentItems;
     }
 
     public void setPlugin(HyriBedWars plugin){
@@ -110,9 +147,9 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public void nextUpgradeItem(BWMaterial newMaterial) {
-        if(newMaterial.isUpgradable()) {
-            if (!this.itemsUpgradable.isEmpty()) {
-                for (ItemShopUpgradable item : this.itemsUpgradable) {
+        if(newMaterial.isItemUpgradable()) {
+            if (!this.upgradableItems.isEmpty()) {
+                for (ItemShopUpgradable item : this.upgradableItems) {
                     if (item.getHyriMaterial() == newMaterial) {
                         item.updateNextTier();
                         this.giveUpgradeItem(newMaterial);
@@ -120,14 +157,14 @@ public class BWGamePlayer extends HyriGamePlayer {
                     }
                 }
             }
-            this.itemsUpgradable.add(newMaterial.getItemUpgradable());
+            this.upgradableItems.add(newMaterial.getItemUpgradable());
             this.giveUpgradeItem(newMaterial);
         }
     }
 
     public boolean hasUpgradeMaterial(BWMaterial material) {
-        if(material.isUpgradable()){
-            for (ItemShopUpgradable item : this.itemsUpgradable) {
+        if(material.isItemUpgradable()){
+            for (ItemShopUpgradable item : this.upgradableItems) {
                 if(item.getHyriMaterial() == material){
                     return true;
                 }
@@ -136,15 +173,29 @@ public class BWGamePlayer extends HyriGamePlayer {
         return false;
     }
 
-    public List<ItemShopUpgradable> getItemsUpgradable() {
-        return this.itemsUpgradable;
+    public List<ItemShopUpgradable> getUpgradableItems() {
+        return this.upgradableItems;
     }
 
     public ItemShopUpgradable getItemUpgradable(BWMaterial material){
-        return this.itemsUpgradable.stream().filter(item -> item.getHyriMaterial() == material).findFirst().orElse(null);
+        return this.upgradableItems.stream().filter(item -> item.getHyriMaterial() == material).findFirst().orElse(null);
     }
 
     public void clearArmor() {
         this.player.getInventory().setArmorContents(null);
+    }
+
+    public BWGameTeam getHyriTeam(){
+        return (BWGameTeam) this.team;
+    }
+
+    public BWGameScoreboard getScoreboard() {
+        return scoreboard;
+    }
+
+    public void downItemsUpgradable() {
+        for(ItemShopUpgradable item : this.upgradableItems){
+            item.downUpgrade();
+        }
     }
 }

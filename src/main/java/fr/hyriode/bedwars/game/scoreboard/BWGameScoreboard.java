@@ -24,22 +24,30 @@ public class BWGameScoreboard extends Scoreboard {
         this.plugin = plugin;
         this.game = this.plugin.getGame();
 
-        this.addTeamsLines();
 
         this.setLine(0, this.getDateLine(), line -> line.setValue(this.getDateLine()), 20);
         this.setLine(1, "§1");
         this.setLine(2, this.getActualEvent(), line -> line.setValue(this.getActualEvent()), 20);
         this.setLine(3, "§2");
+
+        int i = this.addTeamsLines();
+
+        this.setLine(i, "§3");
+        this.setLine(i+1, ChatColor.DARK_AQUA + "hyriode.fr", new HyriScoreboardIpConsumer("hyriode.fr"), 2);
     }
 
-    private void addTeamsLines() {
+    private int addTeamsLines() {
         int i = 4;
         for (HyriGameTeam team : this.game.getTeams()) {
             this.setLine(i, this.getTeamLine((BWGameTeam) team));
             i += 1;
         }
-        this.setLine(i, "§3");
-        this.setLine(i+1, ChatColor.DARK_AQUA + "hyriode.fr", new HyriScoreboardIpConsumer("hyriode.fr"), 2);
+        return i;
+    }
+
+    public void update(){
+        this.addTeamsLines();
+        this.updateLines();
     }
 
     private String getTeamLine(BWGameTeam team) {

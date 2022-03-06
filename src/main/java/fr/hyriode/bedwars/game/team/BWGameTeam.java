@@ -1,48 +1,87 @@
 package fr.hyriode.bedwars.game.team;
 
-import fr.hyriode.bedwars.game.team.upgrade.BWUpgrades;
+import fr.hyriode.bedwars.game.team.upgrade.BWTeamUpgrades;
+import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.utils.Area;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.block.BlockState;
+import org.bukkit.*;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import java.util.Random;
 
 public class BWGameTeam extends HyriGameTeam {
 
     private boolean hasBed;
-    private boolean eliminated;
 
     private final HyriBedWars plugin;
 
-    private final BWUpgrades upgrades;
+    private final BWTeamUpgrades upgrades;
 
-    private Location bedLocation;
+    private Location npcShopLocation;
+    private Location npcUpgradeLocation;
+    private Location generatorLocation;
     private Area baseArea;
     private Area protectArea;
 
     public BWGameTeam(EBWGameTeam team, int teamSize, HyriBedWars plugin) {
         super(team.getName(), team.getDisplayName(), team.getColor(), teamSize);
         this.plugin = plugin;
-        this.upgrades = new BWUpgrades(this);
+        this.upgrades = new BWTeamUpgrades(this);
         this.init();
     }
 
     public void init() {
         this.hasBed = true;
-        this.eliminated = false;
 
-        HyriBWConfiguration.Team teamConfig = plugin.getConfiguration().getTeams().stream().filter(team -> team.getName().equalsIgnoreCase(this.name)).findFirst().get();
-
-        this.bedLocation = teamConfig.getBedLocation();
+        HyriBWConfiguration.Team teamConfig = this.plugin.getConfiguration().getTeam(this.getName());
 
         this.setSpawnLocation(teamConfig.getRespawnLocation());
+
+        this.npcShopLocation = teamConfig.getShopNPCLocation();
+        this.npcUpgradeLocation = teamConfig.getUpgradeNPCLocation();
+
+        this.generatorLocation = teamConfig.getGeneratorLocation();
 
         this.baseArea = new Area(teamConfig.getBaseAreaPos1(), teamConfig.getBaseAreaPos2());
         this.protectArea = new Area(teamConfig.getBaseAreaProtectionPos1(), teamConfig.getBaseAreaProtectionPos2());
 
+    }
+
+    public void startHealPoolUpgrade(){
+        if(this.upgrades.containsUpgrade(EBWUpgrades.HEAL_POOL.getUpgrade().getKeyName())){
+            new BukkitRunnable(){
+                @Override
+                public void run() {
+                    Location locMin = baseArea.getMin();
+                    int miX = locMin.getBlockX();
+                    int miY = locMin.getBlockY();
+                    int miZ = locMin.getBlockZ();
+                    Location locMax = baseArea.getMax();
+                    int maX = locMax.getBlockX();
+                    int maY = locMax.getBlockY();
+                    int maZ = locMax.getBlockZ();
+                    for(int x = miX ; x < maX ; ++x){
+                        for(int y = miY ; y < maY ; ++y){
+                            for(int z = miZ ; z < maZ ; ++z){
+                                Random random = new Random();
+                                int rand = random.nextInt(500);
+                                if(rand == 1)
+                                Bukkit.getWorld("world").playEffect(new Location(Bukkit.getWorld("world"), x, y, z), Effect.HEART, 10);
+                            }
+                        }
+                    }
+                    players.forEach(player -> {
+                        if(baseArea.isInArea(player.getPlayer().getLocation())){
+                            player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 2, 1));
+                        }
+                    });
+                }
+            }.runTaskTimer(this.plugin, 0L, 40L);
+        }
     }
 
     public void updateUpgrade(){
@@ -62,15 +101,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public boolean isEliminated() {
-        return eliminated;
-    }
-
-    public void setEliminated(boolean eliminated) {
-        this.eliminated = eliminated;
-    }
-
-    public Location getBedLocation() {
-        return bedLocation;
+        return this.getPlayersPlaying().size() == 0;
     }
 
     public Area getBaseArea() {
@@ -81,17 +112,29 @@ public class BWGameTeam extends HyriGameTeam {
         return protectArea;
     }
 
-    public BWUpgrades getUpgrades() {
+    public BWTeamUpgrades getUpgrades() {
         return upgrades;
     }
 
     public String getStateAsSymbol() {
         if(this.hasBed) {
             return ChatColor.GREEN + "✔";
-        } else if(this.eliminated) {
+        } else if(this.isEliminated()) {
             return ChatColor.RED + "✘";
         } else {
             return ChatColor.GREEN + String.valueOf(this.getPlayersPlaying().size());
         }
+    }
+
+    public Location getNPCShopLocation() {
+        return npcShopLocation;
+    }
+
+    public Location getNPCUpgradeLocation() {
+        return npcUpgradeLocation;
+    }
+
+    public Location getGeneratorLocation() {
+        return generatorLocation;
     }
 }

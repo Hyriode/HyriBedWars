@@ -1,7 +1,10 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop.utility;
 
+import fr.hyriode.bedwars.game.BWGameOre;
+import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.HyriShopItem;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
 import fr.hyriode.hyrame.IHyrame;
-import fr.hyriode.hyrame.item.HyriItem;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.npc.inventory.shop.utility.entity.DreamDefenderEntity;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
@@ -9,11 +12,9 @@ import org.bukkit.Material;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-import java.util.Collections;
-
-public class DreamDefenderEgg extends HyriItem<HyriBedWars> {
+public class DreamDefenderEgg extends HyriShopItem<HyriBedWars> {
     public DreamDefenderEgg(HyriBedWars plugin) {
-        super(plugin, "dream_defender", () -> HyriBedWars.getLanguageManager().getMessage("shop.item.dream_defender.name"), () -> Collections.singletonList(HyriBedWars.getLanguageManager().getMessage("shop.item.dream_defender.lore")), Material.MONSTER_EGG, (byte) 0);
+        super(plugin, "dream_defender", Material.MONSTER_EGG, BWShopCategory.UTILITY, new OreStack(BWGameOre.IRON, 120));
     }
 
     @Override

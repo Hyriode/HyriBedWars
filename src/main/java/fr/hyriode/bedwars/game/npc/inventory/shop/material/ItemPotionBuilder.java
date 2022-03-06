@@ -1,4 +1,4 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop;
+package fr.hyriode.bedwars.game.npc.inventory.shop.material;
 
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.utils.StringBWUtils;

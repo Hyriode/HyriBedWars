@@ -1,9 +1,9 @@
-package fr.hyriode.bedwars.game.npc.inventory.pages;
+package fr.hyriode.bedwars.game.npc.inventory.shop.pages;
 
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.EHyriBWShopNavBar;
-import fr.hyriode.bedwars.game.npc.inventory.BWShopInventory;
+import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
+import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopInventory;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +11,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class BWShopQuickBuy extends BWShopInventory {
     public BWShopQuickBuy(HyriBedWars plugin, Player owner) {
-        super(plugin, owner, EHyriBWShopNavBar.QUICK_BUY);
+        super(plugin, owner, BWShopCategory.QUICK_BUY);
     }
 
     @Override
@@ -40,7 +40,7 @@ public class BWShopQuickBuy extends BWShopInventory {
         return new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14)
                 .withName(ChatColor.RED + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.name"))
                 .withLore(ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore1"),
-                        ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.sneack.click") + " " + ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore2"),
+                        ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.sneak.click") + " " + ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore2"),
                         ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore3"))
                 .build();
     }

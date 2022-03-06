@@ -1,25 +1,27 @@
-package fr.hyriode.bedwars.game.generator.item;
+package fr.hyriode.bedwars.game.generator;
 
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Function;
 
-public class BWItemGenerator implements IHyriGeneratorTier {
+public enum BWBaseIronGenerator implements IHyriGeneratorTier {
 
-    private final ItemStack itemStack;
+    BASE_I(true, 48, 30),
+    BASE_II(true, 48, 30),
+    BASE_III(true, 48, 30),
+    BASE_IV(true, 48, 30),
+
+    ;
+
+    private final boolean splitting;
     private final int spawnLimit;
     private final long timeBetweenSpawns;
 
-    public BWItemGenerator(ItemStack itemStack, int spawnLimit, long timeBetweenSpawns){
-        this.itemStack = itemStack;
+    BWBaseIronGenerator(boolean splitting, int spawnLimit, long timeBetweenSpawns){
+        this.splitting = splitting;
         this.spawnLimit = spawnLimit;
         this.timeBetweenSpawns = timeBetweenSpawns;
-    }
-
-    public ItemStack getItemStack() {
-        return itemStack;
     }
 
     @Override
@@ -29,16 +31,16 @@ public class BWItemGenerator implements IHyriGeneratorTier {
 
     @Override
     public int getSpawnLimit() {
-        return spawnLimit;
+        return this.spawnLimit;
     }
 
     @Override
     public long getTimeBetweenSpawns() {
-        return timeBetweenSpawns;
+        return this.timeBetweenSpawns;
     }
 
     @Override
     public boolean isSplitting() {
-        return false;
+        return this.splitting;
     }
 }

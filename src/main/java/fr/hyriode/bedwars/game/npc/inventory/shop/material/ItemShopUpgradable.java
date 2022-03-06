@@ -1,4 +1,4 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop;
+package fr.hyriode.bedwars.game.npc.inventory.shop.material;
 
 public interface ItemShopUpgradable {
 
@@ -40,6 +40,14 @@ public interface ItemShopUpgradable {
 
     default ItemShop getPreviousTierItem(){
         return this.getTier() - 1 < 0 ? this.getTierItem(0) : this.getTierItem(this.getTier() - 1);
+    }
+
+    default int getPreviousItem(){
+        return Math.max(this.getTier() - 1, 0);
+    }
+
+    default void downUpgrade(){
+        this.setTier(this.getPreviousItem());
     }
 
 }

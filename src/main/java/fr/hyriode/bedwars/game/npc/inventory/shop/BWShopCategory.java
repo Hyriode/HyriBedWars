@@ -1,4 +1,4 @@
-package fr.hyriode.bedwars.game.npc.inventory;
+package fr.hyriode.bedwars.game.npc.inventory.shop;
 
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
@@ -9,16 +9,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
-public enum EHyriBWShopNavBar {
+public enum BWShopCategory {
 
-    QUICK_BUY(0, getTitle("quick_buy"), new ItemBuilder(Material.NETHER_STAR).build()),
-    BLOCKS(1, getTitle("blocks"), new ItemBuilder(Material.HARD_CLAY).build()),
-    MELEE(2, getTitle("melee"), new ItemBuilder(Material.GOLD_SWORD).build()),
-    ARMOR(3, getTitle("armor"), new ItemBuilder(Material.CHAINMAIL_BOOTS).build()),
-    TOOLS(4, getTitle("tools"), new ItemBuilder(Material.STONE_PICKAXE).build()),
-    RANGED(5, getTitle("ranged"), new ItemBuilder(Material.BOW).build()),
-    POTIONS(6, getTitle("potions"), new ItemBuilder(Material.BREWING_STAND_ITEM).build()),
-    UTILITY(7, getTitle("utility"), new ItemBuilder(Material.TNT).build()),
+    QUICK_BUY(0, "quick_buy", new ItemBuilder(Material.NETHER_STAR).build()),
+    BLOCKS(1, "blocks", new ItemBuilder(Material.HARD_CLAY).build()),
+    MELEE(2, "melee", new ItemBuilder(Material.GOLD_SWORD).build()),
+    ARMOR(3, "armor", new ItemBuilder(Material.CHAINMAIL_BOOTS).build()),
+    TOOLS(4, "tools", new ItemBuilder(Material.STONE_PICKAXE).build()),
+    RANGED(5, "ranged", new ItemBuilder(Material.BOW).build()),
+    POTIONS(6, "potions", new ItemBuilder(Material.BREWING_STAND_ITEM).build()),
+    UTILITY(7, "utility", new ItemBuilder(Material.TNT).build()),
 
     ;
 
@@ -26,9 +26,9 @@ public enum EHyriBWShopNavBar {
     private final String titleKey;
     private final ItemStack itemStack;
 
-    EHyriBWShopNavBar(int id, String titleKey, ItemStack itemStack){
+    BWShopCategory(int id, String titleKey, ItemStack itemStack){
         this.id = id;
-        this.titleKey = titleKey;
+        this.titleKey = getTitle(titleKey);
         this.itemStack = itemStack;
     }
 
@@ -41,7 +41,7 @@ public enum EHyriBWShopNavBar {
     }
 
     public ItemStack getItemStack() {
-        return itemStack;
+        return itemStack.clone();
     }
 
     public ItemStack getItemStack(Player player, boolean active) {

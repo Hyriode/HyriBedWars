@@ -2,19 +2,16 @@ package fr.hyriode.bedwars.game.team.upgrade;
 
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.stream.Collectors;
 
-public class BWUpgrades {
+public class BWTeamUpgrades {
 
     private final HashMap<BWUpgrade, BWUpgradeTier> upgrades = new HashMap<>();
 
     private final BWGameTeam team;
 
-    public BWUpgrades(BWGameTeam team){
+    public BWTeamUpgrades(BWGameTeam team){
         this.team = team;
     }
 
@@ -33,23 +30,37 @@ public class BWUpgrades {
             return this.upgrades.keySet().stream().filter(upgrade -> upgrade.getKeyName().equals(name))
                     .collect(Collectors.toList()).get(0);
         }
-        BWUpgrade base = Arrays.stream(EBWUpgrades.values()).filter(ebwUpgrades -> ebwUpgrades.getUpgrade().getKeyName().equals(name))
-                .collect(Collectors.toList()).get(0).getUpgrade();
-        this.upgrades.put(base, base.getUpgradeTier(0));
-        return base;
+        return null;
     }
 
     public BWUpgradeTier getCurrentUpgradeTier(String name){
         return this.upgrades.get(this.getUpgrade(name));
     }
 
-    public boolean upgrade(String name){
-        if(this.getCurrentUpgradeTier(name).getTier() + 1 > this.getUpgrade(name).getMaxTier())
-            return false;
-        BWUpgrade upgrade = this.getUpgrade(name);
-        BWUpgradeTier tier = upgrade.getNextUpgradeTier(this.getCurrentUpgradeTier(name).getTier());
-        if(this.upgrades.get(upgrade) != tier) {
-            this.upgrades.put(upgrade, tier);
+    public boolean canUpgrade(String name){
+        return this.containsUpgrade(name) && this.getCurrentUpgradeTier(name).getTier() + 1 <= this.getUpgrade(name).getMaxTier();
+    }
+
+    public boolean upgrade(BWUpgrade upgrades){
+        String name = upgrades.getKeyName();
+        if(this.containsUpgrade(name)) {
+            if (!this.canUpgrade(name)) {
+                return false;
+            }
+            BWUpgrade upgrade = this.getUpgrade(name);
+
+            BWUpgradeTier tier = upgrade.getNextUpgradeTier(this.getCurrentUpgradeTier(name).getTier());
+
+            if (tier.getTier() == 0) {
+                this.upgrades.put(upgrade, tier);
+                return true;
+            }
+            if (this.upgrades.get(upgrade).getTier() != tier.getTier()) {
+                this.upgrades.put(upgrade, tier);
+                return true;
+            }
+        }else{
+            this.upgrades.put(upgrades, upgrades.getUpgradeTier(0));
             return true;
         }
         return false;
