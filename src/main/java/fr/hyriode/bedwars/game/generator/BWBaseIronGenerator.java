@@ -8,9 +8,9 @@ import java.util.function.Function;
 public enum BWBaseIronGenerator implements IHyriGeneratorTier {
 
     BASE_I(true, 48, 30),
-    BASE_II(true, 48, 30),
-    BASE_III(true, 48, 30),
-    BASE_IV(true, 48, 30),
+    BASE_II(true, 48, 25),
+    BASE_III(true, 48, 20),
+    BASE_IV(true, 48, 10),
 
     ;
 

@@ -3,11 +3,10 @@ package fr.hyriode.bedwars.game.team.upgrade;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 
 import java.util.HashMap;
-import java.util.stream.Collectors;
 
 public class BWTeamUpgrades {
 
-    private final HashMap<BWUpgrade, BWUpgradeTier> upgrades = new HashMap<>();
+    private final HashMap<EBWUpgrades, BWUpgradeTier> upgrades = new HashMap<>();
 
     private final BWGameTeam team;
 
@@ -15,41 +14,30 @@ public class BWTeamUpgrades {
         this.team = team;
     }
 
-    public HashMap<BWUpgrade, BWUpgradeTier> getUpgrades() {
+    public HashMap<EBWUpgrades, BWUpgradeTier> getUpgrades() {
         return upgrades;
     }
 
-    public boolean containsUpgrade(String name){
+    public boolean containsUpgrade(EBWUpgrades upgrade){
         if(this.upgrades.isEmpty())
             return false;
-        return this.upgrades.keySet().stream().map(BWUpgrade::getKeyName).collect(Collectors.toList()).contains(name);
+        return this.upgrades.containsKey(upgrade);
     }
 
-    public BWUpgrade getUpgrade(String name){
-        if(this.containsUpgrade(name)) {
-            return this.upgrades.keySet().stream().filter(upgrade -> upgrade.getKeyName().equals(name))
-                    .collect(Collectors.toList()).get(0);
-        }
-        return null;
+    public BWUpgradeTier getCurrentUpgradeTier(EBWUpgrades upgrade){
+        return this.upgrades.get(upgrade);
     }
 
-    public BWUpgradeTier getCurrentUpgradeTier(String name){
-        return this.upgrades.get(this.getUpgrade(name));
+    public boolean canUpgrade(EBWUpgrades upgrade){
+        return this.containsUpgrade(upgrade) && this.getCurrentUpgradeTier(upgrade).getTier() + 1 <= upgrade.getMaxTier();
     }
 
-    public boolean canUpgrade(String name){
-        return this.containsUpgrade(name) && this.getCurrentUpgradeTier(name).getTier() + 1 <= this.getUpgrade(name).getMaxTier();
-    }
-
-    public boolean upgrade(BWUpgrade upgrades){
-        String name = upgrades.getKeyName();
-        if(this.containsUpgrade(name)) {
-            if (!this.canUpgrade(name)) {
+    public boolean upgrade(EBWUpgrades upgrade){
+        if(this.containsUpgrade(upgrade)) {
+            if (!this.canUpgrade(upgrade)) {
                 return false;
             }
-            BWUpgrade upgrade = this.getUpgrade(name);
-
-            BWUpgradeTier tier = upgrade.getNextUpgradeTier(this.getCurrentUpgradeTier(name).getTier());
+            BWUpgradeTier tier = upgrade.getNextUpgradeTier(this.getCurrentUpgradeTier(upgrade).getTier());
 
             if (tier.getTier() == 0) {
                 this.upgrades.put(upgrade, tier);
@@ -60,7 +48,7 @@ public class BWTeamUpgrades {
                 return true;
             }
         }else{
-            this.upgrades.put(upgrades, upgrades.getUpgradeTier(0));
+            this.upgrades.put(upgrade, upgrade.getUpgradeTier(0));
             return true;
         }
         return false;

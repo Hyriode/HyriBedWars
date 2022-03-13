@@ -20,28 +20,39 @@ public class HyriBedWarsAPI {
 
     private final JedisPool jedisPool;
 
+    private static HyriBedWarsAPI instance;
+
+    private boolean running;
+
     public HyriBedWarsAPI(JedisPool jedisPool) {
         this.jedisPool = jedisPool;
         this.redisRequests = new LinkedBlockingQueue<>();
         this.redisRequestsThread = new Thread(() -> {
             try {
-                final Consumer<Jedis> request = this.redisRequests.take();
+                while(running){
+                    final Consumer<Jedis> request = this.redisRequests.take();
 
-                try (final Jedis jedis = this.getRedisResource()) {
-                    if (jedis != null) {
-                        request.accept(jedis);
+                    try (final Jedis jedis = this.getRedisResource()) {
+                        if (jedis != null) {
+                            request.accept(jedis);
+                        }
                     }
                 }
             } catch (InterruptedException ignored) {}
         }, "RTF API - Redis processor");
         this.playerManager = new HyriBWPlayerManager(this);
+        instance = this;
     }
 
     public void start() {
+        this.running = true;
+
         this.redisRequestsThread.start();
     }
 
     public void stop() {
+        this.running = false;
+
         this.redisRequestsThread.interrupt();
     }
 
@@ -70,5 +81,7 @@ public class HyriBedWarsAPI {
         return this.playerManager;
     }
 
-
+    public static HyriBedWarsAPI get() {
+        return instance;
+    }
 }

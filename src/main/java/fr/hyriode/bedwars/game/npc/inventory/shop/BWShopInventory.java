@@ -1,19 +1,14 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop;
 
 import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShop;
-import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWShopQuickBuy;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
-import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,7 +16,7 @@ import java.util.stream.Collectors;
 
 public class BWShopInventory extends HyriInventory {
 
-    private final HyriBedWars plugin;
+    protected final HyriBedWars plugin;
     private final int categoryId;
     private final BWShopCategory category;
 
@@ -44,67 +39,7 @@ public class BWShopInventory extends HyriInventory {
         for (BWMaterial material : getMaterialByCategory(this.getCategory())) {
             if(i == 26 || i == 34) i += 2;
             try {
-                final ItemShop itemShop = material.isItemUpgradable() ?
-                        this.getPlayer().getItemUpgradable(material) != null ?
-                                material.getItemUpgradable().getNextTierItem() :
-                                material.getItemUpgradable().getTierItem(0) :
-                        material.getItemShop();
-                final boolean isMaxed = itemShop.isUpgradable() &&
-                        this.getPlayer().hasUpgradeMaterial(itemShop.getHyriMaterial()) &&
-                        this.getPlayer().getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
-
-                this.setItem(i, material.getItemShop().getItemForShop(this.getPlayer()), event -> {
-                    if (InventoryBWUtils.hasItems(this.owner, itemShop.getPrice()) && !isMaxed) {
-                        if (material.isArmor()) {
-                            if (this.getPlayer().getPermanentArmor() != null && this.getPlayer().getPermanentArmor().getArmor().getLevel() >= ((ArmorBW) itemShop).getLevel()) {
-                                owner.sendMessage("Vous ne pouvez plus prendre d'armure inferieur à la votre !");
-                            } else {
-                                this.getPlayer().giveArmor(material);
-                                this.getPlayer().setUpgradesTeam(EBWUpgrades.PROTECTION_ARMOR.getUpgrade());
-                                InventoryBWUtils.removeItems(this.owner, itemShop.getPrice());
-                            }
-                        } else {
-                            if (material.isItemUpgradable()) {
-                                this.getPlayer().nextUpgradeItem(material);
-                            } else {
-                                if (material.getItemShop().isPermanent()) {
-                                    if (this.getPlayer().hasPermanentItem(material)) {
-                                        this.owner.sendMessage("Vous avez déjà cette item !");
-                                        return;
-                                    } else {
-                                        this.getPlayer().addPermanentItem(material);
-                                    }
-                                }
-                                if (material.isHyriItem()) {
-                                    this.plugin.getHyrame().getItemManager().giveItem(this.owner, material.getHyriItem());
-                                } else {
-                                    if (material == BWMaterial.WOOL) {
-                                        this.owner.getInventory().addItem(
-                                                new ItemBuilder(itemShop.getItemStack().getType(),
-                                                        itemShop.getItemStack().getAmount(),
-                                                        this.getPlayer().getTeam().getColor().getDyeColor().getWoolData()).build());
-                                    } else if ((material == BWMaterial.DIAMOND_SWORD || material == BWMaterial.IRON_SWORD || material == BWMaterial.STONE_SWORD) && InventoryBWUtils.hasItems(this.owner, new ItemStack(Material.WOOD_SWORD))) {
-                                        if (InventoryBWUtils.hasItems(this.owner, new ItemStack(Material.WOOD_SWORD))) {
-                                            InventoryBWUtils.setItemsSlot(this.owner, slot -> material.getItemShop().getItemStack(),
-                                                    new ItemStack(Material.WOOD_SWORD));
-                                        }
-                                    } else {
-                                        this.owner.getInventory().addItem(new ItemStack(itemShop.getItemStack()));
-                                    }
-                                }
-                            }
-
-                            InventoryBWUtils.removeItems(this.owner, itemShop.getPrice());
-                        }
-
-
-                    } else if (isMaxed) {
-                        this.owner.sendMessage("Vous avez tout upgrade !");
-                    } else {
-                        this.owner.sendMessage("Vous n'avez pas ce qui faut !");
-                    }
-                    this.refreshGui();
-                });
+                this.setItem(i, material.getItemShop().getItemForShop(this.getPlayer()), material.getItemShop().getClick(this.plugin, this));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -112,7 +47,7 @@ public class BWShopInventory extends HyriInventory {
         }
     }
 
-    private void initNavBar(){
+    protected void initNavBar(){
         int i = 0;
         for(BWShopCategory item : BWShopCategory.values()){
             this.setItem(i, item.getItemStack(this.owner, item.getId() == categoryId), event -> this.openGui(item));
@@ -153,11 +88,11 @@ public class BWShopInventory extends HyriInventory {
         return category;
     }
 
-    protected BWGamePlayer getPlayer(){
+    public BWGamePlayer getPlayer(){
         return this.plugin.getGame().getPlayer(this.owner.getUniqueId());
     }
 
-    private void refreshGui(){
+    public void refreshGui(){
         this.openGui(this.category);
     }
 }

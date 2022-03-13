@@ -4,6 +4,7 @@ import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
 import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
 import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
 import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
+import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
 import fr.hyriode.bedwars.game.npc.inventory.upgrade.BWUpgradeGui;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGame;
@@ -87,10 +88,19 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         p.teleport(this.plugin.getConfiguration().getWaitingSpawn());
         p.getActivePotionEffects().forEach(potionEffect -> p.removePotionEffect(potionEffect.getType()));
 
+        this.getPlayer(p.getUniqueId()).setPlugin(this.plugin);
+
+        HyriBWPlayer account = this.plugin.getAPI().getPlayerManager().getPlayer(p.getUniqueId());
+
+        if(account == null){
+            account = new HyriBWPlayer(p.getUniqueId());
+        }
+
+        this.getPlayer(p.getUniqueId()).setAccount(account);
+
         HyriGameItems.TEAM_CHOOSER.give(this.hyrame, p, 0);
         HyriGameItems.LEAVE_ITEM.give(this.hyrame, p, 8);
 
-        this.getPlayer(p.getUniqueId()).setPlugin(this.plugin);
     }
 
     @Override
@@ -102,6 +112,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     public void start() {
         super.start();
         this.setActualEvent(BWNextEvent.START);
+        this.updateBed();
+        this.updateAPI();
+
 
         this.spawnNPCs();
 
@@ -113,6 +126,21 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.teleportTeams();
 
         this.setScoreboardForPlayers();
+    }
+
+    private void updateAPI(){
+        for (BWGamePlayer player : this.players) {
+            if(this.plugin.getAPI().getPlayerManager().getPlayer(player.getUUID()) == null){
+                HyriBWPlayer account = player.getAccount();
+                this.setBaseQuickBuy(account);
+                this.plugin.getAPI().getPlayerManager().sendPlayer(account);
+            }
+        }
+    }
+
+    private void setBaseQuickBuy(HyriBWPlayer account){
+        account.putMaterialQuickBuy(19, BWMaterial.WOOL.name());
+        account.putMaterialQuickBuy(20, BWMaterial.FIREBALL.name());
     }
 
     private void setScoreboardForPlayers(){
@@ -132,19 +160,31 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
             });
         });
+    }
 
+    private void updateBed(){
+        this.teams.forEach(gameTeam -> {
+            if(((BWGameTeam) gameTeam).isEliminated())
+                ((BWGameTeam) gameTeam).setHasBed(false);
+        });
     }
 
     private void spawnGenerators(){
-        for(HyriBWConfiguration.Team team : this.plugin.getConfiguration().getTeams()){
-            Location loc = team.getGeneratorLocation();
+        for(HyriGameTeam team : this.getTeams()){
+            BWGameTeam gameTeam = ((BWGameTeam)team);
+
+            Location loc = gameTeam.getGeneratorLocation();
 
             HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseIronGenerator.BASE_I)
                     .withItem(BWGameOre.IRON.getItemStack()).build();
             ironGenerator.create();
+            gameTeam.setIronGenerator(ironGenerator);
+
             HyriGenerator goldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseGoldGenerator.BASE_I)
                     .withItem(BWGameOre.GOLD.getItemStack()).build();
             goldGenerator.create();
+            gameTeam.setGoldGenerator(goldGenerator);
+
         }
 
         for(Location loc : this.plugin.getConfiguration().getDiamondLocations()){
@@ -161,10 +201,14 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final Location locShop = ((BWGameTeam)team).getNPCShopLocation();
             final Location locUpgrade = ((BWGameTeam)team).getNPCUpgradeLocation();
 
-            final NPCSkin npcShopSkin = this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : BWNPCType.SHOP.getDefaultSkin();
-            final NPCSkin npcUpgradeSkin = this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() : BWNPCType.UPGRADE.getDefaultSkin();
+            final NPCSkin npcShopSkin =
+//                    this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
+//                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() :
+                    BWNPCType.SHOP.getDefaultSkin();
+            final NPCSkin npcUpgradeSkin =
+//                    this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
+//                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() :
+                            BWNPCType.UPGRADE.getDefaultSkin();
 
             for (HyriGamePlayer player : this.players) {
                 final HyriLanguage language = HyriAPI.get().getPlayerSettingsManager()
@@ -173,10 +217,10 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                         Collections.singletonList(ChatColor.BOLD + BWNPCType.SHOP.getLanguageName().getValue(language)));
                 final NPC upgrade = NPCManager.createNPC(locUpgrade, npcUpgradeSkin,
                         Collections.singletonList(ChatColor.BOLD + BWNPCType.UPGRADE.getLanguageName().getValue(language)));
-                shop.setShowingToAll(false);
-                upgrade.setShowingToAll(false);
-                shop.addPlayer(player.getPlayer());
-                upgrade.addPlayer(player.getPlayer());
+//                shop.setShowingToAll(false);
+//                upgrade.setShowingToAll(false);
+//                shop.addPlayer(player.getPlayer());
+//                upgrade.addPlayer(player.getPlayer());
                 shop.setInteractCallback((rightClick, clicker) -> {
                     if (rightClick)
                         new BWShopQuickBuy(this.plugin, clicker).open();
@@ -198,17 +242,21 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final int rankId = rank.getId();
             HyriBWPlayer playerAPI = this.plugin.getAPI().getPlayerManager().getPlayer(player.getUUID());
 
-            if(finalPlayer == null){
-                finalPlayer = playerAPI;
-            }else if(finalPlayer.getPlayer().getRank().getType().getId() > rankId && playerAPI.getCurrentCosmetic() != null){
-                finalPlayer = playerAPI;
-            }
+//            if(finalPlayer == null){
+//                finalPlayer = playerAPI;
+//            }else if(finalPlayer.getPlayer().getRank().getType().getId() > rankId && playerAPI.getCurrentCosmetic() != null){
+//                finalPlayer = playerAPI;
+//            }
         }
-        if(finalPlayer != null && finalPlayer.getCurrentCosmetic() != null && finalPlayer.getCurrentCosmetic() instanceof HyriBWNPCCosmetic)
-            return (HyriBWNPCCosmetic) finalPlayer.getCurrentCosmetic();
-        else
+//        if(finalPlayer != null && finalPlayer.getCurrentCosmetic() != null && finalPlayer.getCurrentCosmetic() instanceof HyriBWNPCCosmetic)
+//            return (HyriBWNPCCosmetic) finalPlayer.getCurrentCosmetic();
+//        else
             return null;
 
+    }
+
+    public void win(){
+        this.win(this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).findFirst().get());
     }
 
     @Override

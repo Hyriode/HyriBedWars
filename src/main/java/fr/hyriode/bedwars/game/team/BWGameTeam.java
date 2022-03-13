@@ -1,8 +1,15 @@
 package fr.hyriode.bedwars.game.team;
 
+import fr.hyriode.bedwars.game.BWGameOre;
+import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
+import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
+import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
 import fr.hyriode.bedwars.game.team.upgrade.BWTeamUpgrades;
+import fr.hyriode.bedwars.game.team.upgrade.BWUpgradeTier;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
+import fr.hyriode.hyrame.generator.HyriGenerator;
+import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import fr.hyriode.hyrame.utils.Area;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
@@ -20,6 +27,9 @@ public class BWGameTeam extends HyriGameTeam {
     private final HyriBedWars plugin;
 
     private final BWTeamUpgrades upgrades;
+
+    private HyriGenerator ironGenerator;
+    private HyriGenerator goldGenerator;
 
     private Location npcShopLocation;
     private Location npcUpgradeLocation;
@@ -52,7 +62,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public void startHealPoolUpgrade(){
-        if(this.upgrades.containsUpgrade(EBWUpgrades.HEAL_POOL.getUpgrade().getKeyName())){
+        if(this.upgrades.containsUpgrade(EBWUpgrades.HEAL_POOL)){
             new BukkitRunnable(){
                 @Override
                 public void run() {
@@ -81,6 +91,31 @@ public class BWGameTeam extends HyriGameTeam {
                     });
                 }
             }.runTaskTimer(this.plugin, 0L, 40L);
+        }
+    }
+
+    public void updateGenerator(){
+        if(this.upgrades.containsUpgrade(EBWUpgrades.FORGE)){
+            BWUpgradeTier currentTier = this.upgrades.getCurrentUpgradeTier(EBWUpgrades.FORGE);
+            switch (currentTier.getTier()){
+                case 0:
+                    this.ironGenerator.upgrade(BWBaseIronGenerator.BASE_II);
+                    this.goldGenerator.upgrade(BWBaseGoldGenerator.BASE_II);
+                    break;
+                case 1:
+                    this.ironGenerator.upgrade(BWBaseIronGenerator.BASE_III);
+                    this.goldGenerator.upgrade(BWBaseGoldGenerator.BASE_III);
+                    break;
+                case 2:
+                    HyriGenerator emeraldGenerator = new HyriGenerator.Builder(this.plugin, this.generatorLocation, BWEmeraldGenerator.EMERALD_TIER_I)
+                            .withItem(BWGameOre.EMERALD.getItemStack()).build();
+                    emeraldGenerator.create();
+                    break;
+                case 3:
+                    this.ironGenerator.upgrade(BWBaseIronGenerator.BASE_IV);
+                    this.goldGenerator.upgrade(BWBaseGoldGenerator.BASE_IV);
+                    break;
+            }
         }
     }
 
@@ -136,5 +171,13 @@ public class BWGameTeam extends HyriGameTeam {
 
     public Location getGeneratorLocation() {
         return generatorLocation;
+    }
+
+    public void setIronGenerator(HyriGenerator ironGenerator) {
+        this.ironGenerator = ironGenerator;
+    }
+
+    public void setGoldGenerator(HyriGenerator goldGenerator) {
+        this.goldGenerator = goldGenerator;
     }
 }

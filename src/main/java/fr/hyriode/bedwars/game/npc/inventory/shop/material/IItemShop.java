@@ -2,6 +2,7 @@ package fr.hyriode.bedwars.game.npc.inventory.shop.material;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
+import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.StringBWUtils;
 import fr.hyriode.hyrame.item.HyriItem;
 import fr.hyriode.hyrame.item.ItemBuilder;
@@ -42,7 +43,7 @@ public interface IItemShop {
     }
 
     default ItemStack getItemStack(){
-        return new ItemBuilder(this.getItemStack()).nbt().setBoolean("IsPermanent", this.isPermanent()).build();
+        return new ItemBuilder(this.getItemStack()).nbt().setBoolean(MetadataReferences.ISPERMANENT, this.isPermanent()).build();
     }
 
     ChatColor getColor();

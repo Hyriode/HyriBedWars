@@ -21,7 +21,7 @@ public class DreamDefenderEgg extends HyriShopItem<HyriBedWars> {
     public void onRightClick(IHyrame hyrame, PlayerInteractEvent event) {
         if(event.getAction() == Action.RIGHT_CLICK_BLOCK){
             InventoryBWUtils.removeItem(event.getPlayer(), event.getItem());
-            DreamDefenderEntity.spawn(this.plugin, event.getClickedBlock().getLocation(), this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId()).getTeam(), 1, 10, 120);
+            DreamDefenderEntity.spawn(event.getPlayer(), this.plugin, event.getClickedBlock().getLocation(), this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId()).getTeam(), 1, 10, 120);
         }
     }
 }

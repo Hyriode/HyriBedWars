@@ -1,7 +1,8 @@
 package fr.hyriode.bedwars.game;
 
+import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
-import fr.hyriode.bedwars.game.team.upgrade.BWUpgrade;
+import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.item.ItemBuilder;
@@ -32,6 +33,8 @@ public class BWGamePlayer extends HyriGamePlayer {
     private final List<ItemShopUpgradable> upgradableItems = new ArrayList<>();
     private final List<BWMaterial> permanentItems = new ArrayList<>();
 
+    private HyriBWPlayer account;
+
     public BWGamePlayer(HyriGame<?> game, Player player) {
         super(game, player);
     }
@@ -48,8 +51,8 @@ public class BWGamePlayer extends HyriGamePlayer {
                 this.setUpgradesTeam(upgrade, bwUpgradeTier.getTier()));
     }
 
-    public void setUpgradesTeam(BWUpgrade upgrade, int tier){
-        switch (upgrade.getEUpgrade()){
+    public void setUpgradesTeam(EBWUpgrades upgrade, int tier){
+        switch (upgrade){
             case SHARPNESS:
                 InventoryBWUtils.changeItemsSlot(this.player, itemStack -> itemStack.addEnchantment(Enchantment.DAMAGE_ALL, 1),
                         new ItemStack(Material.WOOD_SWORD), BWMaterial.STONE_SWORD.getItemShop().getItemStack(), BWMaterial.IRON_SWORD.getItemShop().getItemStack(), BWMaterial.DIAMOND_SWORD.getItemShop().getItemStack());
@@ -67,9 +70,9 @@ public class BWGamePlayer extends HyriGamePlayer {
         }
     }
 
-    public void setUpgradesTeam(BWUpgrade upgrade){
-        if(this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade.getKeyName()) != null)
-            this.setUpgradesTeam(upgrade, this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade.getKeyName()).getTier());
+    public void setUpgradesTeam(EBWUpgrades upgrade){
+        if(this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade) != null)
+            this.setUpgradesTeam(upgrade, this.getHyriTeam().getUpgrades().getCurrentUpgradeTier(upgrade).getTier());
     }
 
     public void giveItemsPermanent(){
@@ -197,5 +200,13 @@ public class BWGamePlayer extends HyriGamePlayer {
         for(ItemShopUpgradable item : this.upgradableItems){
             item.downUpgrade();
         }
+    }
+
+    public HyriBWPlayer getAccount() {
+        return account;
+    }
+
+    public void setAccount(HyriBWPlayer account) {
+        this.account = account;
     }
 }

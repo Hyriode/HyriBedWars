@@ -128,4 +128,29 @@ public class InventoryBWUtils {
                     items.add(itemStack.clone());
         return items;
     }
+
+    public static boolean hasItemInSlot(Player player, int slot){
+        return player.getInventory().getItem(slot) != null;
+    }
+
+    public static void addItem(Player player, int slot, ItemStack itemStack){
+        if(slot == -1)
+            player.getInventory().addItem(itemStack);
+        else {
+            ItemStack item = player.getInventory().getItem(slot) != null ? player.getInventory().getItem(slot).clone() : null;
+            player.getInventory().setItem(slot, itemStack);
+            if(item != null) {
+                player.getInventory().addItem(item);
+            }
+        }
+    }
+
+    public static boolean isFull(Player player, ItemStack itemStack){
+        for (ItemStack stack : player.getInventory()) {
+            if(stack == null)
+                return false;
+        }
+        return true;
+    }
+
 }

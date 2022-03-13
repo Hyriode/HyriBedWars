@@ -35,19 +35,22 @@ public class BWUpgradeGui extends HyriInventory {
         for (EBWUpgrades upgrade : EBWUpgrades.values()) {
             if(i == 13) i = 19;
             try {
-                this.setItem(i, upgrade.getUpgrade().getItemUpgrade(this.owner, this.team),
+                this.setItem(i, upgrade.getItemUpgrade(this.owner, this.team),
                         event -> {
                             final BWTeamUpgrades upgradeTeam = this.team.getUpgrades();
-                            final BWUpgradeTier tier = !upgradeTeam.containsUpgrade(upgrade.getUpgrade().getKeyName()) ? upgrade.getUpgrade().getUpgradeTier(0) : upgrade.getUpgrade().getNextUpgradeTier(upgradeTeam.getCurrentUpgradeTier(upgrade.getUpgrade().getKeyName()) != null ? upgradeTeam.getCurrentUpgradeTier(upgrade.getUpgrade().getKeyName()).getTier() : 0);
-                            if(!upgradeTeam.containsUpgrade(upgrade.getUpgrade().getKeyName()) || upgradeTeam.canUpgrade(upgrade.getUpgrade().getKeyName())) {
+                            final BWUpgradeTier tier = !upgradeTeam.containsUpgrade(upgrade) ? upgrade.getUpgradeTier(0) : upgrade.getNextUpgradeTier(upgradeTeam.getCurrentUpgradeTier(upgrade) != null ? upgradeTeam.getCurrentUpgradeTier(upgrade).getTier() : 0);
+                            if(!upgradeTeam.containsUpgrade(upgrade) || upgradeTeam.canUpgrade(upgrade)) {
                                 if (InventoryBWUtils.hasItems(this.owner, tier.getPrice())) {
                                     this.team.sendMessage(player -> ChatColor.GREEN + this.owner.getName() + " purchased " + ChatColor.GOLD + tier.getName().getForPlayer(player));
-                                    if (upgradeTeam.upgrade(upgrade.getUpgrade())) {
+                                    if (upgradeTeam.upgrade(upgrade)) {
                                         InventoryBWUtils.removeItems(this.owner, tier.getPrice());
                                         this.team.getPlayersPlaying().forEach(player -> {
-                                            ((BWGamePlayer)player).setUpgradesTeam(upgrade.getUpgrade(), tier.getTier());
+                                            ((BWGamePlayer)player).setUpgradesTeam(upgrade, tier.getTier());
                                             if(upgrade == EBWUpgrades.HEAL_POOL){
                                                 ((BWGamePlayer)player).getHyriTeam().startHealPoolUpgrade();
+                                            }
+                                            if(upgrade == EBWUpgrades.FORGE){
+                                                ((BWGamePlayer)player).getHyriTeam().updateGenerator();
                                             }
                                         });
                                     } else {

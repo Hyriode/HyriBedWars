@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop.material;
 
 import fr.hyriode.bedwars.game.npc.inventory.shop.*;
+import fr.hyriode.bedwars.game.npc.inventory.shop.utility.BridgeEgg;
 import fr.hyriode.hyrame.item.HyriItem;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.game.BWGameOre;
@@ -52,22 +53,24 @@ public enum BWMaterial{
 
     GOLDEN_APPLE(BWShopCategory.UTILITY, "golden_apple", Material.GOLDEN_APPLE, 1, false, new OreStack(BWGameOre.GOLD, 3)),
     BEDBUG(BWShopCategory.UTILITY, "bedbug", Material.SNOW_BALL, 1, false, new OreStack(BWGameOre.IRON, 30)),
-    DREAM_DEFENDER(BWShopCategory.UTILITY, "dream_defender", Material.MONSTER_EGG, new OreStack(BWGameOre.IRON, 120), DreamDefenderEgg.class),
-    FIREBALL(BWShopCategory.UTILITY, "fireball", Material.FIREBALL, new OreStack(BWGameOre.IRON, 40), FireballBW.class),
+    DREAM_DEFENDER(BWShopCategory.UTILITY, "dream_defender", new ItemBuilder(Material.MONSTER_EGG).build(), new OreStack(BWGameOre.IRON, 120), DreamDefenderEgg.class),
+    FIREBALL(BWShopCategory.UTILITY, "fireball", new ItemBuilder(Material.FIREBALL).build(), new OreStack(BWGameOre.IRON, 40), FireballBW.class),
     TNT(BWShopCategory.UTILITY, "tnt", Material.TNT, 1, false, new OreStack(BWGameOre.GOLD, 4)),
     ENDER_PEARL(BWShopCategory.UTILITY, "ender_pearl", Material.ENDER_PEARL, 1, false, new OreStack(BWGameOre.EMERALD, 4)),
     WATER(BWShopCategory.UTILITY, "water_bucket", Material.WATER_BUCKET, 1, false, new OreStack(BWGameOre.GOLD, 3)),
-    BRIDGE_EGG(BWShopCategory.UTILITY, "bridge_egg", Material.EGG, 1, false, new OreStack(BWGameOre.EMERALD, 1)),
+    BRIDGE_EGG(BWShopCategory.UTILITY, "bridge_egg", new ItemBuilder(Material.EGG).nbt().setBoolean("BridgeEgg", true).build(), new OreStack(BWGameOre.EMERALD, 1), BridgeEgg.class),
     MAGIC_MILK(BWShopCategory.UTILITY, "magic_milk", Material.MILK_BUCKET, 1, false, new OreStack(BWGameOre.GOLD, 4)),
     SPONGE(BWShopCategory.UTILITY, "sponge", Material.SPONGE, 1, false, new OreStack(BWGameOre.GOLD, 3)),
     COMPACT_POP_UP_TOWER(BWShopCategory.UTILITY, "compact_tower", Material.CHEST, 1, false, new OreStack(BWGameOre.IRON, 24)),
     ;
 
+    private final String name;
     private final ItemShop item;
     private ItemShopUpgradable itemUpgrade;
     private Class<? extends HyriItem<?>> hyriItem;
 
     BWMaterial(BWShopCategory category, String keyName, ItemStack item, boolean permanent, OreStack... price){
+        this.name = keyName;
         this.item = new ItemShop(keyName, item, category, permanent, price).setHyriMaterial(this);
     }
 
@@ -76,16 +79,18 @@ public enum BWMaterial{
     }
 
     BWMaterial(ArmorBW armor){
+        this.name = armor.getKeyName();
         this.item = armor.setHyriMaterial(this);
     }
 
     BWMaterial(ItemShopUpgradable itemUpgrade){
+        this.name = itemUpgrade.getTierItem(0).getKeyName();
         this.itemUpgrade = itemUpgrade;
         this.item = itemUpgrade.getTierItem(0).setHyriMaterial(this);
     }
 
-    BWMaterial(BWShopCategory category, String name, Material material, OreStack price, Class<? extends HyriShopItem<?>> hyriItem){
-        this(category, name, new ItemStack(material), false, price);
+    BWMaterial(BWShopCategory category, String name, ItemStack itemStack, OreStack price, Class<? extends HyriShopItem<?>> hyriItem){
+        this(category, name, itemStack, false, price);
         this.hyriItem = hyriItem;
     }
 

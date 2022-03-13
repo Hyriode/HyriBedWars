@@ -8,9 +8,9 @@ import java.util.function.Function;
 public enum BWBaseGoldGenerator implements IHyriGeneratorTier {
 
     BASE_I(true, 48, 80),
-    BASE_II(true, 48, 80),
-    BASE_III(true, 48, 80),
-    BASE_IV(true, 48, 80),
+    BASE_II(true, 48, 70),
+    BASE_III(true, 48, 60),
+    BASE_IV(true, 48, 40),
 
     ;
 
