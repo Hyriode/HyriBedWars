@@ -1,6 +1,6 @@
 package fr.hyriode.bedwars.game;
 
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShop;
+import fr.hyriode.bedwars.game.material.ItemShop;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 

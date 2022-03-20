@@ -1,22 +1,15 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.utility.entity;
+package fr.hyriode.bedwars.game.material.utility.entity;
 
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.hyrame.utils.PacketUtil;
 import net.minecraft.server.v1_8_R3.EntityIronGolem;
 import net.minecraft.server.v1_8_R3.World;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
-
-import java.lang.reflect.Field;
 
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
-import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
-import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.CreatureSpawnEvent;
 
 
 public class DreamDefenderEntity extends EntityIronGolem {

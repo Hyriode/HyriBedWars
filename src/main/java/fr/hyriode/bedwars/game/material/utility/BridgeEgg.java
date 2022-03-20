@@ -1,21 +1,16 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.utility;
+package fr.hyriode.bedwars.game.material.utility;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGameOre;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.HyriShopItem;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.HyriShopItem;
+import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.item.ItemNBT;
 import org.bukkit.Material;
-import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.Vector;
 
 public class BridgeEgg extends HyriShopItem<HyriBedWars> {
 

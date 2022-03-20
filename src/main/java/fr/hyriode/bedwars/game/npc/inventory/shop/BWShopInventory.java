@@ -1,6 +1,6 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop;
 
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.BWMaterial;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;

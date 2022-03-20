@@ -40,6 +40,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     private List<Location> diamondLocs;
     private final ListEntry diamondLocsEntry;
 
+    private List<Location> emeraldLocs;
+    private final ListEntry emeraldLocsEntry;
+
     private final FileConfiguration config;
     private final HyriBedWars plugin;
 
@@ -71,6 +74,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.diamondLocs = new ArrayList<>();
         this.diamondLocsEntry = new ListEntry("diamond-locations", this.config);
 
+        this.emeraldLocs = new ArrayList<>();
+        this.emeraldLocsEntry = new ListEntry("emerald-locations", this.config);
+
         this.registerTeamsConfig();
     }
 
@@ -92,6 +98,7 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.killLocEntry.setDefault(this.killLoc);
 
         this.diamondLocsEntry.setDefault(this.diamondLocs);
+        this.emeraldLocsEntry.setDefault(this.emeraldLocs);
 
         this.createTeamsConfig();
 
@@ -118,6 +125,7 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.killLoc = this.killLocEntry.get();
 
         this.diamondLocs = this.diamondLocsEntry.get().stream().map(o -> (Location)o).collect(Collectors.toList());
+        this.emeraldLocs = this.emeraldLocsEntry.get().stream().map(o -> (Location)o).collect(Collectors.toList());
 
         this.loadTeamConfig();
     }
@@ -142,6 +150,7 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.killLocEntry.set(this.killLoc);
 
         this.diamondLocsEntry.set(this.diamondLocs);
+        this.emeraldLocsEntry.set(this.emeraldLocs);
 
         this.saveTeamConfig();
 
@@ -168,31 +177,35 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     }
 
     public Location getWaitingSpawn() {
-        return waitingSpawn;
+        return this.waitingSpawn;
     }
 
     public Location getWaitingSpawnPos1() {
-        return waitingSpawnPos1;
+        return this.waitingSpawnPos1;
     }
 
     public Location getWaitingSpawnPos2() {
-        return waitingSpawnPos2;
+        return this.waitingSpawnPos2;
     }
 
     public Location getGameAreaPos1() {
-        return gameAreaPos1;
+        return this.gameAreaPos1;
     }
 
     public Location getGameAreaPos2() {
-        return gameAreaPos2;
+        return this.gameAreaPos2;
     }
 
     public Location getKillLoc() {
-        return killLoc;
+        return this.killLoc;
     }
 
     public List<Location> getDiamondLocations() {
-        return diamondLocs;
+        return this.diamondLocs;
+    }
+
+    public List<Location> getEmeraldLocations() {
+        return this.emeraldLocs;
     }
 
     public class Team implements IHyriConfiguration {

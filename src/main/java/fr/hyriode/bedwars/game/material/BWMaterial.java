@@ -1,23 +1,19 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.material;
+package fr.hyriode.bedwars.game.material;
 
 import fr.hyriode.bedwars.game.npc.inventory.shop.*;
-import fr.hyriode.bedwars.game.npc.inventory.shop.utility.BridgeEgg;
+import fr.hyriode.bedwars.game.material.utility.BridgeEgg;
 import fr.hyriode.hyrame.item.HyriItem;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.game.BWGameOre;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ItemBWAxe;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ItemBWPickaxe;
-import fr.hyriode.bedwars.game.npc.inventory.shop.utility.DreamDefenderEgg;
-import fr.hyriode.bedwars.game.npc.inventory.shop.utility.FireballBW;
-import org.bukkit.ChatColor;
+import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
+import fr.hyriode.bedwars.game.material.upgradable.ItemBWAxe;
+import fr.hyriode.bedwars.game.material.upgradable.ItemBWPickaxe;
+import fr.hyriode.bedwars.game.material.utility.DreamDefenderEgg;
+import fr.hyriode.bedwars.game.material.utility.FireballBW;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
-
-import java.util.Arrays;
-import java.util.List;
 
 public enum BWMaterial{
 
@@ -120,5 +116,13 @@ public enum BWMaterial{
 
     public Class<? extends HyriItem<?>> getHyriItem() {
         return hyriItem;
+    }
+
+    public static BWMaterial[] getSwords(){
+        return new BWMaterial[]{
+                STONE_SWORD,
+                IRON_SWORD,
+                DIAMOND_SWORD
+        };
     }
 }

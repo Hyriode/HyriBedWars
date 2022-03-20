@@ -2,7 +2,7 @@ package fr.hyriode.bedwars.game.team.upgrade;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGameOre;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import fr.hyriode.bedwars.utils.StringBWUtils;

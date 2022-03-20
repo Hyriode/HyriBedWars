@@ -1,6 +1,6 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.material;
+package fr.hyriode.bedwars.game.material;
 
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
+import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
 import org.bukkit.inventory.ItemStack;
 
 public class OreStack {

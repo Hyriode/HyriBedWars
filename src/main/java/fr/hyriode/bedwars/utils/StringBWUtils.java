@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.OreStack;
 import org.bukkit.entity.Player;
 
 import java.util.List;

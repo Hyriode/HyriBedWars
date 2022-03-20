@@ -1,9 +1,9 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.utility;
+package fr.hyriode.bedwars.game.material.utility;
 
 import fr.hyriode.bedwars.game.BWGameOre;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.HyriShopItem;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.HyriShopItem;
+import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.bedwars.HyriBedWars;
 import net.minecraft.server.v1_8_R3.EntityFireball;

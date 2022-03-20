@@ -1,9 +1,9 @@
 package fr.hyriode.bedwars.game.npc.inventory.shop.pages;
 
 import fr.hyriode.bedwars.game.BWGamePlayer;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemEmptySlot;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShop;
+import fr.hyriode.bedwars.game.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.ItemEmptySlot;
+import fr.hyriode.bedwars.game.material.ItemShop;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
@@ -25,7 +25,7 @@ public class BWShopQuickBuy extends BWShopInventory {
     protected void initGui() {
         super.initNavBar();
 
-        BWGamePlayer player = this.getPlayer();
+        final BWGamePlayer player = this.getPlayer();
 
         for(int i = 19 ; ;++i){
             if(i > 43)
@@ -34,9 +34,9 @@ public class BWShopQuickBuy extends BWShopInventory {
                 this.setItem(i, this.getEmptySlot());
             }
         }
-        HashMap<Integer, String> quickBuy = this.getPlayer().getAccount().getQuickBuy();
+        final HashMap<Integer, String> quickBuy = this.getPlayer().getAccount().getQuickBuy();
         for(Integer i : quickBuy.keySet()){
-            ItemShop item = BWMaterial.valueOf(quickBuy.get(i)).getItemShop();
+            final ItemShop item = BWMaterial.valueOf(quickBuy.get(i)).getItemShop();
             this.setItem(i, item.getItemForShop(player), item.getClick(this.plugin, this));
         }
 
@@ -59,11 +59,5 @@ public class BWShopQuickBuy extends BWShopInventory {
 
     private ItemStack getEmptySlot(){
         return new ItemEmptySlot().getItemForShop(this.getPlayer());
-//        return new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14)
-//                .withName(ChatColor.RED + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.name"))
-//                .withLore(ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore1"),
-//                        ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.sneak.click") + " " + ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore2"),
-//                        ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.empty.lore3"))
-//                .build();
     }
 }

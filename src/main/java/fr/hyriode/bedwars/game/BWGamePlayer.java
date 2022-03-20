@@ -5,13 +5,15 @@ import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
+import fr.hyriode.hyrame.game.util.HyriDeadScreen;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShopUpgradable;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
+import fr.hyriode.bedwars.game.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.ItemShopUpgradable;
+import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
 import fr.hyriode.bedwars.game.scoreboard.BWGameScoreboard;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -78,7 +80,7 @@ public class BWGamePlayer extends HyriGamePlayer {
     public void giveItemsPermanent(){
         Arrays.asList(BWMaterial.values()).forEach(material -> {
             if(!material.isItemUpgradable() && material.getItemShop().isPermanent() && this.hasPermanentItem(material)){
-                //TODO à faire selon les slots récents :c
+                //TODO à faire selon les slots récents
                 this.player.getInventory().addItem(material.getItemShop().getItemStack());
             }else if(material.isItemUpgradable() && upgradableItems.contains(material.getItemUpgradable())){
                 this.player.getInventory().addItem(this.getItemUpgradable(material).getTierItem().getItemStack());
@@ -208,5 +210,43 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public void setAccount(HyriBWPlayer account) {
         this.account = account;
+    }
+
+    public void kill(){
+        final Player victim = this.getPlayer();
+        this.setDead(true);
+        this.setSpectator(true);
+        this.downItemsUpgradable();
+        victim.teleport(this.plugin.getConfiguration().getKillLoc());
+        victim.setAllowFlight(true);
+        victim.setFlying(true);
+        victim.setHealth(20.0F);
+        victim.getInventory().clear();
+        victim.getInventory().setArmorContents(null);
+        victim.setGameMode(GameMode.ADVENTURE);
+        victim.getActivePotionEffects().forEach(potionEffect -> victim.removePotionEffect(potionEffect.getType()));
+        victim.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, 20*9999, 0, true, false));
+
+        if(this.getHyriTeam().hasBed()) {
+            HyriDeadScreen.create(this.plugin, victim, 5, () -> {
+                this.setDead(false);
+                this.setSpectator(false);
+                victim.setFallDistance(0);
+                victim.setFlying(false);
+                victim.setAllowFlight(false);
+                victim.setGameMode(GameMode.SURVIVAL);
+                victim.getActivePotionEffects().forEach(potionEffect -> victim.removePotionEffect(potionEffect.getType()));
+                victim.setHealth(20.0F);
+                victim.teleport(this.plugin.getConfiguration().getTeam(this.getTeam().getName()).getRespawnLocation());
+                this.respawn();
+            });
+        }else{
+            this.setEliminated(true);
+            if(((BWGameTeam)this.getTeam()).isEliminated()){
+                this.plugin.getGame().win();
+            }
+            this.plugin.getGame().getPlayers().forEach(player1 -> player1.getScoreboard().update());
+        }
+
     }
 }

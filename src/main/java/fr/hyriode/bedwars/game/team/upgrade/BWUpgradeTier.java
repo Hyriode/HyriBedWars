@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.team.upgrade;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import org.bukkit.inventory.ItemStack;
 

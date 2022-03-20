@@ -1,10 +1,10 @@
 package fr.hyriode.bedwars.game;
 
-import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
 import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
 import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
 import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
+import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
+import fr.hyriode.bedwars.game.material.BWMaterial;
 import fr.hyriode.bedwars.game.npc.inventory.upgrade.BWUpgradeGui;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGame;
@@ -43,6 +43,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private final BWGameType gameType;
     private BWNextEvent actualEvent;
 
+    private final List<HyriGenerator> diamondGenerators = new ArrayList<>();
+    private final List<HyriGenerator> emeraldGenerators = new ArrayList<>();
+
     private BWGameTask task;
 
     public BWGame(IHyrame hyrame, HyriBedWars plugin) {
@@ -59,24 +62,24 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     private void registerTeams() {
         if (gameType.equals(BWGameType.SOLO) || gameType.equals(BWGameType.DOUBLES)) {
-
             for (EBWGameTeam gameTeam : EBWGameTeam.values()) {
                 this.registerTeam(new BWGameTeam(gameTeam, this.gameType.getTeamSize(), this.plugin));
             }
-
         } else {
-
             this.registerTeam(new BWGameTeam(EBWGameTeam.RED, this.gameType.getTeamSize(), this.plugin));
             this.registerTeam(new BWGameTeam(EBWGameTeam.BLUE, this.gameType.getTeamSize(), this.plugin));
             this.registerTeam(new BWGameTeam(EBWGameTeam.YELLOW, this.gameType.getTeamSize(), this.plugin));
             this.registerTeam(new BWGameTeam(EBWGameTeam.GREEN, this.gameType.getTeamSize(), this.plugin));
-
         }
     }
 
     @Override
     public void handleLogin(Player p) {
         super.handleLogin(p);
+//        if(this.state == HyriGameState.PLAYING){
+//            this.getPlayer(p.getUniqueId()).kill();
+//            return;
+//        }
 
         p.getInventory().setArmorContents(null);
         p.getInventory().clear();
@@ -171,16 +174,16 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     private void spawnGenerators(){
         for(HyriGameTeam team : this.getTeams()){
-            BWGameTeam gameTeam = ((BWGameTeam)team);
+            final BWGameTeam gameTeam = ((BWGameTeam)team);
 
-            Location loc = gameTeam.getGeneratorLocation();
+            final Location loc = gameTeam.getGeneratorLocation();
 
-            HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseIronGenerator.BASE_I)
+            final HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseIronGenerator.BASE_I)
                     .withItem(BWGameOre.IRON.getItemStack()).build();
             ironGenerator.create();
             gameTeam.setIronGenerator(ironGenerator);
 
-            HyriGenerator goldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseGoldGenerator.BASE_I)
+            final HyriGenerator goldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWBaseGoldGenerator.BASE_I)
                     .withItem(BWGameOre.GOLD.getItemStack()).build();
             goldGenerator.create();
             gameTeam.setGoldGenerator(goldGenerator);
@@ -188,11 +191,21 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         }
 
         for(Location loc : this.plugin.getConfiguration().getDiamondLocations()){
-            HyriGenerator ironGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
+            final HyriGenerator diamondGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
                     .withItem(BWGameOre.DIAMOND.getItemStack())
                     .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
                     .build();
-            ironGenerator.create();
+            diamondGenerator.create();
+            this.diamondGenerators.add(diamondGenerator);
+        }
+
+        for(Location loc : this.plugin.getConfiguration().getEmeraldLocations()){
+            final HyriGenerator emeraldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWEmeraldGenerator.EMERALD_TIER_I)
+                    .withItem(BWGameOre.EMERALD.getItemStack())
+                    .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
+                    .build();
+            emeraldGenerator.create();
+            this.diamondGenerators.add(emeraldGenerator);
         }
     }
 
@@ -217,10 +230,10 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                         Collections.singletonList(ChatColor.BOLD + BWNPCType.SHOP.getLanguageName().getValue(language)));
                 final NPC upgrade = NPCManager.createNPC(locUpgrade, npcUpgradeSkin,
                         Collections.singletonList(ChatColor.BOLD + BWNPCType.UPGRADE.getLanguageName().getValue(language)));
-//                shop.setShowingToAll(false);
-//                upgrade.setShowingToAll(false);
-//                shop.addPlayer(player.getPlayer());
-//                upgrade.addPlayer(player.getPlayer());
+                shop.setShowingToAll(false);
+                upgrade.setShowingToAll(false);
+                shop.addPlayer(player.getPlayer());
+                upgrade.addPlayer(player.getPlayer());
                 shop.setInteractCallback((rightClick, clicker) -> {
                     if (rightClick)
                         new BWShopQuickBuy(this.plugin, clicker).open();
@@ -229,10 +242,15 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                     if (rightClick)
                         new BWUpgradeGui(this.plugin, clicker).open();
                 });
+                NPCManager.sendNPC(shop);
+                NPCManager.sendNPC(upgrade);
             }
         }
     }
 
+    /*
+    * Soon, in dev
+    * */
     private HyriBWNPCCosmetic getCosmeticByUpPlayersRank(List<HyriGamePlayer> players){
         HyriBWPlayer finalPlayer = null;
 
@@ -292,5 +310,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     public BWGameTask getTask() {
         return task;
+    }
+
+    public List<HyriGenerator> getDiamondGenerators() {
+        return diamondGenerators;
+    }
+
+    public List<HyriGenerator> getEmeraldGenerators() {
+        return emeraldGenerators;
     }
 }

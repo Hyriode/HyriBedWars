@@ -1,9 +1,9 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.material;
+package fr.hyriode.bedwars.game.material;
 
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopInventory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable.ArmorBW;
+import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWChoiceSlotGUI;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
@@ -187,13 +187,15 @@ public class ItemShop {
 
     public Consumer<InventoryClickEvent> getClick(HyriBedWars plugin, BWShopInventory inventory) {
         return event -> {
-            BWMaterial material = this.getHyriMaterial();
+            final BWMaterial material = this.getHyriMaterial();
 
+            // For Quick buy
             if(event.isShiftClick()){
                 new BWChoiceSlotGUI(plugin, inventory.getPlayer().getPlayer(), material).open();
                 return;
             }
-            Player owner = inventory.getPlayer().getPlayer();
+
+            final Player owner = inventory.getPlayer().getPlayer();
             final ItemShop itemShop = material.isItemUpgradable() ?
                     inventory.getPlayer().getItemUpgradable(material) != null ?
                             material.getItemUpgradable().getNextTierItem() :

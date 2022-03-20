@@ -11,6 +11,7 @@ import org.bukkit.entity.Egg;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -46,35 +47,33 @@ public class BWBridgeEgg extends HyriListener<HyriBedWars> {
                                     if (player.getLocation().distance(loc) > 4.0D) {
 
                                         Block b2 = loc.clone().subtract(0.0D, 1.0D, 0.0D).getBlock();
-                                            if (b2.getType() == Material.AIR) {
-                                                b2.setType(Material.WOOL);
-                                                b2.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
-//                                                getArena().addPlacedBlock(b2);
-                                                loc.getWorld().playSound(b2.getLocation(), Sound.CHICKEN_EGG_POP, 2.0F, 1.0F);
-                                            }
+                                        if (b2.getType() == Material.AIR) {
+                                            b2.setType(Material.WOOL);
+                                            Bukkit.getPluginManager().callEvent(new BlockPlaceEvent(b2, b2.getState(), b2, itemEgg, player, true));
+                                            b2.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
+//                                               getArena().addPlacedBlock(b2);
+                                            loc.getWorld().playSound(b2.getLocation(), Sound.CHICKEN_EGG_POP, 2.0F, 1.0F);
+                                        }
 
                                         Block b3 = loc.clone().subtract(1.0D, 1.0D, 0.0D).getBlock();
-                                            if (b3.getType() == Material.AIR) {
-                                                b3.setType(Material.WOOL);
-                                                b3.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
-
+                                        if (b3.getType() == Material.AIR) {
+                                            b3.setType(Material.WOOL);
+                                            Bukkit.getPluginManager().callEvent(new BlockPlaceEvent(b3, b3.getState(), b3, itemEgg, player, true));
+                                            b3.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
 //                                                nms.setBlockTeamColor(b3, getTeamColor());
 //                                                getArena().addPlacedBlock(b3);
 //                                                Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b3));
 //                                                loc.getWorld().playEffect(b3.getLocation(), nms.eggBridge(), 3);
 //                                                Sounds.playSound("egg-bridge-block", getPlayer());
-                                            }
+                                        }
 
                                         Block b4 = loc.clone().subtract(0.0D, 1.0D, 1.0D).getBlock();
-                                            if (b4.getType() == Material.AIR) {
-                                                b4.setType(Material.WOOL);
-                                                b4.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
-//                                                nms.setBlockTeamColor(b4, getTeamColor());
-//                                                getArena().addPlacedBlock(b4);
-//                                                Bukkit.getPluginManager().callEvent(new EggBridgeBuildEvent(getTeamColor(), getArena(), b4));
-//                                                loc.getWorld().playEffect(b4.getLocation(), nms.eggBridge(), 3);
-//                                                Sounds.playSound("egg-bridge-block", getPlayer());
-                                            }
+                                        if (b4.getType() == Material.AIR) {
+                                            b4.setType(Material.WOOL);
+                                            Bukkit.getPluginManager().callEvent(new BlockPlaceEvent(b4, b4.getState(), b4, itemEgg, player, true));
+
+                                            b4.setData(getPlayer(player).getTeam().getColor().getDyeColor().getWoolData());
+                                        }
                                     }
                                 }
                             }.runTaskLater(plugin, 2L);

@@ -1,11 +1,13 @@
 package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.OreStack;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -24,6 +26,18 @@ public class InventoryBWUtils {
         return getAmountItems(player, itemStack) > 0;
     }
 
+    public static boolean hasItems(Player player, ItemStack... materials){
+        for(ItemStack item : materials){
+            return getAmountItems(player, item) > 0;
+        }
+        return false;
+    }
+
+    public static boolean hasItems(Player player, List<ItemStack> items, ItemStack... itemss){
+        items.addAll(Arrays.asList(itemss));
+        return hasItems(player, items.toArray(new ItemStack[0]));
+    }
+
     public static int getAmountItems(Player player, OreStack itemStack){
         int amount = 0;
         for (ItemStack itemInventory : player.getInventory()) {
@@ -36,6 +50,7 @@ public class InventoryBWUtils {
     public static int getAmountItems(Player player, ItemStack itemStack){
         int amount = 0;
         for (ItemStack itemInventory : player.getInventory()) {
+            System.out.println(itemInventory);
             if(itemInventory != null && itemStack.getType() == itemInventory.getType())
                 amount += itemInventory.getAmount();
         }
@@ -153,4 +168,16 @@ public class InventoryBWUtils {
         return true;
     }
 
+    public static boolean isItem(ItemStack base, ItemStack... items) {
+        for(ItemStack item : items){
+            if(base.getType() == item.getType()){
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static boolean isItem(ItemStack base, List<ItemStack> items){
+        return isItem(base, items);
+    }
 }

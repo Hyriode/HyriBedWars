@@ -1,9 +1,9 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.material.upgradable;
+package fr.hyriode.bedwars.game.material.upgradable;
 
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.BWMaterial;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.ItemShop;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.ItemShop;
+import fr.hyriode.bedwars.game.material.OreStack;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 

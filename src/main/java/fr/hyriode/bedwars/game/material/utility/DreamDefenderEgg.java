@@ -1,12 +1,12 @@
-package fr.hyriode.bedwars.game.npc.inventory.shop.utility;
+package fr.hyriode.bedwars.game.material.utility;
 
 import fr.hyriode.bedwars.game.BWGameOre;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.HyriShopItem;
-import fr.hyriode.bedwars.game.npc.inventory.shop.material.OreStack;
+import fr.hyriode.bedwars.game.material.HyriShopItem;
+import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.npc.inventory.shop.utility.entity.DreamDefenderEntity;
+import fr.hyriode.bedwars.game.material.utility.entity.DreamDefenderEntity;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import org.bukkit.Material;
 import org.bukkit.event.block.Action;
