@@ -22,19 +22,25 @@ public class FireballBW extends HyriShopItem<HyriBedWars> {
 
     @Override
     public void onRightClick(IHyrame hyrame, PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+        final Player player = event.getPlayer();
+
         Fireball fireball = player.launchProjectile(Fireball.class);
+
         fireball.setYield(2F);
-        Vector direction = player.getEyeLocation().getDirection();
+
+        final Vector direction = player.getEyeLocation().getDirection();
+
         fireball = this.setFireballDirection(fireball, direction);
         fireball.setVelocity(fireball.getDirection().multiply(2));
     }
 
     public Fireball setFireballDirection(Fireball fireball, Vector vector) {
-        EntityFireball fb = ((CraftFireball) fireball).getHandle();
+        final EntityFireball fb = ((CraftFireball) fireball).getHandle();
+
         fb.dirX = vector.getX() * 0.1D;
         fb.dirY = vector.getY() * 0.1D;
         fb.dirZ = vector.getZ() * 0.1D;
+
         return (Fireball) fb.getBukkitEntity();
     }
 }

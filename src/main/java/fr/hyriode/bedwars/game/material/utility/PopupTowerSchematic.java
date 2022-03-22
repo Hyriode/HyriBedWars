@@ -7,7 +7,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 public class PopupTowerSchematic {
 
@@ -30,33 +29,10 @@ public class PopupTowerSchematic {
     }
 
     private void placeSquare(int y){
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                placeLine(origin.getBlockX() - 2, origin.getBlockY(), origin.getBlockZ() + 2, 4, y, 0);
-            }
-        }.runTaskLater(this.plugin, 1L);
-
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                placeLine(origin.getBlockX() + 2, origin.getBlockY(), origin.getBlockZ() + 2, 0, y, -4);
-            }
-        }.runTaskLater(this.plugin, 5L);
-
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                placeLine(origin.getBlockX() + 2, origin.getBlockY(), origin.getBlockZ() - 2, -4, y, 0);
-            }
-        }.runTaskLater(this.plugin, 10L);
-
-        new BukkitRunnable(){
-            @Override
-            public void run() {
-                placeLine(origin.getBlockX() - 2, origin.getBlockY(), origin.getBlockZ() - 2, 0, y, 4);
-            }
-        }.runTaskLater(this.plugin, 15L);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> placeLine(origin.getBlockX() - 2, origin.getBlockY(), origin.getBlockZ() + 2, 4, y, 0), 1L);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> placeLine(origin.getBlockX() + 2, origin.getBlockY(), origin.getBlockZ() + 2, 0, y, -4), 5L);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> placeLine(origin.getBlockX() + 2, origin.getBlockY(), origin.getBlockZ() - 2, -4, y, 0), 10L);
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> placeLine(origin.getBlockX() - 2, origin.getBlockY(), origin.getBlockZ() - 2, 0, y, 4), 15L);
     }
 
     private void placeLine(int oX, int oY, int oZ, int sX, int sY, int sZ){
@@ -71,12 +47,7 @@ public class PopupTowerSchematic {
                     int finalX = x;
                     int finalY = y;
                     int finalZ = z;
-                    new BukkitRunnable() {
-                        @Override
-                        public void run() {
-                            placeBlock(Material.WOOL, new Location(origin.getWorld(), finalX, finalY, finalZ));
-                        }
-                    }.runTaskLater(this.plugin, 2L + ((i & 0x1) == 0 ? i - 1 : i));
+                    Bukkit.getScheduler().runTaskLater(this.plugin, () -> placeBlock(Material.WOOL, new Location(origin.getWorld(), finalX, finalY, finalZ)), 2L + ((i & 0x1) == 0 ? i - 1 : i));
                     if(sZ < 0) --z; else ++z;
                 }
                 if(sX < 0) --x; else ++x;

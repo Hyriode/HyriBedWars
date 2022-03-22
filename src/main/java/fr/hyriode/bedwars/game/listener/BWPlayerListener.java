@@ -17,6 +17,7 @@ import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Chest;
+import org.bukkit.entity.Egg;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.TNTPrimed;
@@ -27,11 +28,10 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerEggThrowEvent;
 import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.MaterialData;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
 import java.util.Arrays;
@@ -98,10 +98,8 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
     public void onPickup(PlayerPickupItemEvent event){
         if(InventoryBWUtils.isItem(event.getItem().getItemStack(), Arrays.stream(BWMaterial.getSwords()).map(mat -> mat.getItemShop().getItemStack()).collect(Collectors.toList()).toArray(new ItemStack[0]))){
             if(InventoryBWUtils.hasItems(event.getPlayer(), new ItemStack(Material.WOOD_SWORD))){
-                System.out.println("Pickup");
 //               InventoryBWUtils.addItem(event.getPlayer(), 0, event.getItem().getItemStack());
                 InventoryBWUtils.setItemsSlot(event.getPlayer(), integer -> null, new ItemStack(Material.WOOD_SWORD));
-
                 //TODO
             }
         }
@@ -110,21 +108,18 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
     @EventHandler
     public void onBreakBed(BlockBreakEvent event){
         if(event.getBlock().getType() == Material.BED_BLOCK) {
-            for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
-                if (((BWGameTeam) team).getBaseArea().isInArea(event.getBlock().getLocation())) {
+            for (HyriGameTeam hTeam : this.plugin.getGame().getTeams()) {
+                BWGameTeam team = ((BWGameTeam) hTeam);
+                if (team.getBaseArea().isInArea(event.getBlock().getLocation())) {
                     BWGamePlayer breaker = this.plugin.getGame().getPlayer(event.getPlayer().getUniqueId());
                     event.setCancelled(true);
                     if (breaker.getTeam() == team) {
-                        event.getPlayer().sendMessage("You cant break your bed !");
+                        event.getPlayer().sendMessage(HyriBedWars.getLanguageManager().getValue(event.getPlayer(), "team.cant-break.bed"));
                         return;
                     }
-                    if(((BWGameTeam) team).hasBed()) {
+                    if(team.hasBed()) {
                         event.getBlock().setType(Material.AIR);
-                        ((BWGameTeam) team).setHasBed(false);
-                        BroadcastUtil.broadcast(player -> "  ");
-                        BroadcastUtil.broadcast(player -> ChatColor.BOLD + "BED DESTRUCTION > " + ChatColor.RESET + team.getColor().getChatColor() + team.getDisplayName().getForPlayer(player) + " Bed" + ChatColor.GRAY + " was destroyed by " + breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName());
-                        BroadcastUtil.broadcast(player -> "  ");
-                        team.sendTitle(player -> ChatColor.RED + "BED DESTROYED!", player -> "You will no longer respawn!", 10, 3 * 20, 10);
+                        team.destroyBed(breaker);
                         this.plugin.getGame().getPlayers().forEach(player -> {
                             player.getScoreboard().update();
                             player.getPlayer().playSound(player.getPlayer().getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
@@ -136,7 +131,7 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
             return;
         }
         if(!event.getBlock().hasMetadata(MetadataReferences.PLACEBYPLAYER)) {
-            event.getPlayer().sendMessage("You can't break this block");
+            event.getPlayer().sendMessage(HyriBedWars.getLanguageManager().getValue(event.getPlayer(), "block.cant-break.this"));
             event.setCancelled(true);
         }
         for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
@@ -162,12 +157,14 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
     @EventHandler
     public void onDamage(EntityDamageEvent event){
         if(!(event.getEntity() instanceof Player)) return;
-
         if(event.getCause() == EntityDamageEvent.DamageCause.VOID){
             event.setCancelled(true);
+
             BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
+
             victim.kill();
             BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " fell into the void");
+
         }else if(((Player) event.getEntity()).getGameMode() == GameMode.ADVENTURE){
             event.setCancelled(true);
         }else if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
@@ -176,7 +173,7 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
             victim.kill();
         }
         if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
-            event.getEntity().setVelocity(new Vector().setY(2));
+            event.getEntity().setVelocity(new Vector().setY(1.5));
         }
 
     }
@@ -186,19 +183,22 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         if(!(event.getEntity() instanceof Player)) return;
         if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
             event.setCancelled(true);
-            BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
+            final BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
 
             if(event.getDamager() instanceof Player) {
-                HyriGamePlayer damager = this.getPlayer((Player) event.getDamager());
-                List<ItemStack> itemStacks = InventoryBWUtils.getItemsInventory(victim.getPlayer(), BWGameOre.GOLD.getItemStack(), BWGameOre.IRON.getItemStack(), BWGameOre.DIAMOND.getItemStack(), BWGameOre.EMERALD.getItemStack());
+                final HyriGamePlayer damager = this.getPlayer((Player) event.getDamager());
+                final List<ItemStack> itemStacks = InventoryBWUtils.getItemsInventory(victim.getPlayer(), BWGameOre.GOLD.getItemStack(), BWGameOre.IRON.getItemStack(), BWGameOre.DIAMOND.getItemStack(), BWGameOre.EMERALD.getItemStack());
+
                 for(ItemStack item : itemStacks){
                     damager.getPlayer().getInventory().addItem(item);
                 }
+
                 damager.getPlayer().updateInventory();
-                if(event.getCause() == EntityDamageEvent.DamageCause.VOID)
+                if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
                     BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was push into the void by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
-                else
+                }else {
                     BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was killed by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
+                }
             }
             victim.kill();
         }
@@ -206,13 +206,14 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onDeath(PlayerDeathEvent event){
+        event.getEntity().spigot().respawn();
+        this.getPlayer(event.getEntity()).kill();
         event.setDeathMessage("");
     }
 
     @EventHandler
     public void onExplode(EntityExplodeEvent event){
-        event.setCancelled(true);
-        Location loc = event.getEntity().getLocation();
+        final Location loc = event.getEntity().getLocation();
         loc.getWorld().playEffect(loc, Effect.EXPLOSION_LARGE, 5);
         event.blockList().forEach(block -> {
             if(block.hasMetadata(MetadataReferences.PLACEBYPLAYER)){
@@ -248,6 +249,11 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         }
 
         b.setMetadata(MetadataReferences.PLACEBYPLAYER, new FixedMetadataValue(this.plugin, true));
+    }
+
+    @EventHandler
+    public void onProjectileHit(PlayerEggThrowEvent event){
+        event.setHatching(false);
     }
 
     private BWGamePlayer getPlayer(Player player){

@@ -40,5 +40,4 @@ public enum EBWGameTeam {
     public HyriLanguageMessage getDisplayName() {
         return this.displayName.get();
     }
-
 }

@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.scoreboard;
 
+import fr.hyriode.bedwars.game.event.BWNextEvent;
 import fr.hyriode.hyrame.game.scoreboard.HyriScoreboardIpConsumer;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.scoreboard.Scoreboard;
@@ -58,12 +59,13 @@ public class BWGameScoreboard extends Scoreboard {
     }
 
     private String getActualEvent(){
-        long timeBeforeEvent = this.game.getActualEvent().getNextEvent() != null ?
-                this.game.getActualEvent().getNextEvent().getTimeBeforeEvent() : 0;
-        long timeSecond = timeBeforeEvent - this.game.getTask().getIndex();
-        if(this.game.getActualEvent().getNextEvent() != null)
-        return this.game.getActualEvent().getNextEvent().get().getForPlayer(this.player)
-                + " in " + StringBWUtils.formatTime(timeSecond);
+        final BWNextEvent currentNextEvent = this.game.getActualEvent();
+        long timeBeforeEvent = currentNextEvent.getNextEvent() != null ?
+                currentNextEvent.getNextEvent().getTimeBeforeEvent() : 0;
+        long timeSecond = timeBeforeEvent - this.game.getTask().getTime();
+        if(currentNextEvent.getNextEvent() != null)
+            return currentNextEvent.getNextEvent().get().getForPlayer(this.player)
+                    + " in " + StringBWUtils.formatTime(timeSecond);
         else
             return "Game down";
     }

@@ -50,7 +50,6 @@ public class InventoryBWUtils {
     public static int getAmountItems(Player player, ItemStack itemStack){
         int amount = 0;
         for (ItemStack itemInventory : player.getInventory()) {
-            System.out.println(itemInventory);
             if(itemInventory != null && itemStack.getType() == itemInventory.getType())
                 amount += itemInventory.getAmount();
         }

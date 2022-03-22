@@ -8,8 +8,8 @@ import java.util.function.Function;
 
 public enum BWEmeraldGenerator implements IHyriGeneratorTier {
     EMERALD_TIER_I("I", false, 2, 60),
-    EMERALD_TIER_II("II", false, 2, 60),
-    EMERALD_TIER_III("III", false, 2, 60),
+    EMERALD_TIER_II("II", false, 2, 120),
+    EMERALD_TIER_III("III", false, 2, 300),
 
     ;
 

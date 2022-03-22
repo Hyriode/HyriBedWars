@@ -2,8 +2,10 @@ package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.material.OreStack;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class StringBWUtils {
@@ -56,6 +58,16 @@ public class StringBWUtils {
             finalStr.append(item.getItem().getName().getForPlayer(player) + (item.getAmount() != 1 ? "s" : "") + ", ");
         }
         return finalStr.substring(0, finalStr.length() - 2);
+    }
+
+    public static List<String> loreToList(String inputLore){
+        List<String> outputLore = new ArrayList<>();
+        String[] splitLore = inputLore.split("\n");
+        for(String desc : splitLore){
+            outputLore.add(ChatColor.GRAY + desc);
+        }
+        outputLore.add(ChatColor.GRAY + " ");
+        return outputLore;
     }
 
 }

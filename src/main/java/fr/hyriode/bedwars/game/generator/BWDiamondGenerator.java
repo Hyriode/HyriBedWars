@@ -8,8 +8,8 @@ import java.util.function.Function;
 
 public enum BWDiamondGenerator implements IHyriGeneratorTier {
     DIAMOND_TIER_I("I", false, 8, 160),
-    DIAMOND_TIER_II("II", false, 8, 160),
-    DIAMOND_TIER_III("III", false, 8, 160),
+    DIAMOND_TIER_II("II", false, 8, 200),
+    DIAMOND_TIER_III("III", false, 8, 260),
 
     ;
 

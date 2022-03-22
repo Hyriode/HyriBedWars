@@ -27,19 +27,27 @@ public class BWShopQuickBuy extends BWShopInventory {
 
         final BWGamePlayer player = this.getPlayer();
 
+        //Fill Quick buy zone
         for(int i = 19 ; ;++i){
-            if(i > 43)
+            if(i > 43) {
                 break;
+            }
             if(i <= 25 || i >= 28 && i <= 34 || i >= 37) {
                 this.setItem(i, this.getEmptySlot());
             }
         }
+
         final HashMap<Integer, String> quickBuy = this.getPlayer().getAccount().getQuickBuy();
+
         for(Integer i : quickBuy.keySet()){
             final ItemShop item = BWMaterial.valueOf(quickBuy.get(i)).getItemShop();
             this.setItem(i, item.getItemForShop(player), item.getClick(this.plugin, this));
         }
 
+        this.addQuickBuyButtons();
+    }
+
+    private void addQuickBuyButtons(){
         this.setItem(45, new ItemBuilder(Material.COMPASS)
                 .withName(ChatColor.GREEN + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.quick_buy.tracker.name"))
                 .withLore(ChatColor.GRAY + HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.quick_buy.tracker.lore1"),
@@ -59,5 +67,9 @@ public class BWShopQuickBuy extends BWShopInventory {
 
     private ItemStack getEmptySlot(){
         return new ItemEmptySlot().getItemForShop(this.getPlayer());
+    }
+
+    public static void open(HyriBedWars plugin, Player owner){
+        new BWShopQuickBuy(plugin, owner).open();
     }
 }

@@ -1,24 +1,28 @@
 package fr.hyriode.bedwars.game.team;
 
 import fr.hyriode.bedwars.game.BWGameOre;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
 import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
 import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
 import fr.hyriode.bedwars.game.team.upgrade.BWTeamUpgrades;
 import fr.hyriode.bedwars.game.team.upgrade.BWUpgradeTier;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import fr.hyriode.hyrame.utils.Area;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
+import fr.hyriode.hyrame.utils.BroadcastUtil;
 import org.bukkit.*;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class BWGameTeam extends HyriGameTeam {
 
@@ -66,24 +70,12 @@ public class BWGameTeam extends HyriGameTeam {
             new BukkitRunnable(){
                 @Override
                 public void run() {
-                    Location locMin = baseArea.getMin();
-                    int miX = locMin.getBlockX();
-                    int miY = locMin.getBlockY();
-                    int miZ = locMin.getBlockZ();
-                    Location locMax = baseArea.getMax();
-                    int maX = locMax.getBlockX();
-                    int maY = locMax.getBlockY();
-                    int maZ = locMax.getBlockZ();
-                    for(int x = miX ; x < maX ; ++x){
-                        for(int y = miY ; y < maY ; ++y){
-                            for(int z = miZ ; z < maZ ; ++z){
-                                Random random = new Random();
-                                int rand = random.nextInt(500);
-                                if(rand == 1)
-                                Bukkit.getWorld("world").playEffect(new Location(Bukkit.getWorld("world"), x, y, z), Effect.HEART, 10);
-                            }
-                        }
-                    }
+                    baseArea(location -> {
+                        Random random = new Random();
+                        int rand = random.nextInt(500);
+                        if(rand == 1)
+                            Bukkit.getWorld("world").playEffect(location, Effect.HAPPY_VILLAGER, 10);
+                    });
                     players.forEach(player -> {
                         if(baseArea.isInArea(player.getPlayer().getLocation())){
                             player.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 2, 1));
@@ -139,6 +131,30 @@ public class BWGameTeam extends HyriGameTeam {
         return this.getPlayersPlaying().size() == 0;
     }
 
+    public void baseArea(Consumer<Location> execute){
+        Location locMin = baseArea.getMin();
+        int miX = locMin.getBlockX();
+        int miY = locMin.getBlockY();
+        int miZ = locMin.getBlockZ();
+        Location locMax = baseArea.getMax();
+        int maX = locMax.getBlockX();
+        int maY = locMax.getBlockY();
+        int maZ = locMax.getBlockZ();
+        for(int x = miX ; x < maX ; ++x){
+            for(int y = miY ; y < maY ; ++y){
+                for(int z = miZ ; z < maZ ; ++z){
+                    final Location loc = new Location(IHyrame.WORLD.get(), x, y, z);
+                    new BukkitRunnable(){
+                        @Override
+                        public void run() {
+                            execute.accept(loc);
+                        }
+                    }.runTask(this.plugin);
+                }
+            }
+        }
+    }
+
     public Area getBaseArea() {
         return baseArea;
     }
@@ -179,5 +195,15 @@ public class BWGameTeam extends HyriGameTeam {
 
     public void setGoldGenerator(HyriGenerator goldGenerator) {
         this.goldGenerator = goldGenerator;
+    }
+
+    public void destroyBed(BWGamePlayer breaker) {
+        this.setHasBed(false);
+        BroadcastUtil.broadcast(player -> "  ");
+        BroadcastUtil.broadcast(player -> ChatColor.BOLD + "BED DESTRUCTION > " +
+                ChatColor.RESET + this.getColor().getChatColor() + this.getDisplayName().getForPlayer(player) + " Bed" +
+                ChatColor.GRAY + " was destroyed by " + breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName());
+        BroadcastUtil.broadcast(player -> "  ");
+        this.sendTitle(player -> ChatColor.RED + "BED DESTROYED!", player -> "You will no longer respawn!", 10, 3 * 20, 10);
     }
 }

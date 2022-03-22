@@ -39,7 +39,8 @@ public class BWShopInventory extends HyriInventory {
         for (BWMaterial material : getMaterialByCategory(this.getCategory())) {
             if(i == 26 || i == 34) i += 2;
             try {
-                this.setItem(i, material.getItemShop().getItemForShop(this.getPlayer()), material.getItemShop().getClick(this.plugin, this));
+                this.setItem(i, material.getItemShop().getItemForShop(this.getPlayer()),
+                        material.getItemShop().getClick(this.plugin, this));
             }catch (Exception e){
                 e.printStackTrace();
             }
@@ -55,14 +56,12 @@ public class BWShopInventory extends HyriInventory {
         }
 
         for(int j = 9 ; j < 18 ; ++j){
-            byte data = 7;
+            byte colorSeperator = 7;
             if(j == 9 + categoryId)
-                data = 13;
-            this.setItem(j, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, data)
-                    .withName(ChatColor.DARK_GRAY + "⬆" + ChatColor.GRAY + " " +
-                            HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.navbar.separator.title"))
-                    .withLore(ChatColor.DARK_GRAY + "⬇" + ChatColor.GRAY + " " +
-                            HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.navbar.separator.lore"))
+                colorSeperator = 13;
+            this.setItem(j, new ItemBuilder(Material.STAINED_GLASS_PANE, 1, colorSeperator)
+                    .withName(ChatColor.DARK_GRAY + "⬆ " + ChatColor.GRAY + getNavbarSeperator("title"))
+                    .withLore(ChatColor.DARK_GRAY + "⬇ " + ChatColor.GRAY + getNavbarSeperator("lore"))
                     .build());
         }
     }
@@ -70,10 +69,10 @@ public class BWShopInventory extends HyriInventory {
     private void openGui(BWShopCategory category){
         try {
             if(category == BWShopCategory.QUICK_BUY){
-                new BWShopQuickBuy(this.plugin, this.owner).open();
+                BWShopQuickBuy.open(this.plugin, this.owner);
                 return;
             }
-            new BWShopInventory(this.plugin, this.owner, category).open();
+            BWShopInventory.open(this.plugin, this.owner, category);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -94,5 +93,13 @@ public class BWShopInventory extends HyriInventory {
 
     public void refreshGui(){
         this.openGui(this.category);
+    }
+
+    private String getNavbarSeperator(String key){
+        return HyriBedWars.getLanguageManager().getValue(this.owner, "inv.shop.navbar.separator." + key);
+    }
+
+    public static void open(HyriBedWars plugin, Player owner, BWShopCategory category){
+        new BWShopInventory(plugin, owner, category).open();
     }
 }

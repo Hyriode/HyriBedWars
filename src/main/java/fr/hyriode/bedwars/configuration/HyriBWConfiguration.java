@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.configuration;
 
+import fr.hyriode.bedwars.game.BWGameType;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.configuration.HyriConfigurationEntry.*;
 import fr.hyriode.hyrame.configuration.IHyriConfiguration;
@@ -19,6 +20,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     private static final Supplier<Location> DEFAULT_LOCATION = () -> new Location(IHyrame.WORLD.get(), 0, 0, 0, 0, 0);
 
     private final List<Team> teams;
+
+    private BWGameType gameType;
+    private final StringEntry gameTypeEntry;
 
     private Location waitingSpawn;
     private final LocationEntry waitingSpawnEntry;
@@ -50,6 +54,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
         this.plugin = plugin;
         this.config = plugin.getConfig();
         this.teams = new ArrayList<>();
+
+        this.gameType = BWGameType.SOLO;
+        this.gameTypeEntry = new StringEntry("game-type", this.config);
 
         final String waitingSpawnKey = "waiting-spawn.";
 
@@ -88,6 +95,9 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
     @Override
     public void create() {
+
+        this.gameTypeEntry.setDefault(this.gameType.name());
+
         this.waitingSpawnEntry.setDefault(this.waitingSpawn);
         this.waitingSpawnPos1Entry.setDefault(this.waitingSpawnPos1);
         this.waitingSpawnPos2Entry.setDefault(this.waitingSpawnPos2);
@@ -115,6 +125,8 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     public void load() {
         HyriBedWars.log("Loading configuration...");
 
+        this.gameType = BWGameType.valueOf(this.gameTypeEntry.get());
+
         this.waitingSpawn = this.waitingSpawnEntry.get();
         this.waitingSpawnPos1 = this.waitingSpawnPos1Entry.get();
         this.waitingSpawnPos2 = this.waitingSpawnPos2Entry.get();
@@ -139,6 +151,8 @@ public class HyriBWConfiguration implements IHyriConfiguration {
     @Override
     public void save() {
         HyriBedWars.log("Saving configuration...");
+
+        this.gameTypeEntry.set(this.gameType.name());
 
         this.waitingSpawnEntry.set(this.waitingSpawn);
         this.waitingSpawnPos1Entry.set(this.waitingSpawnPos1);
@@ -174,6 +188,10 @@ public class HyriBWConfiguration implements IHyriConfiguration {
 
     public Team getTeam(String teamName){
         return this.teams.stream().filter(team1 -> team1.getName().equals(teamName)).findFirst().get();
+    }
+
+    public BWGameType getGameType() {
+        return this.gameType;
     }
 
     public Location getWaitingSpawn() {

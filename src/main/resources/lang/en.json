@@ -181,5 +181,8 @@
 
   "inv.choice_slot.title": "Adding to Quick Buy...",
   "inv.choice_slot.add": "Adding item to Quick Slot!",
-  "inv.choice_slot.replace": "Click to replace!"
+  "inv.choice_slot.replace": "Click to replace!",
+
+  "block.cant-break.this": "You can't break this block",
+  "team.cant-break.bed": "You can't break your bed!"
 }

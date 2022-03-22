@@ -24,7 +24,7 @@ public class BridgeEgg extends HyriShopItem<HyriBedWars> {
 
     @Override
     public void onGive(IHyrame hyrame, Player player, int slot, ItemStack itemStack) {
+        super.onGive(hyrame, player, slot, itemStack);
         player.getInventory().setItem(slot, new ItemBuilder(itemStack).nbt().setBoolean("BridgeEgg", true).build());
-
     }
 }

@@ -1,10 +1,13 @@
 package fr.hyriode.bedwars.game.material;
 
+import fr.hyriode.bedwars.api.HyriBedWarsAPI;
+import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopInventory;
 import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWChoiceSlotGUI;
+import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWShopQuickBuy;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
@@ -143,11 +146,7 @@ public class ItemShop {
             lore.add(ChatColor.GRAY + " ");
 
         if(this.getDescription() != null) {
-            String[] description = this.getDescription().getForPlayer(player).split("\n");
-            for(String desc : description){
-                lore.add(ChatColor.GRAY + desc);
-            }
-            lore.add(ChatColor.GRAY + " ");
+            lore.addAll(StringBWUtils.loreToList(this.getDescription().getForPlayer(player)));
         }
 
         if(itemShop instanceof ArmorBW)
@@ -185,13 +184,22 @@ public class ItemShop {
         }
     }
 
+    @SuppressWarnings("deprecation")
     public Consumer<InventoryClickEvent> getClick(HyriBedWars plugin, BWShopInventory inventory) {
         return event -> {
             final BWMaterial material = this.getHyriMaterial();
+            boolean isQuickBuy = inventory instanceof BWShopQuickBuy;
 
             // For Quick buy
             if(event.isShiftClick()){
-                new BWChoiceSlotGUI(plugin, inventory.getPlayer().getPlayer(), material).open();
+                if(!isQuickBuy) {
+                    new BWChoiceSlotGUI(plugin, inventory.getPlayer().getPlayer(), material).open();
+                }else{
+                    HyriBWPlayer account = inventory.getPlayer().getAccount();
+                    account.removeMaterialQuickBuy(event.getSlot());
+                    HyriBedWarsAPI.get().getPlayerManager().sendPlayer(account);
+                    inventory.refreshGui();
+                }
                 return;
             }
 
@@ -212,7 +220,7 @@ public class ItemShop {
                 if (material.isArmor()) {
                     if (inventory.getPlayer().getPermanentArmor() != null && inventory.getPlayer().getPermanentArmor().getArmor().getLevel() >= ((ArmorBW) itemShop).getLevel()) {
                         owner.sendMessage("Vous ne pouvé plu prandre d'armor < a la votr !");
-                        owner.playSound(owner.getLocation(), Sound.ENDERMAN_STARE, 0.8F, 0.1F);
+                        owner.playSound(owner.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8F, 0.1F);
                         return;
                     } else {
                         inventory.getPlayer().giveArmor(material);
@@ -277,11 +285,7 @@ public class ItemShop {
         lore.add(ChatColor.GRAY + " ");
 
         if(this.getDescription() != null) {
-            String[] description = this.getDescription().getForPlayer(player).split("\n");
-            for(String desc : description){
-                lore.add(ChatColor.GRAY + desc);
-            }
-            lore.add(ChatColor.GRAY + " ");
+            lore.addAll(StringBWUtils.loreToList(this.getDescription().getForPlayer(player)));
         }
 
         boolean hasItems = InventoryBWUtils.hasItems(player, itemShop.getPrice());

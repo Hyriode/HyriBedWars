@@ -4,26 +4,44 @@ import fr.hyriode.hyrame.game.HyriGameType;
 
 public enum BWGameType implements HyriGameType {
 
-    SOLO("Solo", 1),
-    DOUBLES("Doubles", 2),
-    TRIO("Trio", 3),
-    SQUAD("Squad", 4),
+    SOLO("Solo", 1, 8, 3, 8),
+    DOUBLES("Doubles", 2, 8, 6, 16),
+    TRIO("Trio", 3, 4, 6, 12),
+    SQUAD("Squad", 4, 4, 8, 16),
     ;
 
     private final String name;
-    private final int teamSize;
+    private final int teamsSize;
+    private final int maxTeams;
+    private final int minPlayers;
+    private final int maxPlayers;
 
-    BWGameType(String name, int teamSize) {
+    BWGameType(String name, int teamsSize, int maxTeams, int minPlayers, int maxPlayers) {
         this.name = name;
-        this.teamSize = teamSize;
+        this.teamsSize = teamsSize;
+        this.maxTeams = maxTeams;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
     }
 
     @Override
     public String getName() {
-        return name;
+        return this.name;
     }
 
-    public int getTeamSize() {
-        return teamSize;
+    public int getTeamsSize() {
+        return this.teamsSize;
+    }
+
+    public int getMaxTeams() {
+        return this.maxTeams;
+    }
+
+    public int getMinPlayers() {
+        return this.minPlayers;
+    }
+
+    public int getMaxPlayers() {
+        return this.maxPlayers;
     }
 }

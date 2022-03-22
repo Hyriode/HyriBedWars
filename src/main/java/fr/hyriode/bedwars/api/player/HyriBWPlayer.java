@@ -82,8 +82,8 @@ public class HyriBWPlayer {
         this.quickBuy.put(slot, nameMaterial);
     }
 
-    public void removeMaterialQuickBuy(int slot, String nameMaterial){
-        this.quickBuy.remove(slot, nameMaterial);
+    public void removeMaterialQuickBuy(int slot){
+        this.quickBuy.remove(slot);
     }
 
     public void replaceMaterialQuickBuy(int slot, String nameMaterial){
