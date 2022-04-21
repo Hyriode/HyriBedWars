@@ -20,9 +20,10 @@ public class BWBridgeEgg extends HyriListener<HyriBedWars> {
     }
 
     @EventHandler
-    public void onMove(ProjectileLaunchEvent event){
+    public void onLaunch(ProjectileLaunchEvent event){
         if(event.getEntity() instanceof Egg){
             Egg egg = (Egg) event.getEntity();
+            if(!(egg.getShooter() instanceof Player)) return;
             Player player = (Player) egg.getShooter();
             ItemStack itemEgg = player.getItemInHand();
             boolean isBridgeEgg = new ItemNBT(itemEgg).hasTag("BridgeEgg");
@@ -34,7 +35,6 @@ public class BWBridgeEgg extends HyriListener<HyriBedWars> {
 
             int[] taskId = {0};
             taskId[0] = Bukkit.getScheduler().runTaskTimer(this.plugin, () -> {
-                System.out.println("[BWBridgeEgg] Task BridgEgg");
                 if(egg.isDead()) {
                     Bukkit.getScheduler().cancelTask(taskId[0]);
                     return;
@@ -53,11 +53,8 @@ public class BWBridgeEgg extends HyriListener<HyriBedWars> {
                 }, 2L);
 
             }, 2L, 1L).getTaskId();
-
             Bukkit.getScheduler().runTaskLater(this.plugin, egg::remove, 20L);
-
         }
-
     }
 
     @SuppressWarnings("deprecation")

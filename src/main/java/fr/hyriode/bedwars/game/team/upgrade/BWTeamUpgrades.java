@@ -1,17 +1,22 @@
 package fr.hyriode.bedwars.game.team.upgrade;
 
+import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 
 import java.util.HashMap;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class BWTeamUpgrades {
 
     private final HashMap<EBWUpgrades, BWUpgradeTier> upgrades = new HashMap<>();
 
     private final BWGameTeam team;
+    private final HyriBedWars plugin;
 
-    public BWTeamUpgrades(BWGameTeam team){
+    public BWTeamUpgrades(HyriBedWars plugin, BWGameTeam team){
         this.team = team;
+        this.plugin = plugin;
     }
 
     public HashMap<EBWUpgrades, BWUpgradeTier> getUpgrades() {
@@ -26,6 +31,13 @@ public class BWTeamUpgrades {
 
     public BWUpgradeTier getCurrentUpgradeTier(EBWUpgrades upgrade){
         return this.upgrades.get(upgrade);
+    }
+
+    public BWUpgradeTier getTierFromUpgrade(EBWUpgrades upgrade){
+        for (EBWUpgrades upg : this.upgrades.keySet()) {
+            if(upg == upgrade) return this.upgrades.get(upg);
+        }
+        return null;
     }
 
     public boolean canUpgrade(EBWUpgrades upgrade){
@@ -53,5 +65,15 @@ public class BWTeamUpgrades {
         }
         return false;
 
+    }
+
+    public void updateForPlayers() {
+        this.upgrades.forEach((upgrade, tier) -> {
+            if(!upgrade.isForBase()){
+                this.team.getPlayers().forEach(player -> {
+                    upgrade.active(this.plugin, (BWGamePlayer) player, tier.getTier());
+                });
+            }
+        });
     }
 }

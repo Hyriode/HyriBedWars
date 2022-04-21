@@ -1,3 +1,7 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+
 apply plugin: 'idea'
 apply plugin: 'java-library'
 
@@ -28,15 +32,16 @@ repositories {
         url = 'https://maven.pkg.github.com/Hyriode/Hyrame/'
 
         credentials {
-            username System.getenv('USERNAME')
-            password System.getenv('TOKEN')
+            username System.getenv('GITHUB_USERNAME')
+            password System.getenv('GITHUB_TOKEN')
         }
     }
 }
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'fr.hyriode:hyrame:1.1.6'
+    implementation 'fr.hyriode:hyrame:1.1.8'
+    shadow 'xyz.xenondevs:particle:1.7'
 }
 
 processResources {
@@ -45,10 +50,14 @@ processResources {
     }
 }
 
-task deploy(dependsOn: build) {
+shadowJar {
+    configurations = [project.configurations.shadow]
+}
+
+task deploy(dependsOn: shadowJar) {
     doLast {
         copy {
-            from "$buildDir/libs/HyriBedWars-1.0.0.jar"
+            from "$buildDir/libs/HyriBedWars-1.0.0-all.jar"
             into "$buildDir/libs/BWServerTest/plugins"
         }
     }

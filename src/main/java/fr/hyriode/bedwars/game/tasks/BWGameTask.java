@@ -2,10 +2,15 @@ package fr.hyriode.bedwars.game.tasks;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGame;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.event.BWNextEvent;
 import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
 import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
+import fr.hyriode.hyrame.IHyrame;
+import fr.hyriode.hyrame.game.HyriGameState;
+import org.bukkit.Effect;
 import org.bukkit.Material;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -14,9 +19,8 @@ public class BWGameTask extends BukkitRunnable {
     private final HyriBedWars plugin;
     private long time;
 
-    public BWGameTask(HyriBedWars plugin, long time) {
+    public BWGameTask(HyriBedWars plugin) {
         this.plugin = plugin;
-        this.time = time;
     }
 
     @Override
@@ -24,6 +28,9 @@ public class BWGameTask extends BukkitRunnable {
         ++time;
 
         final BWGame game = this.plugin.getGame();
+
+        if(this.plugin.getGame().getState() == HyriGameState.ENDED)
+            this.cancel();
 
         for (BWNextEvent value : BWNextEvent.values()) {
             if (value.getTimeBeforeEvent() < this.time) {
@@ -33,7 +40,6 @@ public class BWGameTask extends BukkitRunnable {
 
         switch (this.plugin.getGame().getActualEvent()) {
             case START:
-//                System.out.println("Start");
                 break;
 
             case DIAMOND_GENERATOR_TIER_II:
@@ -71,7 +77,13 @@ public class BWGameTask extends BukkitRunnable {
                 break;
 
             case ENDER_DRAGON:
-//                System.out.println("Dragons relachés");
+                game.getTeams().forEach(t -> {
+                    BWGameTeam team = ((BWGameTeam) t);
+                    team.spawnEnderDragon();
+                    if(team.getUpgrades().containsUpgrade(EBWUpgrades.DRAGON)){
+                        team.spawnEnderDragon();
+                    }
+                });
                 break;
 
             case GAME_END:

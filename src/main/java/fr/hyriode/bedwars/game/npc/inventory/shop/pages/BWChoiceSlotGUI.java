@@ -2,22 +2,32 @@ package fr.hyriode.bedwars.game.npc.inventory.shop.pages;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.HyriGameStyle;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.material.BWMaterial;
 import fr.hyriode.bedwars.game.material.ItemEmptySlot;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
+import java.util.Map;
+
 //For Quick Buy
 public class BWChoiceSlotGUI extends HyriInventory {
 
     private final HyriBedWars plugin;
     private final BWMaterial material;
+    private final HyriGameStyle gameStyle;
 
-    public BWChoiceSlotGUI(HyriBedWars plugin, Player owner, BWMaterial material) {
+    public BWChoiceSlotGUI(HyriBedWars plugin, Player owner, BWMaterial material, boolean isHyriode) {
+        this(plugin, owner, material, isHyriode ? HyriGameStyle.HYRIODE : HyriGameStyle.HYPIXEL);
+    }
+
+    public BWChoiceSlotGUI(HyriBedWars plugin, Player owner, BWMaterial material, HyriGameStyle gameStyle) {
         super(owner, HyriBedWars.getLanguageManager().getValue(owner, "inv.choice_slot.title"), 54);
         this.plugin = plugin;
         this.material = material;
+        this.gameStyle = gameStyle;
         this.initGui();
     }
 
@@ -42,9 +52,10 @@ public class BWChoiceSlotGUI extends HyriInventory {
                 });
             }
         }
-
-        for(Integer slot : this.getPlayer().getAccount().getQuickBuy().keySet()){
-            this.setItem(slot, BWMaterial.valueOf(this.getPlayer().getAccount().getQuickBuy().get(slot)).getItemShop().getItemToReplace(player),
+        Map<String, Integer> quickBuy = this.getPlayer().getAccount().getQuickBuy();
+        for(String material : quickBuy.keySet()){
+            int slot = quickBuy.get(material);
+            this.setItem(slot, BWMaterial.valueOf(material).getItemShop().getItemToReplace(player),
                     event -> {
                         final HyriBWPlayer account = this.getPlayer().getAccount();
 
@@ -54,6 +65,10 @@ public class BWChoiceSlotGUI extends HyriInventory {
                         new BWShopQuickBuy(this.plugin, this.owner).open();
                     });
         }
+    }
+
+    protected boolean isHyriode(){
+        return this.gameStyle == HyriGameStyle.HYRIODE;
     }
 
     private BWGamePlayer getPlayer(){

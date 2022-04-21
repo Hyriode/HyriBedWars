@@ -1,11 +1,10 @@
 package fr.hyriode.bedwars.game.material;
 
-import fr.hyriode.bedwars.api.HyriBedWarsAPI;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
-import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopInventory;
 import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
+import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopInventory;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWChoiceSlotGUI;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWShopQuickBuy;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
@@ -20,6 +19,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ItemShop {
 
     private final String keyName;
     private final ItemStack item;
-    private final List<OreStack> price;
+    private OreStack price;
     private final BWShopCategory category;
     private final boolean permanent;
     private ChatColor color;
@@ -39,35 +39,35 @@ public class ItemShop {
 
     private boolean upgradable;
 
-    public ItemShop(String keyName, ItemStack item, BWShopCategory category, boolean permanent, OreStack... price) {
+    public ItemShop(String keyName, ItemStack item, BWShopCategory category, boolean permanent, OreStack price) {
         this.keyName = keyName;
         this.item = item;
         this.category = category;
         this.permanent = permanent;
-        this.price = Arrays.asList(price);
+        this.price = price;
     }
 
-    public ItemShop(String keyName, Material material, int amount, BWShopCategory category, boolean permanent, OreStack... price){
+    public ItemShop(String keyName, Material material, int amount, BWShopCategory category, boolean permanent, OreStack price){
         this(keyName, new ItemStack(material, amount), category, permanent, price);
     }
 
-    public ItemShop(String keyName, Material material, BWShopCategory category, boolean permanent, OreStack... price){
+    public ItemShop(String keyName, Material material, BWShopCategory category, boolean permanent, OreStack price){
         this(keyName, material, 1, category, permanent, price);
     }
 
-    public ItemShop(String keyName, Material material, boolean permanent, OreStack... price){
-        this(keyName, material, null, permanent, price);
+    public ItemShop(String keyName, Material material){
+        this(keyName, material, null, false, null);
     }
 
-    public ItemShop(String keyName, Material material, OreStack... price){
-        this(keyName, material, false, price);
+    public ItemShop(String keyName, Material material, OreStack price){
+        this(keyName, material, null, false, price);
     }
 
     public String getKeyName() {
         return keyName;
     }
 
-    public List<OreStack> getPrice() {
+    public OreStack getPrice() {
         return price;
     }
 
@@ -96,7 +96,7 @@ public class ItemShop {
     }
 
     public ItemStack getItemStack(){
-        return new ItemBuilder(item).nbt().setBoolean(MetadataReferences.ISPERMANENT, this.permanent).build();
+        return new ItemBuilder(item.clone()).unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setBoolean(MetadataReferences.ISPERMANENT, this.permanent).build();
     }
 
     public ChatColor getColor() {
@@ -126,39 +126,46 @@ public class ItemShop {
         return hyriMaterial;
     }
 
-    public ItemStack getItemForShop(BWGamePlayer hyriPlayer){
-        Player player = hyriPlayer.getPlayer();
+    public ItemStack getItemForShop(BWShopInventory inventory, BWGamePlayer hyriPlayer){
         List<String> lore = new ArrayList<>();
+        Player player = hyriPlayer.getPlayer();
+        boolean isQuickBuy = inventory instanceof BWShopQuickBuy;
 
         ItemShop itemShop = this.getItemToBuy(hyriPlayer);
 
         boolean isMaxed = itemShop.isUpgradable() && hyriPlayer.hasUpgradeMaterial(itemShop.getHyriMaterial()) && hyriPlayer.getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
 
-        if(!isMaxed && !itemShop.getPrice().isEmpty()) {
-            lore.add(ChatColor.GRAY + "Cost: " + itemShop.getCountPriceAsString(player));
+        if(!isMaxed) {
+            lore.add(String.format(ChatColor.GRAY + this.getValue(player, "cost"), itemShop.getCountPriceAsString(player)));
         }
 
         if(this.isUpgradable()) {
             int tier = !hyriPlayer.hasUpgradeMaterial(this.getHyriMaterial()) ? 0 : hyriPlayer.getItemUpgradable(this.getHyriMaterial()).getNextTier();
-            lore.add(ChatColor.GRAY + "Tier: " + ChatColor.YELLOW + InventoryBWUtils.getTierString(player, (isMaxed ? hyriPlayer.getItemUpgradable(this.getHyriMaterial()).getMaxTier() + 2 : tier + 1)));
+            lore.add(String.format(ChatColor.GRAY + this.getValue(player, "tier"), ChatColor.YELLOW + InventoryBWUtils.getTierString(player, (isMaxed ? hyriPlayer.getItemUpgradable(this.getHyriMaterial()).getMaxTier() + 2 : tier + 1))));
         }
-        if(!itemShop.getPrice().isEmpty())
-            lore.add(ChatColor.GRAY + " ");
+        lore.add(" ");
 
         if(this.getDescription() != null) {
             lore.addAll(StringBWUtils.loreToList(this.getDescription().getForPlayer(player)));
+            lore.add(" ");
         }
 
         if(itemShop instanceof ArmorBW)
             if(hyriPlayer.getPermanentArmor() != null && ((ArmorBW) hyriPlayer.getPermanentArmor().getItemShop()).getLevel() >= ((ArmorBW)itemShop).getLevel()){
-                lore.add(ChatColor.GREEN + "UNLOCKED !");
+                lore.add(ChatColor.GREEN + this.getValue(player, "unlocked"));
                 lore.add(" ");
             }
 
-        boolean hasItems = InventoryBWUtils.hasItems(player, itemShop.getPrice());
+        if(isQuickBuy)
+            lore.add(ChatColor.AQUA + this.getValue(player, "sneak.remove"));
+        else if(!hyriPlayer.getAccount().getQuickBuy().containsKey(this.getHyriMaterial().name()))
+            lore.add(ChatColor.AQUA + this.getValue(player, "sneak.add"));
+
+
+        boolean hasItems = InventoryBWUtils.hasPrice(player, itemShop.getPrice());
 
         if(isMaxed)
-            lore.add(ChatColor.GREEN + "MAXED !");
+            lore.add(ChatColor.GREEN + this.getValue(player, "maxed"));
         else {
             lore.add((hasItems ? ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.shop.click.purchase") : ChatColor.RED + HyriBedWars.getLanguageManager().getValue(player, "inv.shop.enough.item") + " " + this.getPriceAsString(player)));
         }
@@ -189,81 +196,89 @@ public class ItemShop {
         return event -> {
             final BWMaterial material = this.getHyriMaterial();
             boolean isQuickBuy = inventory instanceof BWShopQuickBuy;
+            BWGamePlayer player = inventory.getPlayer();
 
             // For Quick buy
             if(event.isShiftClick()){
                 if(!isQuickBuy) {
-                    new BWChoiceSlotGUI(plugin, inventory.getPlayer().getPlayer(), material).open();
+                    new BWChoiceSlotGUI(plugin, player.getPlayer(), material, inventory.isHyriode()).open();
                 }else{
-                    HyriBWPlayer account = inventory.getPlayer().getAccount();
-                    account.removeMaterialQuickBuy(event.getSlot());
-                    HyriBedWarsAPI.get().getPlayerManager().sendPlayer(account);
+                    HyriBWPlayer account = player.getAccount();
+                    account.removeMaterialQuickBuy(event.getSlot() - (inventory.isHyriode() ? 9 : 0));
+                    account.update();
                     inventory.refreshGui();
                 }
                 return;
             }
 
-            final Player owner = inventory.getPlayer().getPlayer();
+            final Player owner = player.getPlayer();
+            HyriBWPlayer account = inventory.getPlayer().getAccount();
             final ItemShop itemShop = material.isItemUpgradable() ?
-                    inventory.getPlayer().getItemUpgradable(material) != null ?
+                    player.getItemUpgradable(material) != null ?
                             material.getItemUpgradable().getNextTierItem() :
                             material.getItemUpgradable().getTierItem(0) :
                     material.getItemShop();
             final boolean isMaxed = itemShop.isUpgradable() &&
-                    inventory.getPlayer().hasUpgradeMaterial(itemShop.getHyriMaterial()) &&
-                    inventory.getPlayer().getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
+                    player.hasUpgradeMaterial(itemShop.getHyriMaterial()) &&
+                    player.getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
+
             if(InventoryBWUtils.isFull(owner, itemShop.getItemStack())){
-                owner.sendMessage("Your inventory is full !");
+                owner.sendMessage(ChatColor.RED + this.getValue(owner, "player-inventory.full"));
                 return;
             }
-            if (InventoryBWUtils.hasItems(owner, itemShop.getPrice()) && !isMaxed) {
+            int slotAccount = account.getSlotByHotbar(this.getCategory().getHotbar());
+            int slot = event.getHotbarButton() != -1 ? event.getHotbarButton() : account.getSlotByHotbar(this.getCategory().getHotbar()) != -1 ? slotAccount : -1;
+
+            if (InventoryBWUtils.hasPrice(owner, itemShop.getPrice()) && !isMaxed) {
                 if (material.isArmor()) {
-                    if (inventory.getPlayer().getPermanentArmor() != null && inventory.getPlayer().getPermanentArmor().getArmor().getLevel() >= ((ArmorBW) itemShop).getLevel()) {
-                        owner.sendMessage("Vous ne pouvé plu prandre d'armor < a la votr !");
+                    if (player.getPermanentArmor() != null && player.getPermanentArmor().getArmor().getLevel() >= ((ArmorBW) itemShop).getLevel()) {
+                        owner.sendMessage(ChatColor.RED + this.getValue(owner, "armor.lower"));
                         owner.playSound(owner.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8F, 0.1F);
                         return;
                     } else {
-                        inventory.getPlayer().giveArmor(material);
-                        inventory.getPlayer().setUpgradesTeam(EBWUpgrades.PROTECTION_ARMOR);
-                        InventoryBWUtils.removeItems(owner, itemShop.getPrice());
+                        player.giveArmor(material);
+                        player.activeUpgradesTeam(EBWUpgrades.PROTECTION_ARMOR);
                     }
                 } else {
                     if (material.isItemUpgradable()) {
-                        inventory.getPlayer().nextUpgradeItem(material);
+                        player.nextUpgradeItem(material);
                     } else {
                         if (material.getItemShop().isPermanent()) {
-                            if (inventory.getPlayer().hasPermanentItem(material)) {
-                                owner.sendMessage("Vous avez déjà cette item !");
+                            if (player.hasPermanentItem(material)) {
+                                owner.sendMessage(ChatColor.RED + this.getValue(owner, "item.already"));
                                 return;
                             }
-                            inventory.getPlayer().addPermanentItem(material);
+                            player.addPermanentItem(material);
                         }
                         if (material.isHyriItem()) {
                             plugin.getHyrame().getItemManager().giveItem(owner, material.getHyriItem());
                         } else {
                             if (material == BWMaterial.WOOL) {
-                                InventoryBWUtils.addItem(owner, event.getHotbarButton(),
+                                InventoryBWUtils.addItem(owner, slot,
                                         new ItemBuilder(itemShop.getItemStack().getType(),
                                                 itemShop.getItemStack().getAmount(),
-                                                inventory.getPlayer().getTeam().getColor().getDyeColor().getWoolData()).build());
-                            } else if ((material == BWMaterial.DIAMOND_SWORD || material == BWMaterial.IRON_SWORD || material == BWMaterial.STONE_SWORD) && InventoryBWUtils.hasItems(owner, new ItemStack(Material.WOOD_SWORD))) {
-                                if (InventoryBWUtils.hasItems(owner, new ItemStack(Material.WOOD_SWORD))) {
-                                    InventoryBWUtils.setItemsSlot(owner, slot -> material.getItemShop().getItemStack(),
+                                                player.getTeam().getColor().getDyeColor().getWoolData()).build());
+                            } else if (Arrays.asList(BWMaterial.getSwords()).contains(material)) {
+                                if(InventoryBWUtils.hasItem(owner, new ItemStack(Material.WOOD_SWORD)))
+                                    InventoryBWUtils.setItemsSlot(owner, s -> material.getItemShop().getItemStack(),
                                             new ItemStack(Material.WOOD_SWORD));
-                                }
+                                else
+                                    InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack());
+                                plugin.getGame().getPlayer(owner).activeUpgradesTeam(EBWUpgrades.SHARPNESS);
                             } else {
-                                InventoryBWUtils.addItem(owner, event.getHotbarButton(), new ItemStack(itemShop.getItemStack()));
+                                InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack());
                             }
                         }
                     }
                 }
-                owner.playSound(owner.getLocation(), Sound.NOTE_PLING, 0.8F, 2.0F);
                 InventoryBWUtils.removeItems(owner, itemShop.getPrice());
+                owner.playSound(owner.getLocation(), Sound.NOTE_PLING, 0.8F, 2.0F);
+                owner.sendMessage(ChatColor.GREEN + this.getValue(owner, "purchased") + " " + ChatColor.GOLD + itemShop.getName().getForPlayer(owner));
             } else if (isMaxed) {
-                owner.sendMessage("Vous avez tout upgrade !");
+                owner.sendMessage(ChatColor.RED + this.getValue(owner, "maxed.warn"));
                 owner.playSound(owner.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8F, 0.1F);
             } else {
-                owner.sendMessage("Vous n'avez pas ce qui faut !");
+                owner.sendMessage(String.format(ChatColor.RED + this.getValue(owner, "purchased.missing"), StringBWUtils.getPriceAsString(owner, itemShop.getPrice()), StringBWUtils.getCountPriceMissing(owner, itemShop.getPrice())));
                 owner.playSound(owner.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8F, 0.1F);
             }
             inventory.refreshGui();
@@ -278,17 +293,18 @@ public class ItemShop {
 
         boolean isMaxed = itemShop.isUpgradable() && hyriPlayer.hasUpgradeMaterial(itemShop.getHyriMaterial()) && hyriPlayer.getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
 
-        if(!isMaxed && !itemShop.getPrice().isEmpty()) {
-            lore.add(ChatColor.GRAY + "Cost: " + itemShop.getCountPriceAsString(player));
+        if(!isMaxed) {
+            lore.add(ChatColor.GRAY + String.format(this.getValue(player, "cost"), itemShop.getCountPriceAsString(player)));
         }
 
-        lore.add(ChatColor.GRAY + " ");
+        lore.add(" ");
 
         if(this.getDescription() != null) {
             lore.addAll(StringBWUtils.loreToList(this.getDescription().getForPlayer(player)));
+            lore.add(" ");
         }
 
-        boolean hasItems = InventoryBWUtils.hasItems(player, itemShop.getPrice());
+        boolean hasItems = InventoryBWUtils.hasPrice(player, itemShop.getPrice());
 
         lore.add(ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.choice_slot.add"));
 
@@ -301,11 +317,23 @@ public class ItemShop {
         Player player = hyriPlayer.getPlayer();
         ItemShop itemShop = this.getItemToBuy(hyriPlayer);
 
-        boolean hasItems = InventoryBWUtils.hasItems(player, itemShop.getPrice());
+        boolean hasItems = InventoryBWUtils.hasPrice(player, itemShop.getPrice());
 
         return new ItemBuilder(itemShop.getItemStack())
                 .withName((hasItems ? ChatColor.GREEN : ChatColor.RED) + itemShop.getName().getForPlayer(player))
                 .withAllItemFlags()
                 .withLore(ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.choice_slot.replace")).build();
+    }
+
+    public void setPrice(OreStack price){
+        this.price = price;
+    }
+
+    public void changePrice(int price){
+        this.price.setAmount(price);
+    }
+
+    private String getValue(Player player, String key){
+        return HyriBedWars.getLanguageManager().getValue(player, "shop." + key);
     }
 }

@@ -19,6 +19,4 @@ public interface BWUpgrade {
     boolean isUpgrading();
 
     int getMaxTier();
-
-    BWUpgrade setEUpgrades(EBWUpgrades eUpgrades);
 }

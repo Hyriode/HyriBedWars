@@ -1,14 +1,17 @@
 {
-  "team.blue.display": "&9Bleu",
-  "team.red.display": "&cRouge",
-  "team.green.display": "&aVert",
-  "team.yellow.display": "&eJaune",
-  "team.aqua.display": "&bAqua",
-  "team.pink.display": "&dRose",
-  "team.white.display": "&fBlanc",
-  "team.gray.display": "&8Gris",
+  "team.blue.display": "Bleu",
+  "team.red.display": "Rouge",
+  "team.green.display": "Vert",
+  "team.yellow.display": "Jaune",
+  "team.aqua.display": "Cyan",
+  "team.pink.display": "Rose",
+  "team.white.display": "Blanc",
+  "team.gray.display": "Gris",
 
-  "scoreboard.you.display": "&7(VOUS)",
+  "scoreboard.you.display": "&7(TOI)",
+  "scoreboard.kills.display": "Kills:",
+  "scoreboard.finalkills.display": "Final kills:",
+  "scoreboard.bedsbroken.display": "Lits Cassé:",
 
   "game.next-event.diamond.II": "&bDiamant II",
   "game.next-event.diamond.III": "&bDiamant III",
@@ -20,6 +23,7 @@
 
   "npc.shop.name": "BOUTIQUE D'OBJETS",
   "npc.upgrade.name": "AMELIORATIONS",
+  "npc.click": "CLIQUE DROIT",
 
   "inv.shop.navbar.separator.title": "Categories",
   "inv.shop.navbar.separator.lore": "Items",

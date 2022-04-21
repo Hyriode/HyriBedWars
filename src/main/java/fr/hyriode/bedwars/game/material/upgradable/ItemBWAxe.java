@@ -15,27 +15,39 @@ public class ItemBWAxe implements ItemShopUpgradable{
 
     private int tier = 0;
 
+    private static ItemShop tier1;
+    private static ItemShop tier2;
+    private static ItemShop tier3;
+    private static ItemShop tier4;
+
+    public void init(){
+        tier1 = this.getAxeTier(1, Material.WOOD_AXE, 1, new OreStack(BWGameOre.IRON, 10));
+        tier2 = this.getAxeTier(2, Material.IRON_AXE, 1, new OreStack(BWGameOre.IRON, 10));
+        tier3 = this.getAxeTier(3, Material.GOLD_AXE, 2, new OreStack(BWGameOre.GOLD, 3));
+        tier4 = this.getAxeTier(3, Material.DIAMOND_AXE, 3, new OreStack(BWGameOre.GOLD, 6));
+    }
+
     @Override
     public ItemShop getTierItem(int tier){
         switch (tier){
             case 0:
-                return this.getAxeTier(1, Material.WOOD_AXE, 1, true, new OreStack(BWGameOre.IRON, 10));
+                return tier1;
             case 1:
-                return this.getAxeTier(2, Material.IRON_AXE, 1, false, new OreStack(BWGameOre.IRON, 10));
+                return tier2;
             case 2:
-                return this.getAxeTier(3, Material.GOLD_AXE, 2, false, new OreStack(BWGameOre.GOLD, 3));
+                return tier3;
             case 3:
-                return this.getAxeTier(3, Material.DIAMOND_AXE, 3, false, new OreStack(BWGameOre.GOLD, 6));
+                return tier4;
             default:
                 return null;
         }
     }
 
-    private ItemShop getAxeTier(int tier, Material material, int level, boolean permanent, OreStack price){
+    private ItemShop getAxeTier(int tier, Material material, int level, OreStack price){
         return new ItemShop(this.getKeyName() + "_tier" + tier,
                 new ItemBuilder(material).withEnchant(Enchantment.DIG_SPEED, level)
                         .unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).build(),
-                BWShopCategory.TOOLS, permanent, price)
+                BWShopCategory.TOOLS, true, price)
                 .setUpgradable(true).setHyriMaterial(BWMaterial.AXE);
     }
 

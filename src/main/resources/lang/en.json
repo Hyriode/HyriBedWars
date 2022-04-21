@@ -1,25 +1,30 @@
 {
-  "team.blue.display": "&9Blue",
-  "team.red.display": "&cRed",
-  "team.green.display": "&aGreen",
-  "team.yellow.display": "&eYellow",
-  "team.aqua.display": "&bAqua",
-  "team.pink.display": "&dPink",
-  "team.white.display": "&fWhite",
-  "team.gray.display": "&8Gray",
+  "team.blue.display": "Blue",
+  "team.red.display": "Red",
+  "team.green.display": "Green",
+  "team.yellow.display": "Yellow",
+  "team.aqua.display": "Aqua",
+  "team.pink.display": "Pink",
+  "team.white.display": "White",
+  "team.gray.display": "Gray",
 
   "scoreboard.you.display": "&7(YOU)",
+  "scoreboard.kills.display": "Kills:",
+  "scoreboard.finalkills.display": "Final Kills:",
+  "scoreboard.bedsbroken.display": "Beds Broken:",
 
   "game.next-event.diamond.II": "&bDiamond II",
   "game.next-event.diamond.III": "&bDiamond III",
   "game.next-event.emerald.II": "&aEmerald II",
   "game.next-event.emerald.III": "&aEmerald III",
   "game.next-event.beds-destroy": "&cBeds destroy",
-  "game.next-event.dragons-spawn": "&cDragons spawn",
+  "game.next-event.dragons-spawn": "&Sudden Death",
   "game.next-event.game-end": "&cGame end",
 
   "npc.shop.name": "ITEM SHOP",
   "npc.upgrade.name": "UPGRADES",
+  "npc.coal_shop.name": "COAL SHOP",
+  "npc.click": "RIGHT CLICK",
 
   "tier.1": "I",
   "tier.2": "II",
@@ -40,15 +45,28 @@
   "inv.shop.navbar.utility.title": "Utility",
 
   "inv.shop.quick_buy.tracker.name": "Tracker Shop",
-  "inv.shop.quick_buy.tracker.lore1": "Purchase tracking upgrade for",
-  "inv.shop.quick_buy.tracker.lore2": "your compass which will track",
-  "inv.shop.quick_buy.tracker.lore3": "each player on a specific team",
-  "inv.shop.quick_buy.tracker.lore4": "until you die",
+  "inv.shop.quick_buy.tracker.lore": "Purchase tracking upgrade for\nyour compass which will track\neach player on a specific team\nuntil you die",
 
   "inv.shop.quick_buy.hotbar.name": "Hotbar Manager",
-  "inv.shop.quick_buy.hotbar.lore1": "Edit preferred slots for your",
-  "inv.shop.quick_buy.hotbar.lore2": "items per category",
+  "inv.shop.quick_buy.hotbar.lore": "Edit preferred slots for your\nitems per category",
   "inv.shop.click.edit": "Click to edit!",
+  "inv.back": "Go Back",
+  "inv.tracker.back.lore": "To Tracker & Communication",
+  "inv.tracker.name": "Track Team",
+  "inv.tracker.lore": "Purchase tracking upgrade for\nyour compass which will track\neach player on a specific team\nuntil you die.",
+  "inv.tracker.title": "Purchase Enemy Tracker",
+  "tracker.bed-dont-destroy": "Not all enemy beds are destroyed yet!",
+
+  "inv.hotbar.separator.title": "Categories",
+  "inv.hotbar.separator.lore": "Hotbar",
+  "inv.hotbar.back.lore": "To Quick Buy",
+  "inv.hotbar.reset.name": "Reset to Default",
+  "inv.hotbar.reset.lore": "Reset your hotbar to the\ndefault.",
+  "inv.hotbar.compass.name": "Compass",
+  "inv.hotbar.compass.lore": "Click to change the position\ncompass will be set to on spawn.\n\n§aIf no slot has a compass, you\n§awill not be given one.",
+
+  "inv.hotbar.navbar.lore": "Click to change the position\nto favor that slot when\npurchasing an item this\ncategory or on spawn.",
+  "inv.click.drag": "Click to drag!",
 
   "shop.item.empty_slot.name": "Empty Slot!",
   "shop.item.empty_slot.lore": "This is a Quick Buy Slot!\n&bSneak Click&7 any item in the\nshop to add it here",
@@ -62,6 +80,18 @@
   "shop.item.diamond.name": "Diamond",
   "shop.item.emerald.name": "Emerald",
   "shop.item.coal.name": "Coal",
+
+  "shop.cost": "Cost: %s",
+  "shop.tier": "Tier: %s",
+  "shop.player-inventory.full": "Your inventory is full!",
+  "shop.armor.lower": "You already have a higher tier item.",
+  "shop.item.already": "You already have this item!",
+  "shop.unlocked": "UNLOCKED !",
+  "shop.maxed": "MAXED !",
+  "shop.sneak.add": "Sneak Click to add from Quick Buy",
+  "shop.sneak.remove": "Sneak Click to remove from Quick Buy",
+  "shop.purchased": "You purchased",
+  "shop.purchased.missing": "You don't have enought %s! Need %s more!",
 
   "shop.item.wool.name": "Wool",
   "shop.item.wool.lore": "Great for bridging across\nislands. Turns into your team's\ncolor.",
@@ -145,8 +175,14 @@
   "shop.item.compact_tower.name": "Compact Pop-up Tower",
   "shop.item.compact_tower.lore": "Place a pop-up defence!",
 
+  "shop.maxed.warn": "You've already purchased this item!",
+
   "inv.upgrade.separator.title": "Purchasable",
   "inv.upgrade.separator.lore": "Traps Queue",
+
+  "upgrade.purchased": "purchased",
+  "upgrade.missing-items": "You don't have enough resources to unlock that upgrade!",
+  "upgrade.already": "You already unlocked this upgrade!",
 
   "upgrade.sharpness.name": "Sharpened Swords",
   "upgrade.sharpness.lore": "Your team permanently gains\nSharpness I on all swords and\naxes!",
@@ -184,5 +220,38 @@
   "inv.choice_slot.replace": "Click to replace!",
 
   "block.cant-break.this": "You can't break this block",
-  "team.cant-break.bed": "You can't break your bed!"
+  "team.cant-break.bed": "You can't break your bed!",
+
+  "trap.blindness.name": "It's a trap!",
+  "trap.blindness.lore": "Inflicts Blindness and Slowness\nfor 8 seconds",
+  "trap.counter_offensive.name": "Counter-Offensive Trap",
+  "trap.counter_offensive.lore": "Grants Speed II and Jump Boost\nII for 15 seconds to allied\nplayers near your base.",
+  "trap.alarm.name": "Alarm Trap",
+  "trap.alarm.lore": "Reveals invisible players as\nwell as their name and team.",
+  "trap.miner_fatigue.name": "Miner Fatigue Trap",
+  "trap.miner_fatigue.lore": "Inflict Mining Fatigue for 10\nseconds",
+
+  "notrap.1.name": "Trap #1:",
+  "notrap.1.lore": "The first enemy to walk into\nyour base will trigger this\ntrap!",
+  "notrap.2.name": "Trap #2:",
+  "notrap.2.lore": "The second enemy to walk into\nyour base will trigger this\ntrap!",
+  "notrap.3.name": "Trap #3:",
+  "notrap.3.lore": "The third enemy to walk into\nyour base will trigger this\ntrap!",
+  "notrap.name": "No Trap!",
+  "notrap.lore": "Purchasing a trap will queue it\nhere. Its cost will scale based\non the number of traps queued.",
+
+  "nexttrap.price.name": "Next trap:",
+
+  "trap.title": "TRAP TRIGGERED!",
+  "trap.subtitle": "Your %s has been triggered!",
+  "trap.alarm.title": "ALARM!!!",
+  "trap.alarm.subtitle": "Alarm trap set off by %s team!",
+
+  "item.gamestyle.title": "Game style",
+  "item.gamestyle.lore": "Click to change the style\nof the interfaces",
+
+  "item.tracker.name": "§aCompass §7(Right Click)",
+
+  "team.name": "Team"
+
 }

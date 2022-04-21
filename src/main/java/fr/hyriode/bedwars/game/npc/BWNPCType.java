@@ -1,8 +1,13 @@
 package fr.hyriode.bedwars.game.npc;
 
+import fr.hyriode.api.settings.HyriLanguage;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.npc.NPCSkin;
 import fr.hyriode.bedwars.HyriBedWars;
+import net.md_5.bungee.api.ChatColor;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum BWNPCType {
     SHOP(new NPCSkin("ewogICJ0aW1lc3RhbXAiIDogMTYxMzk2MDkxODk1OCwKICAicHJvZmlsZUlkIiA6ICJhMDVkZWVjMDdhMGU0MDc2ODdjYmRjNWRjYWNhODU4NiIsCiAgInByb2ZpbGVOYW1lIiA6ICJWaWxsYWdlciIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS83YWY3YzA3ZDFkZWQ2MWIxZDMzMTI2ODViMzJlNDU2OGZmZGRhNzYyZWM4ZDgwODg5NWNjMzI5YTkzZDYwNmUwIgogICAgfQogIH0KfQ==",
@@ -34,5 +39,10 @@ public enum BWNPCType {
 
     public HyriLanguageMessage getLanguageName(){
         return HyriBedWars.getLanguageManager().getMessage(this.keyName);
+    }
+
+    public List<String> getLore(HyriLanguage language){
+        return Arrays.asList(ChatColor.AQUA + this.getLanguageName().getValue(language),
+                ChatColor.YELLOW + "" + ChatColor.BOLD + HyriBedWars.getLanguageManager().getValue(language, "npc.click"));
     }
 }

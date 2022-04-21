@@ -1,41 +1,48 @@
 package fr.hyriode.bedwars.game.listener;
 
-import fr.hyriode.bedwars.game.BWGameOre;
-import fr.hyriode.bedwars.game.material.utility.PopupTowerSchematic;
+import fr.hyriode.bedwars.game.material.utility.entity.BedBugEntity;
+import fr.hyriode.bedwars.game.material.utility.entity.DreamDefenderEntity;
+import fr.hyriode.bedwars.game.material.utility.popuptower.TowerEast;
+import fr.hyriode.bedwars.game.material.utility.popuptower.TowerNorth;
+import fr.hyriode.bedwars.game.material.utility.popuptower.TowerSouth;
+import fr.hyriode.bedwars.game.material.utility.popuptower.TowerWest;
+import fr.hyriode.bedwars.game.material.utility.sponge.SpongeAnimationTask;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.team.upgrade.traps.BWTeamTraps;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
-import fr.hyriode.hyrame.game.HyriGamePlayer;
+import fr.hyriode.bedwars.utils.Utils;
+import fr.hyriode.hyrame.IHyrame;
+import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.material.BWMaterial;
-import fr.hyriode.hyrame.utils.BroadcastUtil;
+import fr.hyriode.hyrame.utils.Area;
 import net.minecraft.server.v1_8_R3.ItemArmor;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
-import org.bukkit.entity.Egg;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.TNTPrimed;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftIronGolem;
+import org.bukkit.craftbukkit.v1_8_R3.entity.CraftSilverfish;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerEggThrowEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
+import org.bukkit.event.inventory.*;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.metadata.FixedMetadataValue;
-import org.bukkit.util.Vector;
+import org.bukkit.potion.PotionEffectType;
+import org.bukkit.projectiles.ProjectileSource;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.Arrays;
-import java.util.List;
 import java.util.stream.Collectors;
 
 public class BWPlayerListener extends HyriListener<HyriBedWars> {
@@ -51,11 +58,10 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
     @EventHandler
     public void onDrop(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
+        Player player = event.getPlayer();
 
-        if(item.getItemStack().getType() == Material.WOOD_SWORD){
+        if(event.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType() == Material.AIR)
             event.setCancelled(true);
-            return;
-        }
 
         for (BWMaterial material : BWMaterial.values()) {
             if(material.isItemUpgradable()){
@@ -63,19 +69,6 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
                     ItemStack itemUpgradable = material.getItemUpgradable().getTierItem(i).getItemStack();
                     if(item.getItemStack().getType() == itemUpgradable.getType()) {
                         event.setCancelled(true);
-                        return;
-                    }
-                }
-            }
-
-            if(item.getItemStack().getType() == material.getItemShop().getItemStack().getType()){
-                if(material.getItemShop().isPermanent()){
-                    event.setCancelled(true);
-                    return;
-                }
-                if(Arrays.asList(BWMaterial.getSwords()).contains(material)){
-                    if(!InventoryBWUtils.hasItems(event.getPlayer(), Arrays.stream(BWMaterial.getSwords()).map(mat -> mat.getItemShop().getItemStack()).collect(Collectors.toList()), new ItemStack(Material.WOOD_SWORD))){
-                        InventoryBWUtils.addItem(event.getPlayer(), 0, new ItemStack(Material.WOOD_SWORD));
                         return;
                     }
                 }
@@ -96,11 +89,11 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent event){
+        if(event.getItem().getItemStack().getType() == Material.BED)
+            event.setCancelled(true);
         if(InventoryBWUtils.isItem(event.getItem().getItemStack(), Arrays.stream(BWMaterial.getSwords()).map(mat -> mat.getItemShop().getItemStack()).collect(Collectors.toList()).toArray(new ItemStack[0]))){
-            if(InventoryBWUtils.hasItems(event.getPlayer(), new ItemStack(Material.WOOD_SWORD))){
-//               InventoryBWUtils.addItem(event.getPlayer(), 0, event.getItem().getItemStack());
-                InventoryBWUtils.setItemsSlot(event.getPlayer(), integer -> null, new ItemStack(Material.WOOD_SWORD));
-                //TODO
+            if(InventoryBWUtils.hasItem(event.getPlayer(), new ItemStack(Material.WOOD_SWORD))){
+                InventoryBWUtils.setItemsSlot(event.getPlayer(), slot -> null, new ItemStack(Material.WOOD_SWORD));
             }
         }
     }
@@ -131,7 +124,7 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
             return;
         }
         if(!event.getBlock().hasMetadata(MetadataReferences.PLACEBYPLAYER)) {
-            event.getPlayer().sendMessage(HyriBedWars.getLanguageManager().getValue(event.getPlayer(), "block.cant-break.this"));
+            event.getPlayer().sendMessage(ChatColor.RED + HyriBedWars.getLanguageManager().getValue(event.getPlayer(), "block.cant-break.this"));
             event.setCancelled(true);
         }
         for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
@@ -143,117 +136,330 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
     }
 
     @EventHandler
-    public void onInteract(InventoryClickEvent event){
+    public void onCrafting(CraftItemEvent event){
+        event.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInteractInventory(InventoryClickEvent event){
+        if(event.getSlotType() == InventoryType.SlotType.CRAFTING) {
+            event.setCancelled(true);
+        }
+
         if(event.getSlotType() == InventoryType.SlotType.ARMOR){
             event.setCancelled(true);
         }
-
-        if(InventoryBWUtils.hasItems((Player) event.getWhoClicked(), Arrays.stream(BWMaterial.getSwords())
-                .map(material -> material.getItemShop().getItemStack()).collect(Collectors.toList()))){
-            InventoryBWUtils.removeItem((Player) event.getWhoClicked(), new ItemStack(Material.WOOD_SWORD));
-        }
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onDamage(EntityDamageEvent event){
         if(!(event.getEntity() instanceof Player)) return;
+
+        Player player = (Player) event.getEntity();
+
         if(event.getCause() == EntityDamageEvent.DamageCause.VOID){
             event.setCancelled(true);
-
-            BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
-
-            victim.kill();
-            BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " fell into the void");
-
-        }else if(((Player) event.getEntity()).getGameMode() == GameMode.ADVENTURE){
-            event.setCancelled(true);
-        }else if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
-            event.setCancelled(true);
-            BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
-            victim.kill();
+            player.teleport(this.plugin.getConfiguration().getKillLoc());
+            return;
         }
-        if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION){
-            event.getEntity().setVelocity(new Vector().setY(1.5));
+
+        if(player.getGameMode() == GameMode.ADVENTURE){
+            event.setCancelled(true);
         }
+
+        if(event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION || event.getCause() == EntityDamageEvent.DamageCause.BLOCK_EXPLOSION) {
+            event.setCancelled(true);
+            event.setDamage(0);
+            BWGamePlayer bwPlayer = this.getPlayer(player);
+            if(!bwPlayer.isSpectator() && !bwPlayer.isDead())
+                player.damage(2.0F);
+        }
+//        else if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
+//            event.setCancelled(true);
+//            BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
+//            victim.kill();
+//        }
 
     }
 
+//    @EventHandler
+//    public void onDamageByEntity(EntityDamageByEntityEvent event){
+//        if(!(event.getEntity() instanceof Player)) return;
+//        if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
+//            event.setCancelled(true);
+//            final BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
+//
+//            if(event.getDamager() instanceof Player) {
+//                final HyriGamePlayer damager = this.getPlayer((Player) event.getDamager());
+//                final List<ItemStack> itemStacks = InventoryBWUtils.getItemsInventory(victim.getPlayer(), BWGameOre.GOLD.getItemStack(), BWGameOre.IRON.getItemStack(), BWGameOre.DIAMOND.getItemStack(), BWGameOre.EMERALD.getItemStack());
+//
+//                for(ItemStack item : itemStacks){
+//                    damager.getPlayer().getInventory().addItem(item);
+//                }
+//
+//                damager.getPlayer().updateInventory();
+//                if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
+//                    BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was push into the void by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
+//                }else {
+//                    BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was killed by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
+//                }
+//            }
+//            victim.kill();
+//        }
+//    }
+
     @EventHandler
-    public void onDamageByEntity(EntityDamageByEntityEvent event){
-        if(!(event.getEntity() instanceof Player)) return;
-        if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
+    public void onRightClickBed(PlayerInteractEvent event){
+        if(event.getItem() != null && event.getItem().getType() == Material.FIREBALL)
             event.setCancelled(true);
-            final BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
 
-            if(event.getDamager() instanceof Player) {
-                final HyriGamePlayer damager = this.getPlayer((Player) event.getDamager());
-                final List<ItemStack> itemStacks = InventoryBWUtils.getItemsInventory(victim.getPlayer(), BWGameOre.GOLD.getItemStack(), BWGameOre.IRON.getItemStack(), BWGameOre.DIAMOND.getItemStack(), BWGameOre.EMERALD.getItemStack());
+        if(event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.CHEST){
+            BWGameTeam team = this.getPlayer(event.getPlayer()).getHyriTeam();
+            this.plugin.getGame().getTeams().forEach(t -> {
+                BWGameTeam hTeam = (BWGameTeam) t;
+                if(hTeam.getName().equals(team.getName()))return;
+                if(!hTeam.hasBed()) return;
 
-                for(ItemStack item : itemStacks){
-                    damager.getPlayer().getInventory().addItem(item);
+                if(hTeam.getBaseArea().isInArea(event.getPlayer().getLocation())){
+                    event.setCancelled(true);
                 }
-
-                damager.getPlayer().updateInventory();
-                if(event.getCause() == EntityDamageEvent.DamageCause.VOID) {
-                    BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was push into the void by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
-                }else {
-                    BroadcastUtil.broadcast(player -> victim.getTeam().getColor().getChatColor() + victim.getPlayer().getName() + ChatColor.GRAY + " was killed by " + damager.getTeam().getColor().getChatColor() + damager.getPlayer().getName());
-                }
-            }
-            victim.kill();
+            });
         }
-    }
 
-    @EventHandler
-    public void onDeath(PlayerDeathEvent event){
-        event.getEntity().spigot().respawn();
-        this.getPlayer(event.getEntity()).kill();
-        event.setDeathMessage("");
+        if(event.getClickedBlock() != null && event.getClickedBlock().getType() == Material.BED_BLOCK
+                && !event.getPlayer().isSneaking() && event.getAction() == Action.RIGHT_CLICK_BLOCK)
+            event.setCancelled(true);
     }
 
     @EventHandler
     public void onExplode(EntityExplodeEvent event){
+        event.setCancelled(true);
         final Location loc = event.getEntity().getLocation();
         loc.getWorld().playEffect(loc, Effect.EXPLOSION_LARGE, 5);
         event.blockList().forEach(block -> {
             if(block.hasMetadata(MetadataReferences.PLACEBYPLAYER)){
-               block.setType(Material.AIR);
+                block.setType(Material.AIR);
             }
         });
     }
 
-    @SuppressWarnings("ALL")
+    @SuppressWarnings("deprecation")
     @EventHandler
     public void onPlacedBlock(BlockPlaceEvent event){
+        if(!this.plugin.getConfiguration().getGameArea().isInArea(event.getBlockPlaced().getLocation())){
+            event.setCancelled(true);
+            return;
+        }
+
         for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
             if(((BWGameTeam) team).getProtectArea().isInArea(event.getBlock().getLocation())) {
                 event.setCancelled(true);
                 return;
             }
         }
-        Player p = event.getPlayer();
-        Block b = event.getBlock();
 
-        if(b.getType() == Material.BED_BLOCK)
+        for (Location diamondLocation : this.plugin.getConfiguration().getDiamondLocations()) {
+            if(new Area(diamondLocation, diamondLocation).isInRange(event.getBlockPlaced().getLocation(), 2)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        for (Location emeraldLocation : this.plugin.getConfiguration().getEmeraldLocations()) {
+            if(new Area(emeraldLocation, emeraldLocation).isInRange(event.getBlockPlaced().getLocation(), 2)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        final Player player = event.getPlayer();
+        final Block block = event.getBlock();
+
+        if(block.getType() == Material.BED_BLOCK) {
             event.setCancelled(true);
-
-        if(b.getType() == Material.TNT){
-            b.setType(Material.AIR);
-            b.getWorld().spawn(event.getBlock().getLocation(), TNTPrimed.class);
-            return;
-        }
-        if(b.getType() == Material.CHEST){
-            b.breakNaturally(new ItemStack(Material.AIR));
-            new PopupTowerSchematic(this.plugin, this.getPlayer(p), b.getLocation(), event.getItemInHand()).placeTower();
             return;
         }
 
-        b.setMetadata(MetadataReferences.PLACEBYPLAYER, new FixedMetadataValue(this.plugin, true));
+        if(block.getType() == Material.TNT){
+            block.setType(Material.AIR);
+            block.getWorld().spawn(event.getBlock().getLocation().add(0.5, 0, 0.5), TNTPrimed.class);
+            return;
+        }
+        if(block.getType() == Material.CHEST){
+            event.setCancelled(true);
+            event.getItemInHand().setAmount(0);
+            Location loc = event.getBlockPlaced().getLocation();
+            Block chest = event.getBlockPlaced();
+            int col = this.getPlayer(player).getTeam().getColor().getDyeColor().getWoolData();
+            double rotation = ((player.getLocation().getYaw() - 90.0F) % 360.0F);
+            if (rotation < 0.0D)
+                rotation += 360.0D;
+            if (45.0D <= rotation && rotation < 135.0D) {
+                new TowerSouth(loc, chest, col, player, this.plugin);
+            } else if (225.0D <= rotation && rotation < 315.0D) {
+                new TowerNorth(loc, chest, col, player, this.plugin);
+            } else if (135.0D <= rotation && rotation < 225.0D) {
+                new TowerWest(loc, chest, col, player, this.plugin);
+            } else if (0.0D <= rotation && rotation < 45.0D) {
+                new TowerEast(loc, chest, col, player, this.plugin);
+            } else if (315.0D <= rotation && rotation < 360.0D) {
+                new TowerEast(loc, chest, col, player, this.plugin);
+            }
+            return;
+        }
+
+        if(block.getType() == Material.SPONGE){
+            new SpongeAnimationTask(block).runTaskTimer(this.plugin, 0L, 8L);
+            return;
+        }
+
+        block.setMetadata(MetadataReferences.PLACEBYPLAYER, new FixedMetadataValue(this.plugin, true));
     }
 
     @EventHandler
     public void onProjectileHit(PlayerEggThrowEvent event){
         event.setHatching(false);
+    }
+
+    @EventHandler
+    public void onDeathEntity(EntityDeathEvent event){
+        if(event.getEntity() instanceof CraftSilverfish){
+            BedBugEntity bedBug = this.plugin.getGame().getBedBug(event.getEntity().getUniqueId());
+            if(bedBug != null){
+                this.plugin.getGame().removeBedBug(event.getEntity().getUniqueId());
+                return;
+            }
+        }
+
+        if(event.getEntity() instanceof CraftIronGolem){
+            DreamDefenderEntity dreamDefender = this.plugin.getGame().getDreamDefender(event.getEntity().getUniqueId());
+            if(dreamDefender != null){
+                this.plugin.getGame().removeDreamDefender(event.getEntity().getUniqueId());
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDamage(EntityDamageByEntityEvent event){
+        BWGamePlayer damager = event.getDamager() instanceof Projectile ? this.getPlayer((Player) ((Projectile) event.getDamager()).getShooter()) : event.getDamager() instanceof Player ? this.getPlayer((Player) event.getDamager()) : null;
+
+        if(damager == null) return;
+
+        if(event.getEntity() instanceof CraftSilverfish){
+            BedBugEntity bedBug = this.plugin.getGame().getBedBug(event.getEntity().getUniqueId());
+            if(bedBug != null && bedBug.getTeam().getName().equals(damager.getHyriTeam().getName())){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if(event.getEntity() instanceof CraftIronGolem){
+            DreamDefenderEntity dreamDefender = this.plugin.getGame().getDreamDefender(event.getEntity().getUniqueId());
+            if(dreamDefender != null && dreamDefender.getTeam().getName().equals(damager.getHyriTeam().getName())){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if(!(event.getEntity() instanceof Player)) return;
+
+        BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
+        if(victim.isCooldownRespawn()){
+            event.setCancelled(true);
+        }
+
+        damager.setCooldownRespawn(false);
+
+    }
+
+    @EventHandler
+    public void onConsumePotion(PlayerItemConsumeEvent event){
+        final ItemStack item = event.getItem();
+        final Player player = event.getPlayer();
+        if(item == null) return;
+
+        switch (item.getType()){
+            case POTION:
+                event.setCancelled(true);
+                final PotionMeta meta = (PotionMeta) item.getItemMeta();
+
+                player.getInventory().setItem(player.getInventory().getHeldItemSlot(), null);
+                meta.getCustomEffects().forEach(potionEffect -> {
+                    player.addPotionEffect(potionEffect);
+                    if(potionEffect.getType().equals(PotionEffectType.INVISIBILITY)){
+                        player.getPlayer().setMetadata(MetadataReferences.ISINVISIBLE, new FixedMetadataValue(this.plugin, true));
+                        int duration = potionEffect.getDuration();
+                        new BukkitRunnable(){
+                            int i = 0;
+                            @Override
+                            public void run() {
+                                if(!MetadataReferences.isInvisible(player)){
+                                    this.cancel();
+                                    return;
+                                }
+
+                                if(i > duration) {
+                                    player.getPlayer().removeMetadata(MetadataReferences.ISINVISIBLE, plugin);
+                                    this.cancel();
+                                    return;
+                                }
+                                ++i;
+                            }
+                        }.runTaskTimer(this.plugin, 0, 1);
+                    }
+                });
+                break;
+            case MILK_BUCKET:
+                event.setCancelled(true);
+                BWGamePlayer hPlayer = this.getPlayer(player);
+                if(!hPlayer.isCooldownTrap()){
+                    hPlayer.setCooldownTrap(true);
+                    Bukkit.getScheduler().runTaskLater(this.plugin, () -> hPlayer.setCooldownTrap(false), 20*30);
+                }
+                break;
+        }
+    }
+
+    @EventHandler
+    public void onMove(PlayerMoveEvent event){
+        if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
+
+        Player p = event.getPlayer();
+        BWGamePlayer bwPlayer = this.getPlayer(p);
+
+        if(MetadataReferences.isInvisible(p)){
+            if(!bwPlayer.isCooldownInvisibilityParticle() && p.getLocation().subtract(0, 0.1, 0).getBlock().getType() != Material.AIR) {
+                bwPlayer.setCooldownInvisibilityParticle(true);
+                IHyrame.WORLD.get().playEffect(p.getLocation().add(0, 0.05, 0), Effect.FOOTSTEP, 2);
+            }
+        }
+        if(event.getPlayer().getLocation().getY() <= this.plugin.getConfiguration().getCancelOpenInventoryY())
+            p.closeInventory();
+
+        for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
+            final BWGameTeam hTeam = (BWGameTeam) team;
+
+            if(hTeam.getName().equals(this.getPlayer(event.getPlayer()).getHyriTeam().getName())) continue;
+
+            if(!bwPlayer.isSpectator() && !bwPlayer.isDead() && hTeam.getBaseArea().isInArea(event.getPlayer().getLocation())){
+                BWGamePlayer player = this.plugin.getGame().getPlayer(event.getPlayer());
+                BWTeamTraps traps = hTeam.getTraps();
+                if(traps.canTrap() && !player.isCooldownTrap()) {
+                    traps.getFirstTrap().active(player, hTeam);
+                    traps.removeTrap();
+                    traps.setCanTrap(false);
+                    Bukkit.getScheduler().runTaskLater(this.plugin, () -> traps.setCanTrap(true), 15*20);
+                }
+            }
+        }
+    }
+
+    @EventHandler
+    public void onDrag(InventoryDragEvent event){
+        int slot = Utils.getFirstElementOfInt(event.getInventorySlots());
+        if(event.getInventory().getType() == InventoryType.CRAFTING && slot >= 1 && slot <= 4){
+            event.setCancelled(true);
+        }
     }
 
     private BWGamePlayer getPlayer(Player player){

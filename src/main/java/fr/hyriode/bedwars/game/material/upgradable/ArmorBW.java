@@ -14,7 +14,7 @@ public class ArmorBW extends ItemShop {
     private Material leggings;
     private Material boots;
 
-    public ArmorBW(int level, Material material, String keyName, OreStack... price) {
+    public ArmorBW(int level, Material material, String keyName, OreStack price) {
         super(keyName, new ItemStack(material), BWShopCategory.ARMOR, true, price);
         this.level = level;
     }

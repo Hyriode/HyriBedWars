@@ -4,10 +4,12 @@ import fr.hyriode.hyrame.game.HyriGameType;
 
 public enum BWGameType implements HyriGameType {
 
-    SOLO("Solo", 1, 8, 3, 8),
+    SOLO("Solo", 1, 8, 4, 8),
     DOUBLES("Doubles", 2, 8, 6, 16),
     TRIO("Trio", 3, 4, 6, 12),
     SQUAD("Squad", 4, 4, 8, 16),
+//1v1
+    VS1("1v1", 1, 2, 2, 2)
     ;
 
     private final String name;

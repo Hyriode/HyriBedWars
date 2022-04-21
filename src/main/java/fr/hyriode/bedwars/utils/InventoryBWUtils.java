@@ -1,41 +1,52 @@
 package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.game.BWGameOre;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.material.BWMaterial;
+import fr.hyriode.bedwars.game.material.ItemShop;
 import fr.hyriode.bedwars.game.material.OreStack;
+import fr.hyriode.hyrame.utils.ItemUtil;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.function.Consumer;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class InventoryBWUtils {
 
-    public static boolean hasItems(Player player, List<OreStack> itemStack){
+    public static boolean hasPrice(Player player, List<OreStack> itemStack){
+        int i = 0;
         for (OreStack itemToSell : itemStack) {
-            if(getAmountItems(player, itemToSell) >= itemToSell.getAmount())
-                return true;
+            if(hasPrice(player, itemToSell))
+                ++i;
         }
-        return false;
+        return i == itemStack.size();
     }
 
-    public static boolean hasItems(Player player, ItemStack itemStack){
-        return getAmountItems(player, itemStack) > 0;
+    public static boolean hasPrice(Player player, OreStack price){
+        return getAmountItems(player, price) >= price.getAmount();
     }
 
-    public static boolean hasItems(Player player, ItemStack... materials){
-        for(ItemStack item : materials){
-            return getAmountItems(player, item) > 0;
+    public static boolean hasItem(Player player, ItemStack itemStack){
+        return getAmountItems(player, itemStack.getType()) > 0;
+    }
+
+    public static boolean hasItems(Player player, ItemStack... itemStack){
+        int i = 0;
+        for(ItemStack item : itemStack){
+            if(getAmountItems(player, item.getType()) > 0)
+                ++i;
         }
-        return false;
+        return i > 0;
     }
 
-    public static boolean hasItems(Player player, List<ItemStack> items, ItemStack... itemss){
-        items.addAll(Arrays.asList(itemss));
-        return hasItems(player, items.toArray(new ItemStack[0]));
+    public static boolean hasItems(Player player, List<ItemStack> itemInventory, ItemStack... itemsInventory){
+        itemInventory.addAll(Arrays.asList(itemsInventory));
+        return hasItems(player, itemInventory.toArray(new ItemStack[0]));
     }
 
     public static int getAmountItems(Player player, OreStack itemStack){
@@ -47,28 +58,26 @@ public class InventoryBWUtils {
         return amount;
     }
 
-    public static int getAmountItems(Player player, ItemStack itemStack){
+    public static int getAmountItems(Player player, Material material){
         int amount = 0;
         for (ItemStack itemInventory : player.getInventory()) {
-            if(itemInventory != null && itemStack.getType() == itemInventory.getType())
+            if(itemInventory != null && material == itemInventory.getType())
                 amount += itemInventory.getAmount();
         }
         return amount;
     }
 
-    public static void removeItems(Player player, List<OreStack> buys){
-        for(OreStack itemStack : buys){
-            int amount = itemStack.getAmount();
-            for(int i = 0; i < player.getInventory().getSize() ; ++i){
-                ItemStack itemInventory = player.getInventory().getItem(i);
-                if(itemInventory != null && itemInventory.getType() == itemStack.getItem().getItemStack().getType() && amount > 0){
-                    if(itemInventory.getAmount() > amount){
-                        itemInventory.setAmount(itemInventory.getAmount() - amount);
-                        break;
-                    }else{
-                        player.getInventory().setItem(i, null);
-                        amount -= itemInventory.getAmount();
-                    }
+    public static void removeItems(Player player, OreStack buys){
+        int amount = buys.getAmount();
+        for(int i = 0; i < player.getInventory().getSize() ; ++i){
+            ItemStack itemInventory = player.getInventory().getItem(i);
+            if(itemInventory != null && itemInventory.getType() == buys.getItem().getItemStack().getType() && amount > 0){
+                if(itemInventory.getAmount() > amount){
+                    itemInventory.setAmount(itemInventory.getAmount() - amount);
+                    break;
+                }else{
+                    player.getInventory().setItem(i, null);
+                    amount -= itemInventory.getAmount();
                 }
             }
         }
@@ -134,12 +143,23 @@ public class InventoryBWUtils {
         }
     }
 
-    public static List<ItemStack> getItemsInventory(Player player, ItemStack... itemStacks) {
-        List<ItemStack> items = new ArrayList<>();
-        for(ItemStack itemStack : player.getInventory())
-            for(ItemStack itemSearch : itemStacks)
-                if(itemStack != null && itemStack.getType() == itemSearch.getType())
-                    items.add(itemStack.clone());
+    public static List<OreStack> getOresInventory(Player player, ItemShop... ores) {
+        List<OreStack> items = new ArrayList<>();
+        for(ItemStack itemStack : player.getInventory()) {
+            for (ItemShop itemSearch : ores) {
+                if (itemStack != null && itemStack.getType() == itemSearch.getItemStack().getType()) {
+                    if(!items.stream().map(oreStack -> oreStack.getItemStack().getType()).collect(Collectors.toList()).contains(itemStack.getType())){
+                        items.add(new OreStack(itemSearch, itemStack.getAmount()));
+                    }else{
+                        items.forEach(oreStack -> {
+                            if(oreStack.getItemStack().getType() == itemSearch.getItemStack().getType()){
+                                oreStack.addAmount(itemStack.getAmount());
+                            }
+                        });
+                    }
+                }
+            }
+        }
         return items;
     }
 
@@ -148,14 +168,14 @@ public class InventoryBWUtils {
     }
 
     public static void addItem(Player player, int slot, ItemStack itemStack){
-        if(slot == -1)
+        if(slot == -1) {
             player.getInventory().addItem(itemStack);
-        else {
-            ItemStack item = player.getInventory().getItem(slot) != null ? player.getInventory().getItem(slot).clone() : null;
-            player.getInventory().setItem(slot, itemStack);
-            if(item != null) {
-                player.getInventory().addItem(item);
-            }
+            return;
+        }
+        ItemStack item = player.getInventory().getItem(slot) != null ? player.getInventory().getItem(slot).clone() : null;
+        player.getInventory().setItem(slot, itemStack);
+        if(item != null) {
+            player.getInventory().addItem(item);
         }
     }
 
@@ -178,5 +198,22 @@ public class InventoryBWUtils {
 
     public static boolean isItem(ItemStack base, List<ItemStack> items){
         return isItem(base, items);
+    }
+
+    public static boolean removeDuplicates(Player player, Material material){
+        int amount = getAmountItems(player, material);
+        if(amount > 0){
+            for(int i = 0; i < player.getInventory().getSize() ;++i){
+                ItemStack item = player.getInventory().getItem(i);
+                if(item != null && item.getType() == material){
+                    player.getInventory().setItem(i, null);
+                    --amount;
+                }
+                if(amount <= 0){
+                    break;
+                }
+            }
+        }
+        return false;
     }
 }

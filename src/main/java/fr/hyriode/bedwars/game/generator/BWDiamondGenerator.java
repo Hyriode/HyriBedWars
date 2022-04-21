@@ -1,16 +1,14 @@
 package fr.hyriode.bedwars.game.generator;
 
-import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
 public enum BWDiamondGenerator implements IHyriGeneratorTier {
-    DIAMOND_TIER_I("I", false, 8, 160),
-    DIAMOND_TIER_II("II", false, 8, 200),
-    DIAMOND_TIER_III("III", false, 8, 260),
-
+    DIAMOND_TIER_I("I", false, 8, 30*20),
+    DIAMOND_TIER_II("II", false, 8, 23*20),
+    DIAMOND_TIER_III("III", false, 8, 12*20),
     ;
 
     private final String name;

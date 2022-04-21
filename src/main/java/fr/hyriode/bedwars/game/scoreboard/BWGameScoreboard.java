@@ -1,9 +1,12 @@
 package fr.hyriode.bedwars.game.scoreboard;
 
+import fr.hyriode.bedwars.game.BWGamePlayer;
+import fr.hyriode.bedwars.game.BWGameType;
 import fr.hyriode.bedwars.game.event.BWNextEvent;
+import fr.hyriode.hyrame.game.HyriGameState;
+import fr.hyriode.hyrame.game.scoreboard.HyriGameScoreboard;
 import fr.hyriode.hyrame.game.scoreboard.HyriScoreboardIpConsumer;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
-import fr.hyriode.hyrame.scoreboard.Scoreboard;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
@@ -15,16 +18,17 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class BWGameScoreboard extends Scoreboard {
+public class BWGameScoreboard extends HyriGameScoreboard<BWGame> {
 
     private final HyriBedWars plugin;
     private final BWGame game;
+    private final BWGameType gameType;
 
     public BWGameScoreboard(HyriBedWars plugin, Player player) {
-        super(plugin, player, "bedwarsSB", ChatColor.DARK_AQUA + "     " + ChatColor.BOLD + plugin.getGame().getDisplayName() + "     ");
+        super(plugin, plugin.getGame(), player, "bedwars");
         this.plugin = plugin;
+        this.gameType = this.plugin.getConfiguration().getGameType();
         this.game = this.plugin.getGame();
-
 
         this.setLine(0, this.getDateLine(), line -> line.setValue(this.getDateLine()), 20);
         this.setLine(1, "§1");
@@ -33,8 +37,7 @@ public class BWGameScoreboard extends Scoreboard {
 
         int i = this.addTeamsLines();
 
-        this.setLine(i, "§3");
-        this.setLine(i+1, ChatColor.DARK_AQUA + "hyriode.fr", new HyriScoreboardIpConsumer("hyriode.fr"), 2);
+        this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new HyriScoreboardIpConsumer("hyriode.fr"), 2);
     }
 
     private int addTeamsLines() {
@@ -43,7 +46,16 @@ public class BWGameScoreboard extends Scoreboard {
             this.setLine(i, this.getTeamLine((BWGameTeam) team));
             i += 1;
         }
-        return i;
+        this.setLine(i, "§3");
+        if(this.gameType.getMaxTeams() <= 4){
+            this.setLine(++i, this.getLinePrefix("kills") + " " + ChatColor.AQUA + this.getGamePlayer().getKills());
+            this.setLine(++i, this.getLinePrefix("finalkills") + " " + ChatColor.AQUA + this.getGamePlayer().getFinalKills());
+            if(this.gameType.getMaxTeams() > 2) {
+                this.setLine(++i, this.getLinePrefix("bedsbroken") + " " + ChatColor.AQUA + this.getGamePlayer().getBedsBroken());
+            }
+            this.setLine(i, "§4");
+        }
+        return i + 1;
     }
 
     public void update(){
@@ -52,10 +64,7 @@ public class BWGameScoreboard extends Scoreboard {
     }
 
     private String getTeamLine(BWGameTeam team) {
-        if(this.game.getPlayer(player.getUniqueId()).isInTeam(team)) {
-            return team.getDisplayName().getForPlayer(player) + ChatColor.RESET + " » " +team.getStateAsSymbol() + " " + this.getLinePrefix("you");
-        }
-        return team.getDisplayName().getForPlayer(player) + ChatColor.RESET + " » " +team.getStateAsSymbol();
+        return team.getColor().getChatColor() + team.getDisplayName().getForPlayer(player) + ChatColor.RESET + " » " + team.getStateAsSymbol() + (this.game.getPlayer(player.getUniqueId()).isInTeam(team) ? " " + this.getLinePrefix("you") : "");
     }
 
     private String getActualEvent(){
@@ -63,6 +72,7 @@ public class BWGameScoreboard extends Scoreboard {
         long timeBeforeEvent = currentNextEvent.getNextEvent() != null ?
                 currentNextEvent.getNextEvent().getTimeBeforeEvent() : 0;
         long timeSecond = timeBeforeEvent - this.game.getTask().getTime();
+
         if(currentNextEvent.getNextEvent() != null)
             return currentNextEvent.getNextEvent().get().getForPlayer(this.player)
                     + " in " + StringBWUtils.formatTime(timeSecond);
@@ -78,18 +88,12 @@ public class BWGameScoreboard extends Scoreboard {
         return ChatColor.GRAY + format.format(new Date());
     }
 
-    private String getTimeLine() {
-        final SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
-
-        format.setTimeZone(TimeZone.getTimeZone("GMT"));
-
-        final String line = format.format(this.game.getGameTime() * 1000);
-
-        return this.getLinePrefix("time") + ChatColor.AQUA + (line.startsWith("00:") ? line.substring(3) : line);
-    }
-
     private String getLinePrefix(String prefix) {
         return HyriBedWars.getLanguageManager().getValue(this.player, "scoreboard." + prefix + ".display");
+    }
+
+    private BWGamePlayer getGamePlayer(){
+        return this.plugin.getGame().getPlayer(this.player);
     }
 
 

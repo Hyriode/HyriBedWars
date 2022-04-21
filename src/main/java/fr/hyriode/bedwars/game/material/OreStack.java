@@ -6,7 +6,7 @@ import org.bukkit.inventory.ItemStack;
 public class OreStack {
 
     private final ItemShop item;
-    private final int amount;
+    private int amount;
 
     public OreStack(ItemShop item, int amount){
         this.item = item;
@@ -19,6 +19,14 @@ public class OreStack {
 
     public OreStack(ArmorBW item){
         this(item, 1);
+    }
+
+    public void addAmount(int amount){
+        this.amount += amount;
+    }
+
+    public void setAmount(int amount){
+        this.amount = amount;
     }
 
     public int getAmount() {

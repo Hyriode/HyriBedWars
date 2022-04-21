@@ -6,6 +6,8 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class StringBWUtils {
@@ -38,35 +40,25 @@ public class StringBWUtils {
         return HyriBedWars.getLanguageManager().getValue(player, "tier." + i);
     }
 
-    public static String getCountPriceAsString(Player player, List<OreStack> items){
-        if(items.isEmpty())
-            return "Nothing";
-        StringBuilder finalStr = new StringBuilder();
-        for (OreStack item : items) {
-            finalStr.append(item.getItem().getColor() + "" + item.getAmount() + " " + item.getItem().getName().getForPlayer(player) + (item.getAmount() != 1 ? "s" : "") + ", ");
-        }
-        return finalStr.substring(0, finalStr.length() - 2);
+    public static String getCountPriceAsString(Player player, OreStack item){
+        return item.getItem().getColor() + "" + item.getAmount() + " " + item.getItem().getName().getForPlayer(player) + (item.getAmount() != 1 ? "s" : "");
     }
 
-    public static String getPriceAsString(Player player, List<OreStack> items){
-        if(items.isEmpty())
-            return "Nothing";
-        if(items.size() == 1)
-            return items.get(0).getItem().getName().getForPlayer(player);
-        StringBuilder finalStr = new StringBuilder();
-        for (OreStack item : items) {
-            finalStr.append(item.getItem().getName().getForPlayer(player) + (item.getAmount() != 1 ? "s" : "") + ", ");
-        }
-        return finalStr.substring(0, finalStr.length() - 2);
+    public static String getPriceAsString(Player player, OreStack item){
+        return item.getItem().getName().getForPlayer(player) + (item.getAmount() != 1 ? "s" : "");
     }
 
-    public static List<String> loreToList(String inputLore){
+    public static int getCountPriceMissing(Player player, OreStack items){
+        return items.getAmount() - InventoryBWUtils.getAmountItems(player, items);
+    }
+
+    public static List<String> loreToList(String inputLore, String... inputOtherLore){
         List<String> outputLore = new ArrayList<>();
         String[] splitLore = inputLore.split("\n");
         for(String desc : splitLore){
             outputLore.add(ChatColor.GRAY + desc);
         }
-        outputLore.add(ChatColor.GRAY + " ");
+        outputLore.addAll(Arrays.asList(inputOtherLore));
         return outputLore;
     }
 

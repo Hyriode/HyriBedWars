@@ -1,5 +1,7 @@
 package fr.hyriode.bedwars.game.generator;
 
+import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.configuration.BWGeneratorConfiguration;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.entity.Player;
 
@@ -10,7 +12,7 @@ public enum BWBaseIronGenerator implements IHyriGeneratorTier {
     BASE_I(true, 48, 30),
     BASE_II(true, 48, 25),
     BASE_III(true, 48, 20),
-    BASE_IV(true, 48, 10),
+    BASE_IV(true, 48, 15),
 
     ;
 

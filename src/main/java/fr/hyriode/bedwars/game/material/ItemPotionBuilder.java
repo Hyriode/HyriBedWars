@@ -7,6 +7,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.potion.Potion;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionType;
 
@@ -18,11 +19,18 @@ public class ItemPotionBuilder extends ItemBuilder{
     private final int duration;
     private final int amplifier;
 
+    private boolean isSplash = false;
+
     public ItemPotionBuilder(PotionType type, int duration, int amplifier) {
         super(Material.POTION);
         this.type = type;
         this.duration = duration;
         this.amplifier = amplifier;
+    }
+
+    public ItemPotionBuilder withSplash(){
+        this.isSplash = true;
+        return this;
     }
 
     @SuppressWarnings("deprecation")
@@ -36,7 +44,10 @@ public class ItemPotionBuilder extends ItemBuilder{
             potionMeta.setLore(Collections.singletonList(ChatColor.GRAY + "Jump Boost" + " " + StringBWUtils.getLevelLang(amplifier + 1) + " (" + StringBWUtils.formatTime(duration/20) + ")"));
         }
         itemStack.setItemMeta(potionMeta);
-        itemStack.setDurability((short) this.type.getDamageValue());
+        if(this.isSplash){
+            itemStack.setDurability((short) ((short) this.type.getDamageValue() | 16384));
+        }else itemStack.setDurability((short) this.type.getDamageValue());
+
         return itemStack;
     }
 }

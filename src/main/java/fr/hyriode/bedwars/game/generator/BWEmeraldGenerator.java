@@ -1,15 +1,14 @@
 package fr.hyriode.bedwars.game.generator;
 
-import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.entity.Player;
 
 import java.util.function.Function;
 
 public enum BWEmeraldGenerator implements IHyriGeneratorTier {
-    EMERALD_TIER_I("I", false, 2, 60),
-    EMERALD_TIER_II("II", false, 2, 120),
-    EMERALD_TIER_III("III", false, 2, 300),
+    EMERALD_TIER_I("I", false, 2, 70 * 20),
+    EMERALD_TIER_II("II", false, 2, 50 * 20),
+    EMERALD_TIER_III("III", false, 2, 30 * 20),
 
     ;
 

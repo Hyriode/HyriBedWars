@@ -13,13 +13,13 @@ public class BWUpgradeTier {
     private final String keyName;
     private final int tier;
     private final ItemStack itemStack;
-    private final List<OreStack> price;
+    private final OreStack price;
 
-    public BWUpgradeTier(int tier, String keyName, ItemStack itemStack, OreStack... price){
+    public BWUpgradeTier(int tier, String keyName, ItemStack itemStack, OreStack price){
         this.tier = tier;
         this.keyName = keyName;
         this.itemStack = itemStack;
-        this.price = Arrays.asList(price);
+        this.price = price;
     }
 
     public int getTier() {
@@ -38,7 +38,7 @@ public class BWUpgradeTier {
         return itemStack;
     }
 
-    public List<OreStack> getPrice() {
+    public OreStack getPrice() {
         return price;
     }
 }
