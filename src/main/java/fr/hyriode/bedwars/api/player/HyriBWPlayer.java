@@ -1,49 +1,25 @@
 package fr.hyriode.bedwars.api.player;
 
 import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.player.HyriPlayerData;
 import fr.hyriode.api.player.IHyriPlayer;
-import fr.hyriode.bedwars.api.HyriBedWarsAPI;
 import fr.hyriode.bedwars.api.shop.HyriHotbarCategory;
-import fr.hyriode.bedwars.api.shop.HyriShopCategory;
 import fr.hyriode.bedwars.game.material.BWMaterial;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-public class HyriBWPlayer {
+public class HyriBWPlayer extends HyriPlayerData {
 
-    private final UUID uniqueId;
-//    private final IHyriPlayer player;
-    private HyriBWStatistics statistics;
     private Map<HyriHotbarCategory, Integer> hotBar;
     private Map<String, Integer> quickBuy;
     private HyriGameStyle gameStyle;
-//    private HyriCosmetic currentCosmetic;
 
-    public HyriBWPlayer(UUID uniqueId) {
-        this.uniqueId = uniqueId;
-//        this.player = HyriAPI.get().getPlayerManager().getPlayer(uniqueId);
-        this.statistics = new HyriBWStatistics();
-        this.quickBuy = new HashMap<>();
-        this.hotBar = new HashMap<>();
+    public HyriBWPlayer() {
+        this.resetQuickBuy();
+        this.resetHotbar();
         this.gameStyle = HyriGameStyle.HYRIODE;
-    }
-
-    public UUID getUUID() {
-        return this.uniqueId;
-    }
-
-    public IHyriPlayer getPlayer() {
-        return HyriAPI.get().getPlayerManager().getPlayer(uniqueId);
-    }
-
-    public HyriBWStatistics getStatistics() {
-        return this.statistics;
-    }
-
-    public void setStatistics(HyriBWStatistics statistics) {
-        this.statistics = statistics;
     }
 
     public Map<String, Integer> getQuickBuy() {
@@ -129,8 +105,10 @@ public class HyriBWPlayer {
         return gameStyle;
     }
 
-    public void update(){
-        HyriBedWarsAPI.get().getPlayerManager().sendPlayer(this);
+    public void update(UUID uuid){
+        IHyriPlayer player = HyriAPI.get().getPlayerManager().getPlayer(uuid);
+        player.addData("bedwars", this);
+        player.update();
     }
 
     public void resetQuickBuy() {

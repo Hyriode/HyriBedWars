@@ -11,7 +11,7 @@ public class BWCreatureListener extends HyriListener<HyriBedWars> {
         super(plugin);
     }
 
-    @EventHandler()
+    @EventHandler
     public void onSpawn(CreatureSpawnEvent event){
         event.setCancelled(false);
     }

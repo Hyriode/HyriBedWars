@@ -45,7 +45,6 @@ public class BWGameTeam extends HyriGameTeam {
     private Area baseArea;
     private Area protectArea;
 
-
     public BWGameTeam(EBWGameTeam team, int teamSize, HyriBedWars plugin) {
         super(plugin.getGame(), team.getName(), team.getDisplayName(), team.getColor(), teamSize);
         this.plugin = plugin;
@@ -69,27 +68,6 @@ public class BWGameTeam extends HyriGameTeam {
         this.baseArea = new Area(teamConfig.getBaseAreaPos1(), teamConfig.getBaseAreaPos2());
         this.protectArea = new Area(teamConfig.getBaseAreaProtectionPos1(), teamConfig.getBaseAreaProtectionPos2());
 
-    }
-
-    public void startHealPoolUpgrade(BWGamePlayer player){
-        if(this.upgrades.containsUpgrade(EBWUpgrades.HEAL_POOL)){
-            EBWUpgrades.HEAL_POOL.active(this.plugin, player, this.upgrades.getTierFromUpgrade(EBWUpgrades.HEAL_POOL).getTier());
-        }
-    }
-
-    public void updateGenerator(BWGamePlayer player){
-        if(this.upgrades.containsUpgrade(EBWUpgrades.FORGE)){
-            BWUpgradeTier currentTier = this.upgrades.getCurrentUpgradeTier(EBWUpgrades.FORGE);
-            EBWUpgrades.FORGE.active(this.plugin, player, currentTier.getTier());
-        }
-    }
-
-    public void updateUpgrade(){
-        this.upgrades.getUpgrades().forEach((upgrade, upgradeTier) -> {
-            this.players.forEach(player -> {
-
-            });
-        });
     }
 
     public boolean hasBed() {

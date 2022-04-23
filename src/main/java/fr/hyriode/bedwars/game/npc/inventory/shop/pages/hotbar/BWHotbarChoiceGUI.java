@@ -3,6 +3,7 @@ package fr.hyriode.bedwars.game.npc.inventory.shop.pages.hotbar;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.api.shop.HyriHotbarCategory;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWHotbarManagerGUI;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import fr.hyriode.hyrame.item.ItemBuilder;
@@ -28,9 +29,10 @@ public class BWHotbarChoiceGUI extends HyriInventory {
     }
 
     private void initGui(){
-        HyriBWPlayer player = this.plugin.getGame().getPlayer(this.owner).getAccount();
+        BWGamePlayer player = this.plugin.getGame().getPlayer(this.owner);
+        HyriBWPlayer account = player.getAccount();
 
-        final Map<HyriHotbarCategory, Integer> hotbar = player.getHotBar();
+        final Map<HyriHotbarCategory, Integer> hotbar = account.getHotBar();
 
         int slotAdd = 27;
 
@@ -48,10 +50,11 @@ public class BWHotbarChoiceGUI extends HyriInventory {
         this.setItem(13, hotbarItems.getItemStack(this.owner));
     }
 
-    private Consumer<InventoryClickEvent> getClick(HyriBWPlayer player, int slot){
+    private Consumer<InventoryClickEvent> getClick(BWGamePlayer player, int slot){
         return event -> {
-            player.putMaterialHotBar(slot, this.hotbarItems.fromAPI());
-            player.update();
+            HyriBWPlayer account = player.getAccount();
+            account.putMaterialHotBar(slot, this.hotbarItems.fromAPI());
+            account.update(player.getUUID());
             new BWHotbarManagerGUI(this.plugin, this.owner).open();
         };
     }

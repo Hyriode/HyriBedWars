@@ -18,7 +18,7 @@
   "game.next-event.emerald.II": "&aEmerald II",
   "game.next-event.emerald.III": "&aEmerald III",
   "game.next-event.beds-destroy": "&cBeds destroy",
-  "game.next-event.dragons-spawn": "&Sudden Death",
+  "game.next-event.dragons-spawn": "&aSudden Death",
   "game.next-event.game-end": "&cGame end",
 
   "npc.shop.name": "ITEM SHOP",
@@ -55,7 +55,8 @@
   "inv.tracker.name": "Track Team",
   "inv.tracker.lore": "Purchase tracking upgrade for\nyour compass which will track\neach player on a specific team\nuntil you die.",
   "inv.tracker.title": "Purchase Enemy Tracker",
-  "tracker.bed-dont-destroy": "Not all enemy beds are destroyed yet!",
+  "shop.tracker.bed-dont-destroy": "Not all enemy beds are destroyed yet!",
+  "shop.tracker.already-have": "You already have a tracker",
 
   "inv.hotbar.separator.title": "Categories",
   "inv.hotbar.separator.lore": "Hotbar",
@@ -212,8 +213,8 @@
   "upgrade.dragon_buff.name": "Dragon Buff",
   "upgrade.dragon_buff.lore": "Your team will have 2 dragons\ninstead of 1 during deathmatch!",
 
-  "generator.diamond": "Diamond",
-  "generator.emerald": "Emerald",
+  "generator.diamond": "DIAMOND",
+  "generator.emerald": "EMERALD",
 
   "inv.choice_slot.title": "Adding to Quick Buy...",
   "inv.choice_slot.add": "Adding item to Quick Slot!",
@@ -252,6 +253,8 @@
 
   "item.tracker.name": "§aCompass §7(Right Click)",
 
-  "team.name": "Team"
+  "team.name": "Team",
+
+  "item.ender_pearl.cant_tp": "You cannot teleport to this area"
 
 }

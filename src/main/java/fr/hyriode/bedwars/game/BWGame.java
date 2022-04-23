@@ -2,6 +2,7 @@ package fr.hyriode.bedwars.game;
 
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.settings.HyriLanguage;
+import fr.hyriode.api.util.Skin;
 import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
 import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
 import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
@@ -12,10 +13,14 @@ import fr.hyriode.bedwars.game.npc.inventory.shop.pages.BWShopQuickBuy;
 import fr.hyriode.bedwars.game.npc.inventory.upgrade.BWUpgradeGui;
 import fr.hyriode.bedwars.game.start.items.BWGamePlayItem;
 import fr.hyriode.bedwars.game.tasks.BWGameInventoryTask;
+import fr.hyriode.bedwars.game.test.BWGameInfo;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
+import fr.hyriode.hyrame.game.HyriGameState;
+import fr.hyriode.hyrame.game.HyriGameType;
+import fr.hyriode.hyrame.game.event.player.HyriGameJoinEvent;
 import fr.hyriode.hyrame.game.protocol.HyriDeathProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriWaitingProtocol;
@@ -23,17 +28,18 @@ import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.hyrame.npc.NPC;
 import fr.hyriode.hyrame.npc.NPCManager;
-import fr.hyriode.hyrame.npc.NPCSkin;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.event.BWNextEvent;
 import fr.hyriode.bedwars.game.npc.BWNPCType;
 import fr.hyriode.bedwars.game.scoreboard.BWGameScoreboard;
 import fr.hyriode.bedwars.game.tasks.BWGameTask;
 import fr.hyriode.bedwars.game.team.EBWGameTeam;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.hyrame.utils.Area;
+import fr.hyriode.hyrame.utils.Cuboid;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
@@ -41,13 +47,13 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class BWGame extends HyriGame<BWGamePlayer> {
 
     private final HyriBedWars plugin;
-    private final BWGameType gameType;
     private BWNextEvent actualEvent;
 
     private final List<HyriGenerator> diamondGenerators = new ArrayList<>();
@@ -59,25 +65,46 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private final List<BedBugEntity> bedBugs = new ArrayList<>();
 
     public BWGame(IHyrame hyrame, HyriBedWars plugin) {
-        super(hyrame, plugin, "bedwars", HyriBedWars.NAME, BWGamePlayer.class);
+        super(hyrame, plugin, HyriAPI.get().getConfiguration().isDevEnvironment() ? new BWGameInfo("bedwars", "BedWars") : HyriAPI.get().getGameManager().getGameInfo("bedwars"), BWGamePlayer.class, HyriAPI.get().getConfiguration().isDevEnvironment() ? BWGameType.SQUAD : HyriGameType.getFromData(BWGameType.values()));
 
         this.plugin = plugin;
-        this.gameType = this.plugin.getConfiguration().getGameType();
-
-        this.minPlayers = this.gameType.getMinPlayers();
-        this.maxPlayers = this.gameType.getMaxPlayers();
 
         this.registerTeams();
     }
 
     private void registerTeams() {
-        Arrays.asList(EBWGameTeam.values()).forEach(
-                gameTeam -> this.registerTeam(new BWGameTeam(gameTeam, this.gameType.getTeamsSize(), this.plugin)));
+        for(int i = 0; i < ((BWGameType) this.type).getMaxTeams();++i){
+            this.registerTeam(new BWGameTeam(EBWGameTeam.values()[i], ((BWGameType) this.type).getTeamsSize(), this.plugin));
+        }
     }
 
     @Override
     public void handleLogin(Player p) {
+        if(!HyriAPI.get().getConfiguration().isDevEnvironment())
         super.handleLogin(p);
+        else
+        try {
+            if (this.getState() == HyriGameState.WAITING || this.getState() == HyriGameState.READY) {
+                if (!this.isFull()) {
+                    final BWGamePlayer player = BWGamePlayer.class.getConstructor(HyriGame.class, Player.class).newInstance(this, p);
+
+                    this.players.add(player);
+
+//                    this.updatePlayerCount();
+
+                    HyriAPI.get().getEventBus().publish(new HyriGameJoinEvent(this, player));
+
+                    if (this.usingGameTabList) {
+                        this.tabListManager.handleLogin(p);
+                    }
+                }
+            }
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+            p.sendMessage(org.bukkit.ChatColor.RED + "An error occurred while joining game! Sending you back to lobby...");
+            HyriAPI.get().getServerManager().sendPlayerToLobby(p.getUniqueId());
+            e.printStackTrace();
+        }
+
         p.getInventory().setArmorContents(null);
         p.getInventory().clear();
         p.setGameMode(GameMode.ADVENTURE);
@@ -85,18 +112,10 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         p.setHealth(20);
         p.setLevel(0);
         p.setExp(0.0F);
-        p.teleport(this.plugin.getConfiguration().getWaitingSpawn());
+        p.teleport(this.plugin.getConfiguration().getWaitingRoom().getWaitingSpawn());
         p.getActivePotionEffects().forEach(potionEffect -> p.removePotionEffect(potionEffect.getType()));
 
         this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
-
-        HyriBWPlayer account = this.plugin.getAPI().getPlayerManager().getPlayer(p.getUniqueId());
-
-        if(account == null){
-            account = new HyriBWPlayer(p.getUniqueId());
-        }
-
-        this.getPlayer(p.getUniqueId()).setAccount(account);
 
         Bukkit.getScheduler().runTaskLater(this.plugin , () -> this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class), 1);
     }
@@ -133,7 +152,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 player.removeMetadata(MetadataReferences.ISINVISIBLE, this.plugin);
             }
 
-            player.teleport(this.plugin.getConfiguration().getKillLoc());
+            player.teleport(this.plugin.getConfiguration().getWaitingRoom().getWaitingSpawn());
 
             return this.getPlayer(player).kill();
         }, this.createDeathScreen(), HyriDeathProtocol.ScreenHandler.Default.class)
@@ -141,7 +160,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         this.setActualEvent(BWNextEvent.START);
         this.updateBed();
-        this.updateAPI();
 
         this.spawnNPCs();
 
@@ -156,6 +174,17 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.teleportTeams();
 
         this.setScoreboardForPlayers();
+
+        this.removeWaitingRoom();
+    }
+
+    private void removeWaitingRoom(){
+        Area area = this.plugin.getConfiguration().getWaitingRoom().getArea();
+        final Cuboid cuboid = new Cuboid(area.getMin(), area.getMax());
+
+        for (Block block : cuboid.getBlocks()) {
+            block.setType(Material.AIR);
+        }
     }
 
     public List<BWGameTeam> getTeamsTracker(BWGameTeam ignored){
@@ -185,7 +214,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             if(((BWGameTeam) team).isEliminated())
                 ++eliminated;
         }
-        if(eliminated == this.gameType.getMaxTeams() - 1){
+        if(eliminated == BWGameType.TRIO.getMaxTeams() - 1){
             this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).findFirst().ifPresent(this::win);
         }
         this.players.forEach(player -> {
@@ -203,8 +232,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void postRegistration() {
         super.postRegistration();
-
-        this.protocolManager.getProtocol(HyriWaitingProtocol.class).withTeamSelector(true);
     }
 
     private HyriDeathProtocol.Screen createDeathScreen() {
@@ -239,30 +266,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         });
     }
 
-    private void updateAPI(){
-        for (BWGamePlayer player : this.players) {
-            if(this.plugin.getAPI().getPlayerManager().getPlayer(player.getUUID()) == null){
-                HyriBWPlayer account = player.getAccount();
-                account.resetQuickBuy();
-                account.resetHotbar();
-                account.update();
-            }
-        }
-    }
-
     private void spawnNPCs(){
         for(HyriGameTeam team : this.plugin.getGame().getTeams()) {
             final Location locShop = ((BWGameTeam)team).getNPCShopLocation();
             final Location locUpgrade = ((BWGameTeam)team).getNPCUpgradeLocation();
 
-            final NPCSkin npcShopSkin =
-//                    this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-//                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() :
-                    BWNPCType.SHOP.getDefaultSkin();
-            final NPCSkin npcUpgradeSkin =
-//                    this.getCosmeticByUpPlayersRank(team.getPlayers()) != null ?
-//                    this.getCosmeticByUpPlayersRank(team.getPlayers()).getSkin() :
-                    BWNPCType.UPGRADE.getDefaultSkin();
+            final Skin npcShopSkin = BWNPCType.SHOP.getDefaultSkin();
+            final Skin npcUpgradeSkin = BWNPCType.UPGRADE.getDefaultSkin();
 
             for (HyriGamePlayer player : this.players) {
                 final HyriLanguage language = HyriAPI.get().getPlayerSettingsManager()
@@ -311,19 +321,19 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         //Spawn Generator of the Middle
 
-        for(Location loc : this.plugin.getConfiguration().getDiamondLocations()){
+        for(Location loc : this.plugin.getConfiguration().getDiamondGeneratorLocations()){
             final HyriGenerator diamondGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
                     .withItem(BWGameOre.DIAMOND.getItemStack())
-                    .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
+                    .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> ChatColor.BOLD + "" + ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
                     .build();
             diamondGenerator.create();
             this.diamondGenerators.add(diamondGenerator);
         }
 
-        for(Location loc : this.plugin.getConfiguration().getEmeraldLocations()){
+        for(Location loc : this.plugin.getConfiguration().getEmeraldGeneratorLocations()){
             final HyriGenerator emeraldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWEmeraldGenerator.EMERALD_TIER_I)
                     .withItem(BWGameOre.EMERALD.getItemStack())
-                    .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> ChatColor.DARK_GREEN + HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
+                    .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> ChatColor.BOLD + "" + ChatColor.DARK_GREEN + HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
                     .build();
             emeraldGenerator.create();
             this.emeraldGenerators.add(emeraldGenerator);

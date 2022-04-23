@@ -10,6 +10,7 @@ public class MetadataReferences {
     public static final String ISPERMANENT = "IsPermanent";
     public static final String PLACEBYPLAYER = "PlacedByPlayer";
     public static final String ISINVISIBLE = "IsInvisible";
+    public static final String POPUP_TOWER = "PopupTower";
 
     public static boolean isPermanent(ItemStack itemStack){
         if(itemStack != null && itemStack.getType() != Material.AIR){
@@ -21,5 +22,13 @@ public class MetadataReferences {
 
     public static boolean isInvisible(Player player){
         return player.hasMetadata(ISINVISIBLE) && player.getMetadata(ISINVISIBLE).get(0).asBoolean();
+    }
+
+    public static boolean isPopupTower(ItemStack itemStack){
+        if(itemStack != null && itemStack.getType() != Material.AIR){
+            ItemNBT item = new ItemNBT(itemStack);
+            return item.hasTag(POPUP_TOWER) && item.getBoolean(POPUP_TOWER);
+        }
+        return false;
     }
 }

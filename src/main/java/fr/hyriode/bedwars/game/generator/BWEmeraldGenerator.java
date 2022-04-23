@@ -9,6 +9,7 @@ public enum BWEmeraldGenerator implements IHyriGeneratorTier {
     EMERALD_TIER_I("I", false, 2, 70 * 20),
     EMERALD_TIER_II("II", false, 2, 50 * 20),
     EMERALD_TIER_III("III", false, 2, 30 * 20),
+    BASE("", false, 2, 20*50)
 
     ;
 

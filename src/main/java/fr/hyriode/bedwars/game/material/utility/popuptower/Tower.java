@@ -23,9 +23,10 @@ public class Tower {
         int y = Integer.parseInt(xyz.split(", ")[1]);
         int z = Integer.parseInt(xyz.split(", ")[2]);
         Location loc = this.chest.getRelative(x, y, z).getLocation();
+        if(loc.getBlock().getType() != Material.AIR) return;
         BlockPlaceEvent event = new BlockPlaceEvent(loc.getBlock(), loc.getBlock().getState(), loc.getBlock(), null, this.player, true);
         Bukkit.getPluginManager().callEvent(event);
-        if(!event.isCancelled() && loc.getBlock().getType() == Material.AIR) {
+        if(!event.isCancelled()) {
             loc.getBlock().setType(material);
             loc.getBlock().setData((byte) data);
         }

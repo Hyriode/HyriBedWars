@@ -1,19 +1,23 @@
 package fr.hyriode.bedwars;
 
 import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.server.IHyriServer;
 import fr.hyriode.bedwars.configuration.BWGeneratorConfiguration;
+import fr.hyriode.bedwars.game.BWGameType;
 import fr.hyriode.bedwars.game.material.BWMaterials;
 import fr.hyriode.bedwars.game.material.upgradable.ItemBWAxe;
 import fr.hyriode.bedwars.game.material.upgradable.ItemBWPickaxe;
 import fr.hyriode.bedwars.game.material.utility.entity.BedBugEntity;
 import fr.hyriode.bedwars.game.material.utility.entity.DreamDefenderEntity;
+import fr.hyriode.bedwars.game.team.EBWGameTeam;
+import fr.hyriode.bedwars.game.team.upgrade.BWUpgrades;
 import fr.hyriode.hyrame.HyrameLoader;
 import fr.hyriode.hyrame.IHyrame;
+import fr.hyriode.hyrame.game.HyriGameType;
 import fr.hyriode.hyrame.language.IHyriLanguageManager;
-import fr.hyriode.bedwars.api.HyriBedWarsAPI;
 import fr.hyriode.bedwars.configuration.HyriBWConfiguration;
 import fr.hyriode.bedwars.game.BWGame;
-import fr.hyriode.hyrame.placeholder.PlaceholderAPI;
+import fr.hyriode.hyrame.utils.LocationWrapper;
 import net.minecraft.server.v1_8_R3.EntityTypes;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -23,7 +27,10 @@ import org.bukkit.plugin.java.JavaPlugin;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.logging.Level;
 
 public class HyriBedWars extends JavaPlugin {
@@ -33,7 +40,6 @@ public class HyriBedWars extends JavaPlugin {
     private static IHyriLanguageManager hyriLanguageManager;
 
     private IHyrame hyrame;
-    private HyriBedWarsAPI api;
     private BWGame game;
     private HyriBWConfiguration configuration;
     private BWGeneratorConfiguration generatorConfiguration;
@@ -54,12 +60,75 @@ public class HyriBedWars extends JavaPlugin {
 
         log("Starting " + NAME + "...");
 
-        this.configuration = new HyriBWConfiguration(this);
-        this.configuration.create();
-        this.configuration.load();
+        if(HyriAPI.get().getConfiguration().isDevEnvironment()) {
+//                this.configuration = HyriAPI.get().getHystiaAPI().getConfigManager().getConfig(HyriBWConfiguration.class, "bedwars", BWGameType.TRIO.getName(), "Circus").get();
+            this.configuration = new HyriBWConfiguration(
+                    new HyriBWConfiguration.WaitingRoom(new LocationWrapper(IHyrame.WORLD.get().getUID(), 0.5, 170, 0.5, -90, 0),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), 22, 184, -15),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), -14, 168, 16)),
+                    new HyriBWConfiguration.GameArea(new LocationWrapper(IHyrame.WORLD.get().getUID(), -89, 115, 89),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), 89, 35, -89)),
+                    Arrays.asList(
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), -50.5, 90, -51.5),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), 52.5, 90, -50.5),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), 51.5, 90, 52.5),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), -51.5, 90, 51.5)
+                    ),
+                    Arrays.asList(
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), 13.5, 90, 13.5),
+                            new LocationWrapper(IHyrame.WORLD.get().getUID(), -12.5, 90, -12.5)
+                    ),
+                    Arrays.asList(
+                            new HyriBWConfiguration.Team(
+                                    EBWGameTeam.RED.getName(),
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 15, 110, -66), //base
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -15, 67, -97), //base2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 11, 92, -81), //protect
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -10, 88, -89), //protect2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 0.5, 88, -87.5), //generator
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -7.5, 89, -84.5, -90, 0), //shop
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -7.5, 89, -82.5, -90, 0), //upgrade
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 8.5, 89, -83.5, 45, 0) //spawn
+                            ),
+                            new HyriBWConfiguration.Team(
+                                    EBWGameTeam.GREEN.getName(),
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 66, 110, 15), //base
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 97, 67, -15), //base2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 81, 92, 11), //protect
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 89, 88, -10), //protect2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 88.5, 88, 0.5), //generator
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 85.5, 89, -7.5, 0, 0), //shop
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 83.5, 89, -7.5, 0, 0), //upgrade
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 84.5, 89, 8.5, 135, 0) //spawn
+                            ),
+                            new HyriBWConfiguration.Team(
+                                    EBWGameTeam.YELLOW.getName(),
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -15, 110, 66), //base
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 15, 67, 97), //base2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -11, 92, 81), //protect
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 10, 88, 89), //protect2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 0.5, 88, 88.5), //generator
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 8.5, 89, 85.5, 90, 0), //shop
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), 8.5, 89, 83.5, 90, 0), //upgrade
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -7.5, 89, 84.5, -135, 0) //spawn
+                            ),
+                            new HyriBWConfiguration.Team(
+                                    EBWGameTeam.BLUE.getName(),
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -66, 110, -15), //base
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -97, 67, 15), //base2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -81, 92, -11), //protect
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -89, 88, 10), //protect2
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -87.5, 88, 0.5), //generator
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -84.5, 89, 8.5, 180, 0), //shop
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -82.5, 89, 8.5, 180, 0), //upgrade
+                                    new LocationWrapper(IHyrame.WORLD.get().getUID(), -83.5, 89, -7.5, -45, 0) //spawn
+                            )
+                    ),
+                    80
+            );
+        } else this.configuration = HyriAPI.get().getServer().getConfig(HyriBWConfiguration.class);
         new ItemBWPickaxe().init();
         new ItemBWAxe().init();
-        BWMaterials.init(this.configuration);
 
         this.generatorConfiguration = new BWGeneratorConfiguration(this);
         this.generatorConfiguration.create();
@@ -69,27 +138,22 @@ public class HyriBedWars extends JavaPlugin {
 
         hyriLanguageManager = this.hyrame.getLanguageManager();
 
-        IHyriLanguageManager.Provider.registerInstance(() -> this.hyrame.getLanguageManager());
-
-        this.api = new HyriBedWarsAPI(HyriAPI.get().getRedisConnection().getPool());
-        this.api.start();
         this.game = new BWGame(this.hyrame, this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
+        BWMaterials.init((BWGameType) this.game.getType());
+        BWUpgrades.init((BWGameType) this.game.getType());
 
 //        PlaceholderAPI.registerHandler(new BWPlaceHolder(this.hyrame));
 
         this.registerEntity("BedBug", 60, BedBugEntity.class);
         this.registerEntity("DreamDefender", 99, DreamDefenderEntity.class);
-    }
 
-    private void registerEntityCustom(){
-
+        HyriAPI.get().getServer().setState(IHyriServer.State.READY);
     }
 
     @Override
     public void onDisable() {
         this.hyrame.getGameManager().unregisterGame(this.game);
-        this.api.stop();
     }
 
     public static void log(Level level, String message) {
@@ -127,10 +191,6 @@ public class HyriBedWars extends JavaPlugin {
 
     public BWGeneratorConfiguration getGeneratorConfiguration() {
         return generatorConfiguration;
-    }
-
-    public HyriBedWarsAPI getAPI() {
-        return api;
     }
 
     private void registerEntity(String name, int id, Class<?> customClass) {

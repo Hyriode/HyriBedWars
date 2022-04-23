@@ -1,12 +1,17 @@
 package fr.hyriode.bedwars.game;
 
+import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.HyriBWStatistics;
 import fr.hyriode.bedwars.api.shop.HyriHotbarCategory;
 import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.bedwars.game.material.tracker.BWTrackerItem;
+import fr.hyriode.bedwars.game.player.BWTracker;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.upgrade.EBWUpgrades;
 import fr.hyriode.bedwars.utils.MetadataReferences;
+import fr.hyriode.hyrame.actionbar.ActionBar;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
@@ -24,6 +29,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -51,12 +57,15 @@ public class BWGamePlayer extends HyriGamePlayer {
     private int finalKills;
     private int bedsBroken;
 
+    private BWTracker tracker;
+
     public BWGamePlayer(HyriGame<?> game, Player player) {
         super(game, player);
     }
 
     public void handleLogin(HyriBedWars plugin){
         this.plugin = plugin;
+        this.tracker = new BWTracker(plugin, this);
     }
 
     public void respawn(){
@@ -214,11 +223,20 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public HyriBWPlayer getAccount() {
-        return account;
+        IHyriPlayer player = HyriAPI.get().getPlayerManager().getPlayer(this.player.getUniqueId());
+        if(player != null) {
+            HyriBWPlayer bwPlayer = player.getData("bedwars", HyriBWPlayer.class);
+            if(bwPlayer == null)
+                return new HyriBWPlayer();
+            else
+                return player.getData("bedwars", HyriBWPlayer.class);
+        }else{
+            return new HyriBWPlayer();
+        }
     }
 
-    public void setAccount(HyriBWPlayer account) {
-        this.account = account;
+    public HyriBWStatistics getStatistics() {
+        return HyriAPI.get().getPlayerManager().getPlayer(this.player.getUniqueId()).getStatistics("bedwars", HyriBWStatistics.class);
     }
 
     public boolean kill(){
@@ -393,5 +411,14 @@ public class BWGamePlayer extends HyriGamePlayer {
     public void giveSword() {
         InventoryBWUtils.addItem(player, 0, new ItemBuilder(Material.WOOD_SWORD).unbreakable().nbt().setBoolean(MetadataReferences.ISPERMANENT, true).build());
         this.activeUpgradesTeam(EBWUpgrades.SHARPNESS);
+    }
+
+    public void setTracker(BWGameTeam team) {
+        this.tracker.setTeam(team);
+        this.tracker.start();
+    }
+
+    public BWTracker getTracker() {
+        return this.tracker;
     }
 }

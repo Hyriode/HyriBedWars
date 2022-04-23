@@ -40,7 +40,7 @@ repositories {
 
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
-    implementation 'fr.hyriode:hyrame:1.1.8'
+    implementation 'fr.hyriode:hyrame:1.2.0'
     shadow 'xyz.xenondevs:particle:1.7'
 }
 

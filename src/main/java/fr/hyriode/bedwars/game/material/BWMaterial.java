@@ -9,6 +9,7 @@ import fr.hyriode.bedwars.game.material.utility.BridgeEgg;
 import fr.hyriode.bedwars.game.material.utility.DreamDefenderEgg;
 import fr.hyriode.bedwars.game.material.utility.FireballBW;
 import fr.hyriode.bedwars.game.npc.inventory.shop.BWShopCategory;
+import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.item.HyriItem;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import org.bukkit.Material;
@@ -17,97 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 
 public enum BWMaterial{
-
-//    WOOL(BWMaterials.wool),
-//    HARD_CLAY(BWMaterials.HARD_CLAY),
-//    GLASS(BWMaterials.GLASS),
-//    END_STONE(BWMaterials.END_STONE),
-//    LADDER(BWMaterials.LADDER),
-//    PLANKS(BWMaterials.PLANKS),
-//    OBSIDIAN(BWMaterials.OBSIDIAN),
-//
-//    STONE_SWORD(BWMaterials.STONE_SWORD),
-//    IRON_SWORD(BWMaterials.IRON_SWORD),
-//    DIAMOND_SWORD(BWMaterials.DIAMOND_SWORD),
-//    STICK(BWMaterials.STICK),
-//
-//    CHAINMAIL_ARMOR(BWMaterials.CHAINMAIL_ARMOR),
-//    IRON_ARMOR(BWMaterials.IRON_ARMOR),
-//    DIAMOND_ARMOR(BWMaterials.DIAMOND_ARMOR),
-//
-//    SHEARS(BWMaterials.SHEARS),
-//    PICKAXE(BWMaterials.PICKAXE),
-//    AXE(BWMaterials.AXE),
-//
-//    ARROW(BWMaterials.ARROW),
-//    BOW(BWMaterials.BOW),
-//    BOW_POWER(BWMaterials.BOW_POWER),
-//    BOW_PUNCH(BWMaterials.BOW_PUNCH),
-//
-//    POTION_SPEED(BWMaterials.POTION_SPEED),
-//    POTION_JUMP(BWMaterials.POTION_JUMP),
-//    POTION_INVISIBILITY(BWMaterials.POTION_INVISIBILITY),
-//
-//    GOLDEN_APPLE(BWMaterials.GOLDEN_APPLE),
-//    BEDBUG(BWMaterials.BEDBUG),
-//    DREAM_DEFENDER(BWMaterials.DREAM_DEFENDER),
-//    FIREBALL(BWMaterials.FIREBALL),
-//    TNT(BWMaterials.TNT),
-//    ENDER_PEARL(BWMaterials.ENDER_PEARL),
-//    WATER(BWMaterials.WATER),
-//    BRIDGE_EGG(BWMaterials.BRIDGE_EGG),
-//    MAGIC_MILK(BWMaterials.MAGIC_MILK),
-//    SPONGE(BWMaterials.SPONGE),
-//    COMPACT_POP_UP_TOWER(BWMaterials.COMPACT_POP_UP_TOWER),
-//
-//    ;
-//
-//    private ItemShop itemShop;
-//    private ItemShopUpgradable itemShopUpgradable;
-//
-//    BWMaterial(ItemShop itemShop){
-//        this.itemShop = itemShop;
-//    }
-//
-//    BWMaterial(ItemShopUpgradable itemShopUpgradable){
-//        this.itemShopUpgradable = itemShopUpgradable;
-//    }
-//
-//    public ItemShop getItemShop() {
-//        return this.itemShop;
-//    }
-//
-//    public ArmorBW getAsArmor(){
-//        return (ArmorBW) this.itemShop;
-//    }
-//
-//    public ItemHyriShop getHyriItem(){
-//        return (ItemHyriShop) this.itemShop;
-//    }
-//
-//    public boolean isHyriItem(){
-//        return this.itemShop instanceof ItemHyriShop;
-//    }
-//
-//    public boolean isArmor(){
-//        return this.itemShop instanceof ArmorBW;
-//    }
-//
-//    public ItemShopUpgradable getAsUpgradable(){
-//        return this.itemShopUpgradable;
-//    }
-//
-//    public boolean isUpgradable(){
-//        return this.itemShopUpgradable != null;
-//    }
-//
-//    public static BWMaterial[] getSwords(){
-//        return new BWMaterial[]{
-//                DIAMOND_SWORD,
-//                IRON_SWORD,
-//                STONE_SWORD
-//        };
-//    }
 
     WOOL(BWShopCategory.BLOCKS, "wool", Material.WOOL, 16, false, new OreStack(BWGameOre.IRON, 4)),
     HARD_CLAY(BWShopCategory.BLOCKS, "hard_clay", Material.HARD_CLAY, 16, false, new OreStack(BWGameOre.IRON, 12)),
@@ -149,8 +59,7 @@ public enum BWMaterial{
     BRIDGE_EGG(BWShopCategory.UTILITY, "bridge_egg", new ItemBuilder(Material.EGG).nbt().setBoolean("BridgeEgg", true).build(), new OreStack(BWGameOre.EMERALD, 1), BridgeEgg.class),
     MAGIC_MILK(BWShopCategory.UTILITY, "magic_milk", Material.MILK_BUCKET, 1, false, new OreStack(BWGameOre.GOLD, 4)),
     SPONGE(BWShopCategory.UTILITY, "sponge", new ItemBuilder(Material.SPONGE, 4).nbt().setBoolean("Sponge", true).build(), false, new OreStack(BWGameOre.GOLD, 3)),
-    COMPACT_POP_UP_TOWER(BWShopCategory.UTILITY, "compact_tower", Material.CHEST, 1, false, new OreStack(BWGameOre.IRON, 24)),
-
+    COMPACT_POP_UP_TOWER(BWShopCategory.UTILITY, "compact_tower", new ItemBuilder(Material.CHEST, 1).nbt().setBoolean(MetadataReferences.POPUP_TOWER, true).build(), false, new OreStack(BWGameOre.IRON, 24)),
 
     ;
 

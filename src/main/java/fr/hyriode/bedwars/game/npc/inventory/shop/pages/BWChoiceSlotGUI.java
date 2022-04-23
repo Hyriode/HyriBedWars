@@ -6,6 +6,7 @@ import fr.hyriode.bedwars.api.player.HyriGameStyle;
 import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.material.BWMaterial;
 import fr.hyriode.bedwars.game.material.ItemEmptySlot;
+import fr.hyriode.bedwars.game.material.ItemShop;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import org.bukkit.entity.Player;
 
@@ -32,7 +33,9 @@ public class BWChoiceSlotGUI extends HyriInventory {
     }
 
     protected void initGui() {
-        this.setItem(4, this.material.getItemShop()
+        ItemShop itemShop = this.material.isItemUpgradable() ? this.material.getItemUpgradable().getTierItem(0) : this.material.getItemShop();
+
+        this.setItem(4, itemShop
                 .getItemToPlace(this.getPlayer()));
 
         final BWGamePlayer player = this.getPlayer();
@@ -46,7 +49,7 @@ public class BWChoiceSlotGUI extends HyriInventory {
                     final HyriBWPlayer account = this.getPlayer().getAccount();
 
                     account.putMaterialQuickBuy(finalSlot, this.material.name());
-                    this.plugin.getAPI().getPlayerManager().sendPlayer(account);
+                    account.update(this.getPlayer().getUUID());
 
                     new BWShopQuickBuy(this.plugin, this.owner).open();
                 });
@@ -54,13 +57,16 @@ public class BWChoiceSlotGUI extends HyriInventory {
         }
         Map<String, Integer> quickBuy = this.getPlayer().getAccount().getQuickBuy();
         for(String material : quickBuy.keySet()){
+            System.out.println(material);
+            ItemShop item = BWMaterial.valueOf(material).isItemUpgradable() ? BWMaterial.valueOf(material).getItemUpgradable().getTierItem(0) : BWMaterial.valueOf(material).getItemShop();
+
             int slot = quickBuy.get(material);
-            this.setItem(slot, BWMaterial.valueOf(material).getItemShop().getItemToReplace(player),
+            this.setItem(slot, item.getItemToReplace(player),
                     event -> {
                         final HyriBWPlayer account = this.getPlayer().getAccount();
 
                         account.putMaterialQuickBuy(slot, this.material.name());
-                        this.plugin.getAPI().getPlayerManager().sendPlayer(account);
+                        account.update(this.getPlayer().getUUID());
 
                         new BWShopQuickBuy(this.plugin, this.owner).open();
                     });

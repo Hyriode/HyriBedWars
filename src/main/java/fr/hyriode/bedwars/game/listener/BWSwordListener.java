@@ -83,7 +83,8 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
      *
      * @return true to cancel the event
      */
-    public static boolean managePickup(Item item, Player player) {
+    public boolean managePickup(Item item, Player player) {
+        if(this.plugin.getGame().getState() == HyriGameState.WAITING || this.plugin.getGame().getState() == HyriGameState.READY) return true;
         if (ItemUtil.isSword(item.getItemStack())) {
             if(InventoryBWUtils.hasItem(player, new ItemStack(Material.WOOD_SWORD)))
                 return true;
@@ -113,6 +114,7 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
      * @return true to cancel the event.
      */
     private boolean manageDrop(Player player, Item item) {
+        if(this.plugin.getGame().getState() == HyriGameState.WAITING || this.plugin.getGame().getState() == HyriGameState.READY) return true;
         if(item.getItemStack().getType() == Material.WOOD_SWORD) {
             return true;
         }
@@ -138,7 +140,10 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
      */
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
+        if(this.plugin.getGame().getState() == HyriGameState.WAITING || this.plugin.getGame().getState() == HyriGameState.READY) return;
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
+        BWGamePlayer player = this.plugin.getGame().getPlayer(e.getPlayer().getUniqueId());
+        if(player.isDead() || player.isSpectator()) return;
         if (e.getInventory().getType() == InventoryType.PLAYER) return;
 
         boolean sword = false;

@@ -43,7 +43,7 @@ public class BWHotbarManagerGUI extends HyriInventory {
                 .build(),
                 event -> {
                     player.resetHotbar();
-                    player.update();
+                    player.update(this.owner.getUniqueId());
                     open(this.plugin, this.owner);
                 });
 
@@ -63,7 +63,7 @@ public class BWHotbarManagerGUI extends HyriInventory {
 
         hotbar.forEach((category, slot) -> this.setItem(slotAdd + slot, BWHotbarItems.getById(category.getId()).getItemStack(this.owner), event -> {
             player.removeMaterialHotBar(slot);
-            player.update();
+            player.update(this.owner.getUniqueId());
             open(this.plugin, this.owner);
         }));
 

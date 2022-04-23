@@ -41,4 +41,8 @@ public class BWUpgradeTier {
     public OreStack getPrice() {
         return price;
     }
+
+    public void changePrice(int price){
+        this.price.setAmount(price);
+    }
 }

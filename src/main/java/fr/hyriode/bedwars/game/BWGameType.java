@@ -9,7 +9,7 @@ public enum BWGameType implements HyriGameType {
     TRIO("Trio", 3, 4, 6, 12),
     SQUAD("Squad", 4, 4, 8, 16),
 //1v1
-    VS1("1v1", 1, 2, 2, 2)
+    ONE_ONE("1v1", 1, 2, 2, 2)
     ;
 
     private final String name;
@@ -28,6 +28,11 @@ public enum BWGameType implements HyriGameType {
 
     @Override
     public String getName() {
+        return this.name();
+    }
+
+    @Override
+    public String getDisplayName() {
         return this.name;
     }
 
@@ -39,10 +44,12 @@ public enum BWGameType implements HyriGameType {
         return this.maxTeams;
     }
 
+    @Override
     public int getMinPlayers() {
         return this.minPlayers;
     }
 
+    @Override
     public int getMaxPlayers() {
         return this.maxPlayers;
     }

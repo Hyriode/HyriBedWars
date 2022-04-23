@@ -72,7 +72,7 @@ public enum EBWUpgrades implements BWUpgrade{
                 player.getHyriTeam().getGoldGenerator().upgrade(BWBaseGoldGenerator.BASE_III);
                 break;
             case 2:
-                HyriGenerator emeraldGenerator = new HyriGenerator.Builder(plugin, player.getHyriTeam().getGeneratorLocation(), BWEmeraldGenerator.EMERALD_TIER_I)
+                HyriGenerator emeraldGenerator = new HyriGenerator.Builder(plugin, player.getHyriTeam().getGeneratorLocation(), BWEmeraldGenerator.BASE)
                         .withItem(BWGameOre.EMERALD.getItemStack()).build();
                 emeraldGenerator.create();
                 break;

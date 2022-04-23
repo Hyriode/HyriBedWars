@@ -33,7 +33,8 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
         HyriBWPlayer account = this.plugin.getGame().getPlayer(player).getAccount();
 
         return new ItemBuilder(itemStack)
-                .withName(ChatColor.WHITE + HyriBedWars.getLanguageManager().getValue(player, "item.gamestyle.title") + ": " + account.getGameStyle().getNameColor())
+                .withName(ChatColor.WHITE + HyriBedWars.getLanguageManager().getValue(player, "item.gamestyle.title") + ": " +
+                        account.getGameStyle().getNameColor())
                 .withLore(StringBWUtils.loreToList(HyriBedWars.getLanguageManager().getValue(player, "item.gamestyle.lore")))
                 .build();
     }
@@ -52,7 +53,7 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
         HyriBWPlayer account = this.plugin.getGame().getPlayer(player).getAccount();
 
         account.changeGamePlayStyle();
-        account.update();
+        account.update(player.getUniqueId());
 
         hyrame.getItemManager().giveItem(player, 4, BWGamePlayItem.class);
     }

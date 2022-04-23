@@ -58,7 +58,7 @@ public class BWTNTListener extends HyriListener<HyriBedWars> {
             Player player = (Player) entity;
 
             BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
-            if(bwPlayer != null && !bwPlayer.isDead() && !bwPlayer.isSpectator()) continue;
+            if(bwPlayer != null && (bwPlayer.isDead() || bwPlayer.isSpectator())) continue;
 
             Vector playerVector = player.getLocation().toVector();
             Vector normalizedVector = vector.subtract(playerVector).normalize();

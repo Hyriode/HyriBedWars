@@ -1,6 +1,12 @@
 package fr.hyriode.bedwars.api.player;
 
-public class HyriBWStatistics {
+import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.player.HyriPlayerData;
+import fr.hyriode.api.player.IHyriPlayer;
+
+import java.util.UUID;
+
+public class HyriBWStatistics extends HyriPlayerData {
 
     private long kills;
     private long deaths;
@@ -11,11 +17,8 @@ public class HyriBWStatistics {
     private long playTime;
     private long brokenBeds;
     private long playedGames;
-    private int stars;
-    private long level;
 
     public HyriBWStatistics(){
-
     }
 
     public long getKills() {
@@ -48,5 +51,83 @@ public class HyriBWStatistics {
 
     public long getBrokenBeds() {
         return brokenBeds;
+    }
+
+    public void setKills(long kills) {
+        this.kills = kills;
+    }
+
+    public void setDeaths(long deaths) {
+        this.deaths = deaths;
+    }
+
+    public void setFinalKills(long finalKills) {
+        this.finalKills = finalKills;
+    }
+
+    public void setKillStreak(long killStreak) {
+        this.killStreak = killStreak;
+    }
+
+    public void setBestWinStreak(long bestWinStreak) {
+        this.bestWinStreak = bestWinStreak;
+    }
+
+    public void setCurrentWinStreak(long currentWinStreak) {
+        this.currentWinStreak = currentWinStreak;
+    }
+
+    public void setPlayTime(long playTime) {
+        this.playTime = playTime;
+    }
+
+    public void setBrokenBeds(long brokenBeds) {
+        this.brokenBeds = brokenBeds;
+    }
+
+    public void setPlayedGames(long playedGames) {
+        this.playedGames = playedGames;
+    }
+
+    public void addKills() {
+        this.kills += 1;
+    }
+
+    public void addDeaths() {
+        this.deaths += 1;
+    }
+
+    public void addFinalKills() {
+        this.finalKills += 1;
+    }
+
+    public void addKillStreak() {
+        this.killStreak += 1;
+    }
+
+    public void addBestWinStreak() {
+        this.bestWinStreak += 1;
+    }
+
+    public void addCurrentWinStreak() {
+        this.currentWinStreak += 1;
+    }
+
+    public void addPlayTime() {
+        this.playTime += 1;
+    }
+
+    public void addBrokenBeds() {
+        this.brokenBeds += 1;
+    }
+
+    public void addPlayedGames() {
+        this.playedGames += 1;
+    }
+
+    public void update(UUID uuid){
+        IHyriPlayer player = HyriAPI.get().getPlayerManager().getPlayer(uuid);
+        player.addStatistics("bedwars", this);
+        player.update();
     }
 }

@@ -204,8 +204,8 @@ public class ItemShop {
                     new BWChoiceSlotGUI(plugin, player.getPlayer(), material, inventory.isHyriode()).open();
                 }else{
                     HyriBWPlayer account = player.getAccount();
-                    account.removeMaterialQuickBuy(event.getSlot() - (inventory.isHyriode() ? 9 : 0));
-                    account.update();
+                    account.removeMaterialQuickBuy(event.getSlot());
+                    account.update(player.getUUID());
                     inventory.refreshGui();
                 }
                 return;

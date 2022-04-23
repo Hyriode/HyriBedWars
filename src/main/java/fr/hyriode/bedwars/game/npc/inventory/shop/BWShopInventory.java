@@ -94,7 +94,7 @@ public class BWShopInventory extends HyriInventory {
             this.setItem(44, BWGamePlayItem.getItemStack(this.owner, player),
                     event -> {
                         this.openGui(this.category, player.changeGamePlayStyle() == HyriGameStyle.HYRIODE);
-                        player.update();
+                        player.update(this.owner.getUniqueId());
                     });
             return;
         }
@@ -117,7 +117,7 @@ public class BWShopInventory extends HyriInventory {
         this.setItem(44, BWGamePlayItem.getItemStack(this.owner, player),
                 event -> {
                     this.openGui(this.category, player.changeGamePlayStyle() == HyriGameStyle.HYRIODE);
-                    player.update();
+                    player.update(this.owner.getUniqueId());
                 });
     }
 

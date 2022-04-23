@@ -2,6 +2,7 @@ package fr.hyriode.bedwars.game.npc.inventory.shop.pages;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGameOre;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.bedwars.game.material.OreStack;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
@@ -57,15 +58,20 @@ public class BWTrackerGUI extends HyriInventory {
     }
 
     private Consumer<InventoryClickEvent> getClick(BWGameTeam team){
+        BWGamePlayer player = this.plugin.getGame().getPlayer(this.owner);
         return event -> {
-            if(this.plugin.getGame().teamsHasBed()) {
+            if(!this.plugin.getGame().teamsHasBed()) {
+                if(player.getTracker().hasTeam()){
+                    owner.sendMessage(ChatColor.RED + this.getValue(this.owner, "tracker.already-have"));
+                    return;
+                }
                 if (InventoryBWUtils.hasPrice(this.owner, new OreStack(BWGameOre.EMERALD, 2))) {
                     owner.playSound(owner.getLocation(), Sound.NOTE_PLING, 0.8F, 2.0F);
                     owner.sendMessage(ChatColor.GREEN + this.getValue(owner, "purchased") + " " + ChatColor.GOLD + "");
+                    player.setTracker(team);
                     InventoryBWUtils.removeItem(this.owner, new ItemStack(BWGameOre.EMERALD.getItemStack().getType(), 2));
                     return;
                 }
-                //TODO l'ajouter au membre
                 owner.sendMessage(String.format(ChatColor.RED + this.getValue(owner, "purchased.missing"), StringBWUtils.getPriceAsString(owner, new OreStack(BWGameOre.EMERALD, 2)), StringBWUtils.getCountPriceMissing(owner, new OreStack(BWGameOre.EMERALD, 2))));
                 owner.playSound(owner.getLocation(), Sound.ENDERMAN_TELEPORT, 0.8F, 0.1F);
                 return;
