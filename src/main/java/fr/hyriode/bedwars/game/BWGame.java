@@ -1,8 +1,11 @@
 package fr.hyriode.bedwars.game;
 
 import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.api.settings.HyriLanguage;
 import fr.hyriode.api.util.Skin;
+import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.HyriBWStatistics;
 import fr.hyriode.bedwars.game.generator.BWBaseGoldGenerator;
 import fr.hyriode.bedwars.game.generator.BWBaseIronGenerator;
 import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
@@ -25,6 +28,7 @@ import fr.hyriode.hyrame.game.protocol.HyriDeathProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.game.protocol.HyriWaitingProtocol;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
+import fr.hyriode.hyrame.game.util.HyriRewardAlgorithm;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.hyrame.npc.NPC;
 import fr.hyriode.hyrame.npc.NPCManager;
@@ -43,6 +47,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
@@ -65,7 +70,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private final List<BedBugEntity> bedBugs = new ArrayList<>();
 
     public BWGame(IHyrame hyrame, HyriBedWars plugin) {
-        super(hyrame, plugin, HyriAPI.get().getConfiguration().isDevEnvironment() ? new BWGameInfo("bedwars", "BedWars") : HyriAPI.get().getGameManager().getGameInfo("bedwars"), BWGamePlayer.class, HyriAPI.get().getConfiguration().isDevEnvironment() ? BWGameType.SQUAD : HyriGameType.getFromData(BWGameType.values()));
+        super(hyrame, plugin, HyriAPI.get().getConfiguration().isDevEnvironment() ? new BWGameInfo("bedwars", "BedWars") : HyriAPI.get().getGameManager().getGameInfo("bedwars"), BWGamePlayer.class, HyriAPI.get().getConfiguration().isDevEnvironment() ? BWGameType.SOLO : HyriGameType.getFromData(BWGameType.values()));
 
         this.plugin = plugin;
 
@@ -214,8 +219,38 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             if(((BWGameTeam) team).isEliminated())
                 ++eliminated;
         }
-        if(eliminated == BWGameType.TRIO.getMaxTeams() - 1){
-            this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).findFirst().ifPresent(this::win);
+        if(eliminated == ((BWGameType) this.getType()).getMaxTeams() - 1){
+            //Win
+            BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
+
+            if(winner != null){
+                this.players.forEach(player -> {
+                    IHyriPlayer p = HyriAPI.get().getPlayerManager().getPlayer(player.getUUID());
+                    if(p != null) {
+                        HyriBWStatistics hyriBW = p.getStatistics("bedwars", HyriBWStatistics.class);
+                        if(hyriBW != null){
+                            if(winner.contains(player)){
+                                hyriBW.addWins(1);
+                                hyriBW.addCurrentWinStreak(1);
+                                if(hyriBW.getBestWinStreak() < hyriBW.getCurrentWinStreak())
+                                    hyriBW.addBestWinStreak(1);
+                            }else{
+                                hyriBW.setCurrentWinStreak(0);
+                                hyriBW.addDefeats(1);
+                            }
+                            hyriBW.addKills(player.getKills());
+                            hyriBW.addDeaths(player.getDeaths());
+                            hyriBW.addFinalKills(player.getFinalKills());
+                            hyriBW.addFinalDeaths(player.getFinalDeaths());
+                            hyriBW.addBrokenBeds(player.getBedsBroken());
+                            hyriBW.addPlayTime(player.getPlayedTime());
+                            hyriBW.addPlayedGames(1);
+                            hyriBW.update(player.getUUID());
+                        }
+                    }
+                });
+                this.win(winner);
+            }
         }
         this.players.forEach(player -> {
             if(player != null)
@@ -227,11 +262,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     public void win(HyriGameTeam winner) {
         System.out.println("Game done");
         super.win(winner);
-    }
-
-    @Override
-    public void postRegistration() {
-        super.postRegistration();
     }
 
     private HyriDeathProtocol.Screen createDeathScreen() {
@@ -324,7 +354,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         for(Location loc : this.plugin.getConfiguration().getDiamondGeneratorLocations()){
             final HyriGenerator diamondGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
                     .withItem(BWGameOre.DIAMOND.getItemStack())
-                    .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> ChatColor.BOLD + "" + ChatColor.AQUA + HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
+                    .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
                     .build();
             diamondGenerator.create();
             this.diamondGenerators.add(diamondGenerator);
@@ -333,7 +363,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         for(Location loc : this.plugin.getConfiguration().getEmeraldGeneratorLocations()){
             final HyriGenerator emeraldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWEmeraldGenerator.EMERALD_TIER_I)
                     .withItem(BWGameOre.EMERALD.getItemStack())
-                    .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> ChatColor.BOLD + "" + ChatColor.DARK_GREEN + HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
+                    .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> ChatColor.DARK_GREEN + "" + ChatColor.BOLD + HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
                     .build();
             emeraldGenerator.create();
             this.emeraldGenerators.add(emeraldGenerator);
@@ -341,18 +371,24 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     private void teleportTeams() {
-        this.teams.forEach(gameTeam -> gameTeam.getPlayers().forEach(p -> {
-            Player player = p.getPlayer();
+        this.teams.stream().map(team -> ((BWGameTeam) team)).forEach(gameTeam -> {
+            System.out.println(gameTeam.getName());
+            if(gameTeam.getPlayers().isEmpty()){
+                gameTeam.removeBed();
+            }
+            gameTeam.getPlayers().forEach(p -> {
+                Player player = p.getPlayer();
 
-            Scoreboard s = player.getScoreboard();
-            Objective h = s.getObjective("showheatlth") != null ? s.getObjective("showheatlth") : s.registerNewObjective("showheatlth", Criterias.HEALTH);
-            h.setDisplaySlot(DisplaySlot.BELOW_NAME);
-            h.setDisplayName(ChatColor.RED + "❤");
+                Scoreboard s = player.getScoreboard();
+                Objective h = s.getObjective("showheatlth") != null ? s.getObjective("showheatlth") : s.registerNewObjective("showheatlth", Criterias.HEALTH);
+                h.setDisplaySlot(DisplaySlot.BELOW_NAME);
+                h.setDisplayName(ChatColor.RED + "❤");
 
-            player.teleport(this.plugin.getConfiguration().getTeam(gameTeam.getName()).getRespawnLocation());
-            player.setGameMode(GameMode.SURVIVAL);
-            ((BWGamePlayer) p).respawn();
-        }));
+                player.teleport(this.plugin.getConfiguration().getTeam(gameTeam.getName()).getRespawnLocation());
+                player.setGameMode(GameMode.SURVIVAL);
+                ((BWGamePlayer) p).respawn();
+            });
+        });
         NPCManager.getNPCs().forEach((npc, hologram) -> npc.setCustomNameVisible(false));
     }
 

@@ -35,12 +35,7 @@ public enum BWNextEvent {
                 generator -> generator.upgrade(BWEmeraldGenerator.EMERALD_TIER_III));
     }),
     BEDS_DESTROY(5, "game.next-event.beds-destroy", 1800, plugin -> {
-        plugin.getGame().getTeams().forEach(team ->
-                ((BWGameTeam) team).baseArea(loc -> {
-                    if(loc.getBlock().getType() == Material.BED_BLOCK){
-                        loc.getBlock().setType(Material.AIR);
-                    }
-                }));
+        plugin.getGame().getTeams().forEach(team -> ((BWGameTeam) team).removeBed());
     }),
     ENDER_DRAGON(6, "game.next-event.dragons-spawn", 2400, plugin -> {
         plugin.getGame().getTeams().stream().map(team -> (BWGameTeam)team).filter(team -> !team.isEliminated() && team.hasBed()).forEach(team -> {

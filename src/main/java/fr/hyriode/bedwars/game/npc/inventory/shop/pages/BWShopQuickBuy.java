@@ -74,6 +74,7 @@ public class BWShopQuickBuy extends BWShopInventory {
     }
 
     public static void open(HyriBedWars plugin, Player owner){
+        System.out.println("quick");
         new BWShopQuickBuy(plugin, owner).open();
     }
 }

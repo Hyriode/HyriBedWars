@@ -1,7 +1,5 @@
 package fr.hyriode.bedwars.game.generator;
 
-import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.configuration.BWGeneratorConfiguration;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.entity.Player;
 

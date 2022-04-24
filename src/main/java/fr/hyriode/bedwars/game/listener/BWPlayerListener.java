@@ -168,7 +168,7 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         }
     }
 
-    @EventHandler(priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onDamage(EntityDamageEvent event){
         if(!(event.getEntity() instanceof Player)) return;
 
@@ -191,12 +191,6 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
             if(!bwPlayer.isSpectator() && !bwPlayer.isDead())
                 player.damage(2.0F);
         }
-//        else if (((Player) event.getEntity()).getHealth() - event.getFinalDamage() <= 0D){
-//            event.setCancelled(true);
-//            BWGamePlayer victim = this.getPlayer((Player) event.getEntity());
-//            victim.kill();
-//        }
-
     }
 
 //    @EventHandler
@@ -253,8 +247,10 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         event.setCancelled(true);
         final Location loc = event.getEntity().getLocation();
         loc.getWorld().playEffect(loc, Effect.EXPLOSION_LARGE, 5);
+//        if(!event.blockList().stream().map(Block::getType).collect(Collectors.toList()).contains(Material.GLASS))
         event.blockList().forEach(block -> {
             if(block.hasMetadata(MetadataReferences.PLACEBYPLAYER)){
+                if(block.getType() != Material.GLASS)
                 block.setType(Material.AIR);
             }
         });
@@ -273,6 +269,20 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
                 event.setCancelled(true);
                 return;
             }
+            Location ironGenerator = ((BWGameTeam) team).getIronGenerator().getLocation();
+            if(new Area(ironGenerator, ironGenerator).isInRange(event.getBlockPlaced().getLocation(), 1)){
+                event.setCancelled(true);
+                return;
+            }
+            Location goldGenerator = ((BWGameTeam) team).getGoldGenerator().getLocation();
+            if(new Area(goldGenerator, goldGenerator).isInRange(event.getBlockPlaced().getLocation(), 2)){
+                event.setCancelled(true);
+                return;
+            }
+            if(new Area(team.getSpawnLocation(), team.getSpawnLocation()).isInRange(event.getBlockPlaced().getLocation(), 1)){
+                event.setCancelled(true);
+                return;
+            }
         }
 
         for (Location diamondLocation : this.plugin.getConfiguration().getDiamondGeneratorLocations()) {
@@ -287,6 +297,12 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
                 event.setCancelled(true);
                 return;
             }
+        }
+
+        Block blockBellow = event.getBlockPlaced().getLocation().subtract(0, 1, 0).getBlock();
+        if(blockBellow.getType() == Material.CHEST || blockBellow.getType() == Material.ENDER_CHEST){
+            event.setCancelled(true);
+            return;
         }
 
         final Player player = event.getPlayer();

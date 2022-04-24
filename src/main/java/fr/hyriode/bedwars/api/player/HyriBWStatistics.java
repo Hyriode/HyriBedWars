@@ -11,9 +11,11 @@ public class HyriBWStatistics extends HyriPlayerData {
     private long kills;
     private long deaths;
     private long finalKills;
-    private long killStreak;
+    private long finalDeaths;
     private long bestWinStreak;
     private long currentWinStreak;
+    private long totalWins;
+    private long totalDefeats;
     private long playTime;
     private long brokenBeds;
     private long playedGames;
@@ -33,8 +35,8 @@ public class HyriBWStatistics extends HyriPlayerData {
         return finalKills;
     }
 
-    public long getKillStreak() {
-        return killStreak;
+    public long getFinalKillDeathRatio(){
+        return this.finalKills / this.deaths;
     }
 
     public long getBestWinStreak() {
@@ -53,6 +55,22 @@ public class HyriBWStatistics extends HyriPlayerData {
         return brokenBeds;
     }
 
+    public long getFinalDeaths() {
+        return finalDeaths;
+    }
+
+    public long getPlayedGames() {
+        return playedGames;
+    }
+
+    public long getTotalDefeats() {
+        return totalDefeats;
+    }
+
+    public long getTotalWins() {
+        return totalWins;
+    }
+
     public void setKills(long kills) {
         this.kills = kills;
     }
@@ -63,10 +81,6 @@ public class HyriBWStatistics extends HyriPlayerData {
 
     public void setFinalKills(long finalKills) {
         this.finalKills = finalKills;
-    }
-
-    public void setKillStreak(long killStreak) {
-        this.killStreak = killStreak;
     }
 
     public void setBestWinStreak(long bestWinStreak) {
@@ -89,45 +103,65 @@ public class HyriBWStatistics extends HyriPlayerData {
         this.playedGames = playedGames;
     }
 
-    public void addKills() {
-        this.kills += 1;
+    public void setFinalDeaths(long finalDeaths) {
+        this.finalDeaths = finalDeaths;
     }
 
-    public void addDeaths() {
-        this.deaths += 1;
+    public void setTotalDefeats(long totalDefeats) {
+        this.totalDefeats = totalDefeats;
     }
 
-    public void addFinalKills() {
-        this.finalKills += 1;
+    public void setTotalWins(long totalWins) {
+        this.totalWins = totalWins;
     }
 
-    public void addKillStreak() {
-        this.killStreak += 1;
+    public void addKills(long i) {
+        this.kills += i;
     }
 
-    public void addBestWinStreak() {
-        this.bestWinStreak += 1;
+    public void addDeaths(long i) {
+        this.deaths += i;
     }
 
-    public void addCurrentWinStreak() {
-        this.currentWinStreak += 1;
+    public void addFinalKills(long i) {
+        this.finalKills += i;
     }
 
-    public void addPlayTime() {
-        this.playTime += 1;
+    public void addBestWinStreak(long i) {
+        this.bestWinStreak += i;
     }
 
-    public void addBrokenBeds() {
-        this.brokenBeds += 1;
+    public void addCurrentWinStreak(long i) {
+        this.currentWinStreak += i;
     }
 
-    public void addPlayedGames() {
-        this.playedGames += 1;
+    public void addPlayTime(long i) {
+        this.playTime += i;
+    }
+
+    public void addBrokenBeds(long i) {
+        this.brokenBeds += i;
+    }
+
+    public void addPlayedGames(long i) {
+        this.playedGames += i;
+    }
+
+    public void addFinalDeaths(long i){
+        this.finalDeaths += i;
+    }
+
+    public void addDefeats(int i){
+        this.totalDefeats += i;
+    }
+
+    public void addWins(int i){
+        this.totalWins += i;
     }
 
     public void update(UUID uuid){
         IHyriPlayer player = HyriAPI.get().getPlayerManager().getPlayer(uuid);
         player.addStatistics("bedwars", this);
-        player.update();
+        HyriAPI.get().getPlayerManager().sendPlayer(player);
     }
 }

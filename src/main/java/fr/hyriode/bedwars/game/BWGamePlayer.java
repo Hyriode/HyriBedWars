@@ -45,8 +45,6 @@ public class BWGamePlayer extends HyriGamePlayer {
     private final List<ItemShopUpgradable> upgradableItems = new ArrayList<>();
     private final List<BWMaterial> permanentItems = new ArrayList<>();
 
-    private HyriBWPlayer account;
-
     private boolean cooldownTrap;
     private boolean cooldownFireball;
     private boolean cooldownInvisibilityParticle;
@@ -55,6 +53,7 @@ public class BWGamePlayer extends HyriGamePlayer {
     private int kills;
     private int deaths;
     private int finalKills;
+    private int finalDeaths;
     private int bedsBroken;
 
     private BWTracker tracker;
@@ -102,9 +101,9 @@ public class BWGamePlayer extends HyriGamePlayer {
     public void giveItemsPermanent(){
         Arrays.asList(BWMaterial.values()).forEach(material -> {
             if(!material.isItemUpgradable() && material.getItemShop().isPermanent() && this.hasPermanentItem(material)){
-                this.player.getInventory().addItem(material.getItemShop().getItemStack());
+                this.player.getInventory().addItem(material.getItemShop().getItemStack(this.player));
             }else if(material.isItemUpgradable() && upgradableItems.contains(material.getItemUpgradable())){
-                this.player.getInventory().addItem(this.getItemUpgradable(material).getTierItem().getItemStack());
+                this.player.getInventory().addItem(this.getItemUpgradable(material).getTierItem().getItemStack(this.player));
             }
         });
     }
@@ -161,8 +160,8 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public void giveUpgradeItem(BWMaterial material){
-        ItemStack itemPrevious = this.getItemUpgradable(material).getPreviousTierItem().getItemStack();
-        ItemStack itemUpgrade = this.getItemUpgradable(material).getTierItem().getItemStack();
+        ItemStack itemPrevious = this.getItemUpgradable(material).getPreviousTierItem().getItemStack(this.player);
+        ItemStack itemUpgrade = this.getItemUpgradable(material).getTierItem().getItemStack(this.player);
         if(InventoryBWUtils.hasItem(this.player, itemPrevious)){
             InventoryBWUtils.replaceItem(this.player, itemPrevious, itemUpgrade);
         }else
@@ -255,10 +254,10 @@ public class BWGamePlayer extends HyriGamePlayer {
         PlayerUtil.resetPlayer(player, true);
 
         this.ignoreGenerators(true);
-        this.plugin.getGame().getPlayer(player).addDeath();
 
         if(this.getHyriTeam().hasBed()) {
             if (hitter != null) {
+                this.addDeath();
                 this.plugin.getGame().getPlayer(hitter).addKill();
             }
             this.plugin.getGame().getPlayers().forEach(p -> p.getScoreboard().update());
@@ -266,6 +265,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         }
         this.setSpectator(true);
         if(hitter != null){
+            this.addFinalDeaths();
             this.plugin.getGame().getPlayer(hitter).addFinalKills();
         }
         this.plugin.getGame().win();
@@ -352,8 +352,20 @@ public class BWGamePlayer extends HyriGamePlayer {
         return this.finalKills;
     }
 
+    public int getFinalDeaths() {
+        return finalDeaths;
+    }
+
     public int getDeaths() {
         return this.deaths;
+    }
+
+    public void setFinalDeaths(int finalDeaths) {
+        this.finalDeaths = finalDeaths;
+    }
+
+    public void addFinalDeaths(){
+        this.finalDeaths += 1;
     }
 
     public int getBedsBroken() {

@@ -91,11 +91,7 @@ public class BWShopInventory extends HyriInventory {
             this.setItem(7, BWShopCategory.UTILITY.getItemStack(owner, BWShopCategory.UTILITY == category, this.isHyriode()), event -> this.openGui(BWShopCategory.UTILITY));
             this.setItem(8, BWShopCategory.TOOLS.getItemStack(owner, BWShopCategory.TOOLS == category, this.isHyriode()), event -> this.openGui(BWShopCategory.TOOLS));
 
-            this.setItem(44, BWGamePlayItem.getItemStack(this.owner, player),
-                    event -> {
-                        this.openGui(this.category, player.changeGamePlayStyle() == HyriGameStyle.HYRIODE);
-                        player.update(this.owner.getUniqueId());
-                    });
+            this.addGameStyleSlot(player);
             return;
         }
         int i = 0;
@@ -113,7 +109,9 @@ public class BWShopInventory extends HyriInventory {
                     .withLore(ChatColor.DARK_GRAY + "⬇ " + ChatColor.GRAY + getNavbarSeperator("lore"))
                     .build());
         }
-
+        this.addGameStyleSlot(player);
+    }
+    private void addGameStyleSlot(HyriBWPlayer player){
         this.setItem(44, BWGamePlayItem.getItemStack(this.owner, player),
                 event -> {
                     this.openGui(this.category, player.changeGamePlayStyle() == HyriGameStyle.HYRIODE);
@@ -127,6 +125,7 @@ public class BWShopInventory extends HyriInventory {
 
     private void openGui(BWShopCategory category, boolean isHyriode){
         try {
+            System.out.println(category);
             if(category == BWShopCategory.QUICK_BUY){
                 BWShopQuickBuy.open(this.plugin, this.owner);
                 return;
@@ -167,6 +166,7 @@ public class BWShopInventory extends HyriInventory {
     }
 
     public static void open(HyriBedWars plugin, Player owner, BWShopCategory category){
+        System.out.println("open");
         new BWShopInventory(plugin, owner, category).open();
     }
 }

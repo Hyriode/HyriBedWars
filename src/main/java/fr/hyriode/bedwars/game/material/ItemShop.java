@@ -95,8 +95,18 @@ public class ItemShop {
         return HyriBedWars.getLanguageManager().getMessage("shop.item." + this.keyName + ".lore");
     }
 
+    public ItemStack getItemStack(Player player){
+        if(this.permanent)
+            return new ItemBuilder(item.clone()).unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setBoolean(MetadataReferences.ISPERMANENT, true).build();
+        else
+            return new ItemBuilder(item.clone()).withName(ChatColor.WHITE + this.getName().getForPlayer(player)).build();
+    }
+
     public ItemStack getItemStack(){
-        return new ItemBuilder(item.clone()).unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setBoolean(MetadataReferences.ISPERMANENT, this.permanent).build();
+        if(this.permanent)
+            return new ItemBuilder(item.clone()).unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setBoolean(MetadataReferences.ISPERMANENT, true).build();
+        else
+            return new ItemBuilder(item.clone()).build();
     }
 
     public ChatColor getColor() {
@@ -170,7 +180,7 @@ public class ItemShop {
             lore.add((hasItems ? ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.shop.click.purchase") : ChatColor.RED + HyriBedWars.getLanguageManager().getValue(player, "inv.shop.enough.item") + " " + this.getPriceAsString(player)));
         }
 
-        return new ItemBuilder(itemShop.getItemStack())
+        return new ItemBuilder(itemShop.getItemStack(player))
                 .withName((hasItems ? ChatColor.GREEN : ChatColor.RED) + itemShop.getName().getForPlayer(player))
                 .withAllItemFlags().withLore(lore).build();
     }
@@ -222,7 +232,7 @@ public class ItemShop {
                     player.hasUpgradeMaterial(itemShop.getHyriMaterial()) &&
                     player.getItemUpgradable(itemShop.getHyriMaterial()).isMaxed();
 
-            if(InventoryBWUtils.isFull(owner, itemShop.getItemStack())){
+            if(InventoryBWUtils.isFull(owner, itemShop.getItemStack(owner))){
                 owner.sendMessage(ChatColor.RED + this.getValue(owner, "player-inventory.full"));
                 return;
             }
@@ -255,18 +265,18 @@ public class ItemShop {
                         } else {
                             if (material == BWMaterial.WOOL) {
                                 InventoryBWUtils.addItem(owner, slot,
-                                        new ItemBuilder(itemShop.getItemStack().getType(),
-                                                itemShop.getItemStack().getAmount(),
+                                        new ItemBuilder(itemShop.getItemStack(owner).getType(),
+                                                itemShop.getItemStack(owner).getAmount(),
                                                 player.getTeam().getColor().getDyeColor().getWoolData()).build());
                             } else if (Arrays.asList(BWMaterial.getSwords()).contains(material)) {
                                 if(InventoryBWUtils.hasItem(owner, new ItemStack(Material.WOOD_SWORD)))
-                                    InventoryBWUtils.setItemsSlot(owner, s -> material.getItemShop().getItemStack(),
+                                    InventoryBWUtils.setItemsSlot(owner, s -> material.getItemShop().getItemStack(owner),
                                             new ItemStack(Material.WOOD_SWORD));
                                 else
-                                    InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack());
+                                    InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack(owner));
                                 plugin.getGame().getPlayer(owner).activeUpgradesTeam(EBWUpgrades.SHARPNESS);
                             } else {
-                                InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack());
+                                InventoryBWUtils.addItem(owner, slot, itemShop.getItemStack(owner));
                             }
                         }
                     }
@@ -308,7 +318,7 @@ public class ItemShop {
 
         lore.add(ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.choice_slot.add"));
 
-        return new ItemBuilder(itemShop.getItemStack())
+        return new ItemBuilder(itemShop.getItemStack(player))
                 .withName((hasItems ? ChatColor.GREEN : ChatColor.RED) + itemShop.getName().getForPlayer(player))
                 .withAllItemFlags().withLore(lore).build();
     }
@@ -319,7 +329,7 @@ public class ItemShop {
 
         boolean hasItems = InventoryBWUtils.hasPrice(player, itemShop.getPrice());
 
-        return new ItemBuilder(itemShop.getItemStack())
+        return new ItemBuilder(itemShop.getItemStack(player))
                 .withName((hasItems ? ChatColor.GREEN : ChatColor.RED) + itemShop.getName().getForPlayer(player))
                 .withAllItemFlags()
                 .withLore(ChatColor.YELLOW + HyriBedWars.getLanguageManager().getValue(player, "inv.choice_slot.replace")).build();

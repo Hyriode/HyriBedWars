@@ -56,6 +56,8 @@ public class BWGameTeam extends HyriGameTeam {
     public void init() {
         this.hasBed = true;
 
+        System.out.println(this.getName());
+
         HyriBWConfiguration.Team teamConfig = this.plugin.getConfiguration().getTeam(this.getName());
 
         this.setSpawnLocation(teamConfig.getRespawnLocation());
@@ -79,7 +81,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public boolean isEliminated() {
-        return this.getPlayersPlaying().size() == 0;
+        return this.getPlayersPlaying().size() <= 1 && !this.hasBed;
     }
 
     public void baseArea(Consumer<Location> execute){
@@ -176,5 +178,13 @@ public class BWGameTeam extends HyriGameTeam {
     public void spawnEnderDragon(){
         EnderDragon enderDragon = IHyrame.WORLD.get().spawn(this.getSpawnLocation(), EnderDragon.class);
         enderDragon.setCustomName(this.getColor().getChatColor() + HyriBedWars.getLanguageManager().getValue(HyriLanguage.EN, "team.name") + " " + this.getDisplayName().getValue(HyriLanguage.EN));
+    }
+
+    public void removeBed() {
+        this.baseArea(loc -> {
+            if(loc.getBlock().getType() == Material.BED_BLOCK){
+                loc.getBlock().setType(Material.AIR);
+            }
+        });
     }
 }
