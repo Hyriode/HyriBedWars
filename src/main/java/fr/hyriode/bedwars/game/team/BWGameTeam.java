@@ -81,7 +81,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public boolean isEliminated() {
-        return this.getPlayersPlaying().size() < 1;
+        return this.getPlayers().size() < 1;
     }
 
     public void baseArea(Consumer<Location> execute){

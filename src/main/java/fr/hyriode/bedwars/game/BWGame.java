@@ -214,14 +214,11 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     public void win(){
-        int eliminated = 0;
-        for (HyriGameTeam team : this.teams) {
-            if(((BWGameTeam) team).isEliminated())
-                ++eliminated;
-        }
-        if(eliminated == ((BWGameType) this.getType()).getMaxTeams() - 1){
+        int eliminated = (int) this.teams.stream().filter(team -> ((BWGameTeam) team).isEliminated() && !((BWGameTeam) team).hasBed()).count();
+
+        if(eliminated <= 1){
             //Win
-            BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
+            BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated() && !((BWGameTeam) team).hasBed()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
 
             if(winner != null){
                 this.players.forEach(player -> {

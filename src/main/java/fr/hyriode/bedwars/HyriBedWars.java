@@ -63,7 +63,7 @@ public class HyriBedWars extends JavaPlugin {
         if(HyriAPI.get().getConfiguration().isDevEnvironment()) {
 //            HyriAPI.get().getHystiaAPI().getWorldManager().saveWorld(IHyrame.WORLD.get().getUID(), "bedwars", BWGameType.DOUBLES.getName(), "Poseidon").whenComplete((aBoolean, throwable) -> System.out.println("world: " + aBoolean));
 //            HyriAPI.get().getHystiaAPI().getConfigManager().saveConfig(
-                    this.configuration = new HyriBWConfiguration(
+            this.configuration = new HyriBWConfiguration(
                     new HyriBWConfiguration.WaitingRoom(
                             new LocationWrapper(IHyrame.WORLD.get().getUID(), 0.5, 170, 0.5, -90, 0),
                             new LocationWrapper(IHyrame.WORLD.get().getUID(), 22, 184, -15),
