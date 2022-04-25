@@ -34,7 +34,7 @@ public class FireballBW extends HyriShopItem<HyriBedWars> {
             player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1));
             Fireball fireball = player.launchProjectile(Fireball.class);
 
-            fireball.setYield(2F);
+            fireball.setYield(5F);
 
             final Vector direction = player.getEyeLocation().getDirection();
 

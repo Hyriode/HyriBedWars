@@ -81,7 +81,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public boolean isEliminated() {
-        return this.getPlayers().size() < 1;
+        return this.getPlayersPlaying().size() < 1;
     }
 
     public void baseArea(Consumer<Location> execute){
@@ -166,13 +166,21 @@ public class BWGameTeam extends HyriGameTeam {
         this.setHasBed(false);
         if(breaker != null) {
             breaker.addBedsBroken();
+            BroadcastUtil.broadcast(player -> "  ");
+            BroadcastUtil.broadcast(player -> ChatColor.BOLD + String.format(HyriBedWars.getLanguageManager().getValue(player, "bed.destruction"), this.getColor().getChatColor() + this.getDisplayName().getForPlayer(player), ChatColor.GRAY, breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName()));
+            BroadcastUtil.broadcast(player -> "  ");
         }
-        BroadcastUtil.broadcast(player -> "  ");
-        BroadcastUtil.broadcast(player -> ChatColor.BOLD + "BED DESTRUCTION > " +
-                ChatColor.RESET + this.getColor().getChatColor() + this.getDisplayName().getForPlayer(player) + " Bed" +
-                ChatColor.GRAY + " was destroyed by " + breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName());
-        BroadcastUtil.broadcast(player -> "  ");
-        this.sendTitle(player -> ChatColor.RED + "BED DESTROYED!", player -> "You will no longer respawn!", 10, 3 * 20, 10);
+        new BukkitRunnable(){
+            int i = 0;
+            @Override
+            public void run() {
+                if(i > 3 * 20)
+                    sendTitle(player -> ChatColor.RED + HyriBedWars.getLanguageManager().getValue(player, "bed.destroyed.name"), player -> HyriBedWars.getLanguageManager().getValue(player, "bed.destroyed.subtitle"), 10, 10, 10);
+                else
+                    this.cancel();
+                i++;
+            }
+        }.runTaskTimer(this.plugin, 0, 1);
     }
 
     public void spawnEnderDragon(){

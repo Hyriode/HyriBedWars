@@ -255,6 +255,10 @@
 
   "team.name": "Team",
 
-  "item.ender_pearl.cant_tp": "You cannot teleport to this area"
+  "item.ender_pearl.cant_tp": "You cannot teleport to this area",
+
+  "bed.destruction": "BED DESTRUCTION > %s Bed %s was destroyed by %s",
+  "bed.destroyed.name": "BED DESTROYED!",
+  "bed.destroyed.subtitle": "You will no longer respawn!"
 
 }

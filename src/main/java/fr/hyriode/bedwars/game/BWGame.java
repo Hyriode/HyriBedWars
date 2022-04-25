@@ -85,44 +85,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     @Override
     public void handleLogin(Player p) {
-        if(!HyriAPI.get().getConfiguration().isDevEnvironment())
-            super.handleLogin(p);
-        else
-            try {
-                if (this.getState() == HyriGameState.WAITING || this.getState() == HyriGameState.READY) {
-                    if (!this.isFull()) {
-                        final BWGamePlayer player = BWGamePlayer.class.getConstructor(HyriGame.class, Player.class).newInstance(this, p);
+        super.handleLogin(p);
 
-                        this.players.add(player);
-
-//                    this.updatePlayerCount();
-
-                        HyriAPI.get().getEventBus().publish(new HyriGameJoinEvent(this, player));
-
-                        if (this.usingGameTabList) {
-                            this.tabListManager.handleLogin(p);
-                        }
-                    }
-                }
-            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-                p.sendMessage(org.bukkit.ChatColor.RED + "An error occurred while joining game! Sending you back to lobby...");
-                HyriAPI.get().getServerManager().sendPlayerToLobby(p.getUniqueId());
-                e.printStackTrace();
-            }
-
-        p.getInventory().setArmorContents(null);
-        p.getInventory().clear();
-        p.setGameMode(GameMode.ADVENTURE);
-        p.setFoodLevel(20);
-        p.setHealth(20);
-        p.setLevel(0);
-        p.setExp(0.0F);
         p.teleport(this.plugin.getConfiguration().getWaitingRoom().getWaitingSpawn());
-        p.getActivePotionEffects().forEach(potionEffect -> p.removePotionEffect(potionEffect.getType()));
 
         this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
-        Bukkit.getScheduler().runTaskLater(this.plugin , () -> this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class), 1);
+        this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
     }
 
     @Override
@@ -214,6 +183,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     public void win(){
+        if(this.getState() == HyriGameState.ENDED) return;
         int eliminated = (int) this.teams.stream().filter(team -> ((BWGameTeam) team).isEliminated() && !((BWGameTeam) team).hasBed()).count();
 
         if(eliminated <= 1){

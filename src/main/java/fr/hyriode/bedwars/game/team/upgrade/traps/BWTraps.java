@@ -3,16 +3,12 @@ package fr.hyriode.bedwars.game.team.upgrade.traps;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGameOre;
 import fr.hyriode.bedwars.game.BWGamePlayer;
-import fr.hyriode.bedwars.game.material.ItemShop;
 import fr.hyriode.bedwars.game.material.OreStack;
-import fr.hyriode.bedwars.game.material.upgradable.ArmorBW;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.utils.InventoryBWUtils;
 import fr.hyriode.bedwars.utils.StringBWUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
-import fr.hyriode.hyrame.title.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -21,11 +17,9 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public enum BWTraps implements BWTrap {
 

@@ -32,7 +32,7 @@ public class BWFireballListener extends HyriListener<HyriBedWars> {
         this.fireballExplosionSize = 3;
         this.fireballMakeFire = false;
         this.fireballHorizontal = 1.0 * -1;
-        this.fireballVertical = 1.15;
+        this.fireballVertical = 1.10;
 
         this.damageSelf = 2.0;
         this.damageEnemy = 2.0;

@@ -70,11 +70,13 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
+        if(this.plugin.getGame().getPlayer(e.getPlayer()).isSpectator()) return;
         e.setCancelled(manageDrop(e.getPlayer(), e.getItemDrop()));
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
+        if(this.plugin.getGame().getPlayer(e.getPlayer()).isSpectator()) return;
         e.setCancelled(managePickup(e.getItem(), e.getPlayer()));
     }
 
