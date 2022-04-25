@@ -86,29 +86,29 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void handleLogin(Player p) {
         if(!HyriAPI.get().getConfiguration().isDevEnvironment())
-        super.handleLogin(p);
+            super.handleLogin(p);
         else
-        try {
-            if (this.getState() == HyriGameState.WAITING || this.getState() == HyriGameState.READY) {
-                if (!this.isFull()) {
-                    final BWGamePlayer player = BWGamePlayer.class.getConstructor(HyriGame.class, Player.class).newInstance(this, p);
+            try {
+                if (this.getState() == HyriGameState.WAITING || this.getState() == HyriGameState.READY) {
+                    if (!this.isFull()) {
+                        final BWGamePlayer player = BWGamePlayer.class.getConstructor(HyriGame.class, Player.class).newInstance(this, p);
 
-                    this.players.add(player);
+                        this.players.add(player);
 
 //                    this.updatePlayerCount();
 
-                    HyriAPI.get().getEventBus().publish(new HyriGameJoinEvent(this, player));
+                        HyriAPI.get().getEventBus().publish(new HyriGameJoinEvent(this, player));
 
-                    if (this.usingGameTabList) {
-                        this.tabListManager.handleLogin(p);
+                        if (this.usingGameTabList) {
+                            this.tabListManager.handleLogin(p);
+                        }
                     }
                 }
+            } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
+                p.sendMessage(org.bukkit.ChatColor.RED + "An error occurred while joining game! Sending you back to lobby...");
+                HyriAPI.get().getServerManager().sendPlayerToLobby(p.getUniqueId());
+                e.printStackTrace();
             }
-        } catch (InstantiationException | IllegalAccessException | InvocationTargetException | NoSuchMethodException e) {
-            p.sendMessage(org.bukkit.ChatColor.RED + "An error occurred while joining game! Sending you back to lobby...");
-            HyriAPI.get().getServerManager().sendPlayerToLobby(p.getUniqueId());
-            e.printStackTrace();
-        }
 
         p.getInventory().setArmorContents(null);
         p.getInventory().clear();
@@ -355,6 +355,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final HyriGenerator diamondGenerator = new HyriGenerator.Builder(this.plugin, loc, BWDiamondGenerator.DIAMOND_TIER_I)
                     .withItem(BWGameOre.DIAMOND.getItemStack())
                     .withDefaultHeader(Material.DIAMOND_BLOCK, (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriBedWars.getLanguageManager().getValue(player, "generator.diamond"))
+                    .withDefaultAnimation()
                     .build();
             diamondGenerator.create();
             this.diamondGenerators.add(diamondGenerator);
@@ -364,6 +365,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final HyriGenerator emeraldGenerator = new HyriGenerator.Builder(this.plugin, loc, BWEmeraldGenerator.EMERALD_TIER_I)
                     .withItem(BWGameOre.EMERALD.getItemStack())
                     .withDefaultHeader(Material.EMERALD_BLOCK, (player) -> ChatColor.DARK_GREEN + "" + ChatColor.BOLD + HyriBedWars.getLanguageManager().getValue(player, "generator.emerald"))
+                    .withDefaultAnimation()
                     .build();
             emeraldGenerator.create();
             this.emeraldGenerators.add(emeraldGenerator);
@@ -381,8 +383,11 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
                 Scoreboard s = player.getScoreboard();
                 Objective h = s.getObjective("showheatlth") != null ? s.getObjective("showheatlth") : s.registerNewObjective("showheatlth", Criterias.HEALTH);
+                Objective tab = s.getObjective("showheatlthtab") != null ? s.getObjective("showheatlthtab") : s.registerNewObjective("showheatlthtab", Criterias.HEALTH);
                 h.setDisplaySlot(DisplaySlot.BELOW_NAME);
                 h.setDisplayName(ChatColor.RED + "❤");
+                tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+                tab.setDisplayName(" ");
 
                 player.teleport(this.plugin.getConfiguration().getTeam(gameTeam.getName()).getRespawnLocation());
                 player.setGameMode(GameMode.SURVIVAL);
