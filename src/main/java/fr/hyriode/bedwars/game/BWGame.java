@@ -383,11 +383,11 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
                 Scoreboard s = player.getScoreboard();
                 Objective h = s.getObjective("showheatlth") != null ? s.getObjective("showheatlth") : s.registerNewObjective("showheatlth", Criterias.HEALTH);
-                Objective tab = s.getObjective("showheatlthtab") != null ? s.getObjective("showheatlthtab") : s.registerNewObjective("showheatlthtab", Criterias.HEALTH);
                 h.setDisplaySlot(DisplaySlot.BELOW_NAME);
                 h.setDisplayName(ChatColor.RED + "❤");
-                tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-                tab.setDisplayName(" ");
+//                Objective tab = s.getObjective("showheatlthtab") != null ? s.getObjective("showheatlthtab") : s.registerNewObjective("showheatlthtab", Criterias.HEALTH);
+//                tab.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+//                tab.setDisplayName(" ");
 
                 player.teleport(this.plugin.getConfiguration().getTeam(gameTeam.getName()).getRespawnLocation());
                 player.setGameMode(GameMode.SURVIVAL);
