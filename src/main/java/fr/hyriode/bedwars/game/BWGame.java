@@ -218,7 +218,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         if(eliminated <= 1){
             //Win
-            BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated() && !((BWGameTeam) team).hasBed()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
+            BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
 
             if(winner != null){
                 this.players.forEach(player -> {
