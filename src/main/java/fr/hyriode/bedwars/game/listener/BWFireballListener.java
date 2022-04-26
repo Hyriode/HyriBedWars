@@ -1,7 +1,9 @@
 package fr.hyriode.bedwars.game.listener;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.listener.HyriListener;
+import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Entity;
@@ -71,6 +73,8 @@ public class BWFireballListener extends HyriListener<HyriBedWars> {
             }
             player.setVelocity(horizontalVector.setY(y));
         }
+
+        IHyrame.WORLD.get().playEffect(e.getEntity().getLocation(), Effect.EXPLOSION_LARGE, 1);
 
 //            LastHit lh = LastHit.getLastHit(player);
 //            if (lh != null) {

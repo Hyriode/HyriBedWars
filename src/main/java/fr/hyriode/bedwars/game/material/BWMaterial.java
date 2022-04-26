@@ -41,9 +41,9 @@ public enum BWMaterial{
     AXE(new ItemBWAxe()),
 
     ARROW(BWShopCategory.RANGED, "arrow", Material.ARROW, 6, false, new OreStack(BWGameOre.GOLD, 2)),
-    BOW(BWShopCategory.RANGED, "bow", Material.BOW, 1, false, new OreStack(BWGameOre.GOLD, 12)),
-    BOW_POWER(BWShopCategory.RANGED, "bow_power", new ItemBuilder(Material.BOW).withEnchant(Enchantment.ARROW_DAMAGE).build(), false, new OreStack(BWGameOre.GOLD, 20)),
-    BOW_PUNCH(BWShopCategory.RANGED, "bow_punch", new ItemBuilder(Material.BOW).withEnchant(Enchantment.ARROW_DAMAGE).withEnchant(Enchantment.ARROW_KNOCKBACK).build(), false, new OreStack(BWGameOre.EMERALD, 6)),
+    BOW(BWShopCategory.RANGED, "bow", new ItemBuilder(Material.BOW).unbreakable().build(), false, new OreStack(BWGameOre.GOLD, 12)),
+    BOW_POWER(BWShopCategory.RANGED, "bow_power", new ItemBuilder(Material.BOW).unbreakable().withEnchant(Enchantment.ARROW_DAMAGE).build(), false, new OreStack(BWGameOre.GOLD, 20)),
+    BOW_PUNCH(BWShopCategory.RANGED, "bow_punch", new ItemBuilder(Material.BOW).unbreakable().withEnchant(Enchantment.ARROW_DAMAGE).withEnchant(Enchantment.ARROW_KNOCKBACK).build(), false, new OreStack(BWGameOre.EMERALD, 6)),
 
     POTION_SPEED(BWShopCategory.POTIONS, "potion_speed", new ItemPotionBuilder(PotionType.SPEED, 20*45, 1).build(), false, new OreStack(BWGameOre.EMERALD)),
     POTION_JUMP(BWShopCategory.POTIONS, "potion_jump", new ItemPotionBuilder(PotionType.JUMP, 20*45, 4).build(), false, new OreStack(BWGameOre.EMERALD)),
