@@ -242,8 +242,12 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.downItemsUpgradable();
 
         final Player hitter = this.getLastHitter();
+        System.out.println(hitter);
+        System.out.println(this.isSpectator());
+        System.out.println(this.isDead());
 
         if(hitter != null && !this.isSpectator()) {
+            System.out.println("Test");
             final List<OreStack> itemStacks = InventoryBWUtils.getOresInventory(this.player, BWGameOre.GOLD,
                     BWGameOre.IRON, BWGameOre.DIAMOND, BWGameOre.EMERALD);
             for (OreStack item : itemStacks) {

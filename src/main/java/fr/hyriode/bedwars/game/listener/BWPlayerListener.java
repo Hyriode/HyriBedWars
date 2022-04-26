@@ -458,6 +458,12 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
 
         Player p = event.getPlayer();
+
+        if(p.getLocation().getY() < 30 && this.plugin.getGame().getPlayer(p).isSpectator()){
+            p.teleport(this.plugin.getConfiguration().getWaitingRoom().getWaitingSpawn());
+            return;
+        }
+
         BWGamePlayer bwPlayer = this.getPlayer(p);
 
         if(MetadataReferences.isInvisible(p)){
@@ -466,8 +472,10 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
                 IHyrame.WORLD.get().playEffect(p.getLocation().add(0, 0.05, 0), Effect.FOOTSTEP, 2);
             }
         }
-        if(event.getPlayer().getLocation().getY() <= this.plugin.getConfiguration().getCancelInventoryY())
-            p.closeInventory();
+        if(event.getPlayer().getLocation().getY() <= this.plugin.getConfiguration().getCancelInventoryY()) {
+            System.out.println(p.getOpenInventory().getType());
+//            p.closeInventory();
+        }
 
         for (HyriGameTeam team : this.plugin.getGame().getTeams()) {
             final BWGameTeam hTeam = (BWGameTeam) team;

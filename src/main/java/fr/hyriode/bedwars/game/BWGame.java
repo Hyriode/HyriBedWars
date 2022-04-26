@@ -96,18 +96,18 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     @Override
     public void handleLogout(Player p) {
+        BWGameTeam team = null;
         if(this.getPlayer(p) != null) {
-            BWGameTeam team = this.getPlayer(p).getHyriTeam();
-
-            super.handleLogout(p);
-
-            if (team != null && team.getPlayers().isEmpty()) {
-                team.setHasBed(false);
-                this.win();
-                return;
-            }
+            team = this.getPlayer(p).getHyriTeam();
         }
-        if(this.players.isEmpty()){
+        super.handleLogout(p);
+        if (team != null && team.getPlayers().isEmpty()) {
+            team.setHasBed(false);
+            this.win();
+            return;
+        }
+
+        if(this.players.isEmpty() && this.getState() != HyriGameState.WAITING && this.getState() != HyriGameState.READY){
             this.end();
         }
     }

@@ -34,6 +34,8 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
     @EventHandler
     public void onClick(InventoryClickEvent event){
         Player player = (Player) event.getWhoClicked();
+        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
+        if(bwPlayer.isSpectator() || bwPlayer.isDead()) return;
 
         if(event.getClickedInventory() != null && event.getView() != null && event.getView().getTopInventory() != null && event.getClickedInventory().equals(event.getView().getTopInventory()) && (MetadataReferences.isPermanent(event.getCurrentItem()) || MetadataReferences.isPermanent(event.getCursor()))) {
             event.setCancelled(true);
@@ -62,6 +64,8 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onDrag(InventoryDragEvent event){
+        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer((Player) event.getWhoClicked());
+        if(bwPlayer.isSpectator() || bwPlayer.isDead()) return;
         int slot = Utils.getFirstElementOfInt(event.getInventorySlots());
         if(event.getOldCursor() != null && MetadataReferences.isPermanent(event.getOldCursor())) {
             event.setCancelled(true);
@@ -70,13 +74,15 @@ public class BWSwordListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onDrop(PlayerDropItemEvent e) {
-        if(this.plugin.getGame().getPlayer(e.getPlayer()).isSpectator()) return;
+        BWGamePlayer player = this.plugin.getGame().getPlayer(e.getPlayer());
+        if(player.isSpectator() || player.isDead()) return;
         e.setCancelled(manageDrop(e.getPlayer(), e.getItemDrop()));
     }
 
     @EventHandler
     public void onPickup(PlayerPickupItemEvent e) {
-        if(this.plugin.getGame().getPlayer(e.getPlayer()).isSpectator()) return;
+        BWGamePlayer player = this.plugin.getGame().getPlayer(e.getPlayer());
+        if(player.isSpectator() || player.isDead()) return;
         e.setCancelled(managePickup(e.getItem(), e.getPlayer()));
     }
 

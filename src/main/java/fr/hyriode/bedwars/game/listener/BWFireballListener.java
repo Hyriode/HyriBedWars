@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.listener;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.game.BWGamePlayer;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -15,6 +16,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class BWFireballListener extends HyriListener<HyriBedWars> {
 
@@ -44,22 +46,22 @@ public class BWFireballListener extends HyriListener<HyriBedWars> {
         if(!(e.getEntity() instanceof Fireball)) return;
         Location location = e.getEntity().getLocation();
 
-        ProjectileSource projectileSource = e.getEntity().getShooter();
-        if(!(projectileSource instanceof Player)) return;
-        Player source = (Player) projectileSource;
-
         Vector vector = location.toVector();
 
         World world = location.getWorld();
 
-        assert world != null;
-        Collection<Entity> nearbyEntities = world
-                .getNearbyEntities(location, fireballExplosionSize, fireballExplosionSize, fireballExplosionSize);
-        for(Entity entity : nearbyEntities) {
-            if(!(entity instanceof Player)) continue;
-            Player player = (Player) entity;
+        Collection<Entity> nearbyEntities = world.getNearbyEntities(location, fireballExplosionSize, fireballExplosionSize, fireballExplosionSize);
+        for(BWGamePlayer player : nearbyEntities.stream().map(entity -> {
+            if(entity instanceof Player)
+                return this.plugin.getGame().getPlayer(entity.getUniqueId());
+            else
+                return null;
+        }).collect(Collectors.toList())) {
+            if(player == null) continue;
+            if(player.isDead() || player.isSpectator()) continue;
+            Player p = player.getPlayer();
 
-            Vector playerVector = player.getLocation().toVector();
+            Vector playerVector = p.getLocation().toVector();
             Vector normalizedVector = vector.subtract(playerVector).normalize();
             Vector horizontalVector = normalizedVector.multiply(fireballHorizontal);
             double y = normalizedVector.getY();
@@ -69,7 +71,7 @@ public class BWFireballListener extends HyriListener<HyriBedWars> {
             } else {
                 y = y*fireballVertical*1.5; // kb for jumping
             }
-            player.setVelocity(horizontalVector.setY(y));
+            p.setVelocity(horizontalVector.setY(y));
         }
 
 //            LastHit lh = LastHit.getLastHit(player);

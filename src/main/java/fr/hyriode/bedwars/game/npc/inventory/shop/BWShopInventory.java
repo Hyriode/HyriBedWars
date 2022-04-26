@@ -28,6 +28,7 @@ public class BWShopInventory extends HyriInventory {
 
     public BWShopInventory(HyriBedWars plugin, Player owner, BWShopCategory category) {
         super(owner, category.getTitleLanguage().getForPlayer(owner), 54);
+        System.out.println("INIT GUI");
         this.plugin = plugin;
         this.category = category;
         this.categoryId = category.getId();
@@ -111,11 +112,13 @@ public class BWShopInventory extends HyriInventory {
         }
         this.addGameStyleSlot(player);
     }
+
     private void addGameStyleSlot(HyriBWPlayer player){
         this.setItem(44, BWGamePlayItem.getItemStack(this.owner, player),
                 event -> {
-                    this.openGui(this.category, player.changeGamePlayStyle() == HyriGameStyle.HYRIODE);
+                    HyriGameStyle style = player.changeGamePlayStyle();
                     player.update(this.owner.getUniqueId());
+                    this.openGui(this.category, style == HyriGameStyle.HYRIODE);
                 });
     }
 
@@ -125,7 +128,7 @@ public class BWShopInventory extends HyriInventory {
 
     private void openGui(BWShopCategory category, boolean isHyriode){
         try {
-            System.out.println(category);
+            System.out.println(isHyriode);
             if(category == BWShopCategory.QUICK_BUY){
                 BWShopQuickBuy.open(this.plugin, this.owner);
                 return;

@@ -15,6 +15,7 @@ import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
 import java.util.Collection;
+import java.util.stream.Collectors;
 
 public class BWTNTListener extends HyriListener<HyriBedWars> {
 
@@ -50,17 +51,19 @@ public class BWTNTListener extends HyriListener<HyriBedWars> {
 
         World world = location.getWorld();
 
-        assert world != null;
         Collection<Entity> nearbyEntities = world
                 .getNearbyEntities(location, fireballExplosionSize, fireballExplosionSize, fireballExplosionSize);
-        for(Entity entity : nearbyEntities) {
-            if(!(entity instanceof Player)) continue;
-            Player player = (Player) entity;
+        for(BWGamePlayer player : nearbyEntities.stream().map(entity -> {
+            if(entity instanceof Player)
+                return this.plugin.getGame().getPlayer(entity.getUniqueId());
+            else
+                return null;
+        }).collect(Collectors.toList())) {
+            if(player == null) continue;
+            if(player.isDead() || player.isSpectator()) continue;
+            Player p = player.getPlayer();
 
-            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
-            if(bwPlayer != null && (bwPlayer.isDead() || bwPlayer.isSpectator())) continue;
-
-            Vector playerVector = player.getLocation().toVector();
+            Vector playerVector = p.getLocation().toVector();
             Vector normalizedVector = vector.subtract(playerVector).normalize();
             Vector horizontalVector = normalizedVector.multiply(fireballHorizontal);
             double y = normalizedVector.getY();
@@ -70,7 +73,7 @@ public class BWTNTListener extends HyriListener<HyriBedWars> {
             } else {
                 y = y*fireballVertical*1.5; // kb for jumping
             }
-            player.setVelocity(horizontalVector.setY(y));
+            p.setVelocity(horizontalVector.setY(y));
         }
     }
 
