@@ -1,11 +1,8 @@
 package fr.hyriode.bedwars.game.listener;
 
 import fr.hyriode.bedwars.HyriBedWars;
-<<<<<<< HEAD
 import fr.hyriode.bedwars.game.BWGamePlayer;
-=======
 import fr.hyriode.hyrame.IHyrame;
->>>>>>> fd8308f5efd3298b3042c258c3ff03489c12b7de
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.Effect;
 import org.bukkit.Location;
