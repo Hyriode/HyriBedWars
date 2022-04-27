@@ -242,17 +242,16 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.downItemsUpgradable();
 
         final Player hitter = this.getLastHitter();
-        System.out.println(hitter);
-        System.out.println(this.isSpectator());
-        System.out.println(this.isDead());
 
-        if(hitter != null && !this.isSpectator()) {
-            System.out.println("Test");
-            final List<OreStack> itemStacks = InventoryBWUtils.getOresInventory(this.player, BWGameOre.GOLD,
-                    BWGameOre.IRON, BWGameOre.DIAMOND, BWGameOre.EMERALD);
-            for (OreStack item : itemStacks) {
-                hitter.getInventory().addItem(item.getItemStack());
-                hitter.sendMessage(item.getItem().getColor() + "+" + item.getAmount() + " " + item.getItem().getName().getForPlayer(hitter));
+        if(hitter != null) {
+            final BWGamePlayer bwHitter = this.plugin.getGame().getPlayer(hitter);
+            if(!bwHitter.isDead() && !bwHitter.isSpectator()) {
+                final List<OreStack> itemStacks = InventoryBWUtils.getOresInventory(this.player, BWGameOre.GOLD,
+                        BWGameOre.IRON, BWGameOre.DIAMOND, BWGameOre.EMERALD);
+                for (OreStack item : itemStacks) {
+                    hitter.getInventory().addItem(item.getItemStack());
+                    hitter.sendMessage(item.getItem().getColor() + "+" + item.getAmount() + " " + item.getItem().getName().getForPlayer(hitter));
+                }
             }
         }
         PlayerUtil.resetPlayer(player, true);
