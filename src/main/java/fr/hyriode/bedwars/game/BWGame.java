@@ -341,7 +341,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     private void teleportTeams() {
         this.teams.stream().map(team -> ((BWGameTeam) team)).forEach(gameTeam -> {
-            System.out.println(gameTeam.getName());
             if(gameTeam.getPlayers().isEmpty()){
                 gameTeam.removeBed();
             }

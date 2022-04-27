@@ -473,7 +473,6 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
             }
         }
         if(event.getPlayer().getLocation().getY() <= this.plugin.getConfiguration().getCancelInventoryY()) {
-            System.out.println(p.getOpenInventory().getType());
 //            p.closeInventory();
         }
 

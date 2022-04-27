@@ -57,7 +57,6 @@ public class BWChoiceSlotGUI extends HyriInventory {
         }
         Map<String, Integer> quickBuy = this.getPlayer().getAccount().getQuickBuy();
         for(String material : quickBuy.keySet()){
-            System.out.println(material);
             ItemShop item = BWMaterial.valueOf(material).isItemUpgradable() ? BWMaterial.valueOf(material).getItemUpgradable().getTierItem(0) : BWMaterial.valueOf(material).getItemShop();
 
             int slot = quickBuy.get(material);

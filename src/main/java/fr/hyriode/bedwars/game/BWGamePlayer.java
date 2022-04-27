@@ -267,8 +267,8 @@ public class BWGamePlayer extends HyriGamePlayer {
             return true;
         }
         this.setSpectator(true);
+        this.addFinalDeaths();
         if(hitter != null){
-            this.addFinalDeaths();
             this.plugin.getGame().getPlayer(hitter).addFinalKills();
         }
         this.plugin.getGame().win();

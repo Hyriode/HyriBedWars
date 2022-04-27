@@ -56,8 +56,6 @@ public class BWGameTeam extends HyriGameTeam {
     public void init() {
         this.hasBed = true;
 
-        System.out.println(this.getName());
-
         HyriBWConfiguration.Team teamConfig = this.plugin.getConfiguration().getTeam(this.getName());
 
         this.setSpawnLocation(teamConfig.getRespawnLocation());
