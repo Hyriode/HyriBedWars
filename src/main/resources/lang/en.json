@@ -259,6 +259,8 @@
 
   "bed.destruction": "BED DESTRUCTION > %s Bed %s was destroyed by %s",
   "bed.destroyed.name": "BED DESTROYED!",
-  "bed.destroyed.subtitle": "You will no longer respawn!"
+  "bed.destroyed.subtitle": "You will no longer respawn!",
+
+  "death.final": "§b§lFINAL KILL"
 
 }

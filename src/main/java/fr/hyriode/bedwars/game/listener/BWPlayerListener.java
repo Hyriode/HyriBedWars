@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.listener;
 
+import fr.hyriode.api.event.HyriEventHandler;
 import fr.hyriode.bedwars.game.material.utility.entity.BedBugEntity;
 import fr.hyriode.bedwars.game.material.utility.entity.DreamDefenderEntity;
 import fr.hyriode.bedwars.game.material.utility.popuptower.TowerEast;
@@ -14,8 +15,10 @@ import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.Utils;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGameState;
+import fr.hyriode.hyrame.game.event.player.HyriGameDeathEvent;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.item.ItemNBT;
+import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.listener.HyriListener;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGamePlayer;
@@ -55,13 +58,36 @@ public class BWPlayerListener extends HyriListener<HyriBedWars> {
         event.setCancelled(true);
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    public void onDropOnAir(PlayerDropItemEvent event){
+        if(event.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType() == Material.AIR) {
+            event.setCancelled(true);
+        }
+    }
+
+    @EventHandler
+    public void onInteractFireball(EntityDamageByEntityEvent event){
+        if(event.getDamager() instanceof Player) {
+            BWGamePlayer player = this.getPlayer((Player) event.getDamager());
+            if (player.isSpectator() || player.isDead()) {
+                event.setCancelled(true);
+            }
+        }
+    }
+
+    @HyriEventHandler
+    public void onDeath(HyriGameDeathEvent event){
+        BWGamePlayer player = (BWGamePlayer) event.getGamePlayer();
+
+        if(player.getHyriTeam().hasBed()){
+            event.addMessage(new HyriLanguageMessage(""));
+        }
+
+    }
+
     @EventHandler(priority = EventPriority.LOW)
     public void onDrop(PlayerDropItemEvent event){
         Item item = event.getItemDrop();
-        Player player = event.getPlayer();
-
-        if(event.getPlayer().getLocation().subtract(0, 1, 0).getBlock().getType() == Material.AIR)
-            event.setCancelled(true);
 
         for (BWMaterial material : BWMaterial.values()) {
             if(material.isItemUpgradable()){

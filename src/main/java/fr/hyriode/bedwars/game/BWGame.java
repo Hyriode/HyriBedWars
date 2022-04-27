@@ -186,7 +186,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         if(this.getState() == HyriGameState.ENDED) return;
         int eliminated = (int) this.teams.stream().filter(team -> ((BWGameTeam) team).isEliminated() && !((BWGameTeam) team).hasBed()).count();
 
-        if(eliminated <= 1){
+        System.out.println();
+        if(eliminated >= ((BWGameType)this.type).getMaxTeams() - 1){
             //Win
             BWGameTeam winner = this.teams.stream().filter(team -> !((BWGameTeam) team).isEliminated()).map(team -> (BWGameTeam) team).findFirst().orElse(null);
 
