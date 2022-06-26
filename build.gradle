@@ -1,0 +1,68 @@
+plugins {
+    id "com.github.johnrengelman.shadow" version "7.1.0"
+}
+
+apply plugin: 'idea'
+apply plugin: 'java-library'
+
+group 'fr.hyriode'
+version '1.0.0'
+archivesBaseName = 'HyriBedWars'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+compileJava {
+    sourceCompatibility = JavaVersion.VERSION_1_8
+    options.encoding = 'UTF-8'
+}
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+
+    maven { url = 'https://oss.sonatype.org/content/groups/public/' }
+    maven {
+        name = 'spigotmc-repo'
+        url = 'https://hub.spigotmc.org/nexus/content/repositories/snapshots/'
+    }
+
+    maven {
+        name = 'Hyrame_maven'
+        url = 'https://maven.pkg.github.com/Hyriode/Hyrame/'
+
+        credentials {
+            username System.getenv('GITHUB_USERNAME')
+            password System.getenv('GITHUB_TOKEN')
+        }
+    }
+}
+
+dependencies {
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'fr.hyriode:hyrame:1.2.7'
+    implementation 'org.spigotmc:spigot-api:1.8.8-R0.1-SNAPSHOT'
+    shadow 'xyz.xenondevs:particle:1.7'
+}
+
+processResources {
+    filter {
+        it.replace('@version@', project.version)
+    }
+}
+
+shadowJar {
+    configurations = [project.configurations.shadow]
+}
+
+task deploy(dependsOn: shadowJar) {
+    doLast {
+        copy {
+            from "$buildDir/libs/HyriBedWars-1.0.0-all.jar"
+            into "$buildDir/libs/BWServerTest/plugins"
+        }
+    }
+}

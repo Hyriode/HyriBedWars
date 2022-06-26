@@ -1,0 +1,197 @@
+{
+  "game.description": "Protect your bed and destroy the enemy beds. Upgrade yourself and your team by collecting Iron, Gold, Emerald and Diamond from generators to access powerful upgrades.",
+
+  "team.blue.display": "Blue",
+  "team.red.display": "Red",
+  "team.green.display": "Green",
+  "team.yellow.display": "Yellow",
+  "team.aqua.display": "Aqua",
+  "team.pink.display": "Pink",
+  "team.white.display": "White",
+  "team.gray.display": "Gray",
+
+  "game.next-event.diamond.II": "&bDiamond II",
+  "game.next-event.diamond.III": "&bDiamond III",
+  "game.next-event.emerald.II": "&aEmerald II",
+  "game.next-event.emerald.III": "&aEmerald III",
+  "game.next-event.beds-destroy": "&cBeds destroy",
+  "game.next-event.dragons-spawn": "&aSudden Death",
+  "game.next-event.game-end": "&cGame end",
+
+  "scoreboard.you.display": "&7(YOU)",
+  "scoreboard.kills.display": "Kills:",
+  "scoreboard.finalkills.display": "Final Kills:",
+  "scoreboard.bedsbroken.display": "Beds Broken:",
+  "scoreboard.in.display": "dans",
+  "scoreboard.game_end.display": "Game end",
+
+  "npc.shop.name": "ITEM SHOP",
+  "npc.upgrade.name": "UPGRADES",
+  "npc.click": "RIGHT CLICK",
+
+  "shop.inventory.quick_buy.title": "Quick Buy",
+  "shop.inventory.blocks.title": "Blocks",
+  "shop.inventory.melee.title": "Melee",
+  "shop.inventory.armor.title": "Armor",
+  "shop.inventory.tools.title": "Tools",
+  "shop.inventory.ranged.title": "Ranged",
+  "shop.inventory.potions.title": "Potions",
+  "shop.inventory.utility.title": "Utility",
+
+  "shop.inventory.separator.title": "Categories",
+  "shop.inventory.separator.lore": "Items",
+
+  "inv.click-purchase": "Click to purchase!",
+  "shop.inventory.item.missing": "%s missing %s",
+  "shop.inventory.item.unlocked": "UNLOCKED",
+  "shop.inventory.item.maxed": "MAXED",
+
+  "shop.inventory.item.cost": "Cost: ",
+  "shop.purchased": "You purchased %s",
+  "shop.missing": "You don't have enought %s! Need %s more!",
+
+  "inv.shop.click.view": "Click to view!",
+
+  "item.gamestyle.title": "Game style",
+  "item.gamestyle.lore": "Click to change the style\nof the interfaces",
+
+  "item.iron.name": "Iron",
+  "item.gold.name": "Gold",
+  "item.diamond.name": "Diamond",
+  "item.emerald.name": "Emerald",
+
+  "item.wool.name": "Wool",
+  "item.wool.lore": "Great for bridging across\nislands. Turns into your team's\ncolor.",
+
+  "item.hard_clay.name": "Hardened Clay",
+  "item.hard_clay.lore": "Basic block to defend your bed.",
+
+  "item.glass.name": "Blast-Proof Glass",
+  "item.glass.lore": "Immune to explosions.",
+
+  "item.end_stone.name": "End Stone",
+  "item.end_stone.lore": "Solid block to defend your bed.",
+
+  "item.ladder.name": "Ladder",
+  "item.ladder.lore": "Useful to save cats stuck in\ntrees.",
+
+  "item.wood.name": "Wood",
+  "item.wood.lore": "Good block to defend your bed.\nStrong against pickaxes.",
+
+  "item.obsidian.name": "Obsidian",
+  "item.obsidian.lore": "Extreme protection for your bed.",
+
+  "item.stone_sword.name": "Stone Sword",
+  "item.iron_sword.name": "Iron Sword",
+  "item.diamond_sword.name": "Diamond Sword",
+  "item.stick.name": "Stick (Knockback I)",
+
+  "item.chainmail_armor.name": "Permanent Chainmail Armor",
+  "item.chainmail_armor.lore": "Chainmail leggings and boots\nwhich you will always spawn\nwith.",
+
+  "item.iron_armor.name": "Permanent Iron Armor",
+  "item.iron_armor.lore": "Iron leggings and boots which\nyou will always spawn with",
+
+  "item.diamond_armor.name": "Permanent Diamond Armor",
+  "item.diamond_armor.lore": "Diamond leggings and boots which\nyou will always spawn with",
+
+  "item.shears.name": "Permanent Shears",
+  "item.shears.lore": "Great to get rid of wool. You\nwill always spawn with these\nshears.",
+
+  "item.pickaxe_tier1.name": "Wooden Pickaxe (Efficiency I)",
+  "item.pickaxe_tier2.name": "Iron Pickaxe (Efficiency II)",
+  "item.pickaxe_tier3.name": "Gold Pickaxe (Efficiency III, Sharpness II)",
+  "item.pickaxe_tier4.name": "Diamond Pickaxe (Efficiency III)",
+  "item.pickaxe.lore": "This is an upgradable item.\nIt will lose 1 tier upon death!\n\nYou will permanently respawn\nwith at least the lower tier.",
+
+  "item.axe_tier1.name": "Wooden Axe (Efficiency I)",
+  "item.axe_tier2.name": "Iron Axe (Efficiency I)",
+  "item.axe_tier3.name": "Gold Axe (Efficiency II)",
+  "item.axe_tier4.name": "Diamond Axe (Efficiency III)",
+  "item.axe.lore": "This is an upgradable item.\nIt will lose 1 tier upon death!\n\nYou will permanently respawn\nwith at least the lower tier.",
+
+  "item.arrow.name": "Arrow",
+  "item.bow.name": "Bow",
+  "item.bow_power.name": "Bow (Power I)",
+  "item.bow_punch.name": "Bow (Power I, Punch I)",
+
+  "item.potion_speed.name": "Potion of Speed II (45 seconds)",
+  "item.potion_jump.name": "Potion of Jump V (45 seconds)",
+  "item.potion_invisibility.name": "Potion of Invisibility (30 seconds)",
+
+  "item.golden_apple.name": "Golden Apple",
+  "item.golden_apple.lore": "Well-rounded healing",
+  "item.bedbug.name": "Bedbug",
+  "item.bedbug.lore": "Spawns silverfish where the\nsnowball lands to distract your\nenemies. Lasts 15 seconds",
+  "item.dream_defender.name": "Dream Defender",
+  "item.dream_defender.lore": "Iron Golem to help defend your\nbase. Lasts 4 minutes.",
+  "item.fireball.name": "Fireball",
+  "item.fireball.lore": "Right-click to launch! Great to\nknock back enemies walking on\nthin bridges.",
+  "item.tnt.name": "TNT",
+  "item.tnt.lore": "Instantly ignites, appropriate\nto explode things!",
+  "item.ender_pearl.name": "Ender Pearl",
+  "item.ender_pearl.lore": "The quickest way to invade enemy\nbases.",
+  "item.water_bucket.name": "Water Bucket",
+  "item.water_bucket.lore": "Great to slow down approaching\nenemies. Can also protect\nagainst TNT.",
+  "item.bridge_egg.name": "Bridge Egg",
+  "item.bridge_egg.lore": "This egg creates a bridge in its\ntrail after being thrown.",
+  "item.magic_milk.name": "Magic Milk",
+  "item.magic_milk.lore": "Avoid triggering traps for 30\nseconds after consuming.",
+  "item.sponge.name": "Sponge",
+  "item.sponge.lore": "Great for soaking up water.",
+  "item.compact_tower.name": "Compact Pop-up Tower",
+  "item.compact_tower.lore": "Place a pop-up defence!",
+
+  "inventory.upgrade.title": "Upgrades & Traps",
+
+  "upgrade.sharpness.name": "Sharpened Swords",
+  "upgrade.sharpness.lore": "Your team permanently gains\nSharpness I on all swords and axes!",
+  "upgrade.sharpness.tier_1.name": "Sharpness",
+
+  "upgrade.protection.name": "Reinforced Armor",
+  "upgrade.protection.lore": "Your team permanently gains\nProtection on all armor pieces!",
+  "upgrade.protection.tier_1.name": "Protection I",
+  "upgrade.protection.tier_2.name": "Protection II",
+  "upgrade.protection.tier_3.name": "Protection III",
+  "upgrade.protection.tier_4.name": "Protection IV",
+
+  "upgrade.miner.name": "Maniac Miner",
+  "upgrade.miner.lore": "All players on your team\npermanently gain Haste!",
+  "upgrade.miner.tier_1.name": "Haste I",
+  "upgrade.miner.tier_2.name": "Haste II",
+
+  "upgrade.forge.name": "Iron Forge",
+  "upgrade.forge.lore": "Upgrade resource spawning on\nyour island!",
+  "upgrade.forge.tier_1.name": "+50% Resources",
+  "upgrade.forge.tier_2.name": "+100% Resources",
+  "upgrade.forge.tier_3.name": "Spawn emeralds",
+  "upgrade.forge.tier_4.name": "+200% Resources",
+
+  "upgrade.heal_pool.name": "Heal Pool",
+  "upgrade.heal_pool.lore": "Creates a Regeneration field\naround your base!",
+
+  "upgrade.dragon.name": "Dragon Buff",
+  "upgrade.dragon.lore": "Your team will have 2 dragons\ninstead of 1 during deathmatch!",
+
+  "trap.blindness.name": "It's a trap!",
+  "trap.blindness.lore": "Inflicts Blindness and Slowness\nfor 8 seconds",
+  "trap.counter_offensive.name": "Counter-Offensive Trap",
+  "trap.counter_offensive.lore": "Grants Speed II and Jump Boost\nII for 15 seconds to allied\nplayers near your base.",
+  "trap.alarm.name": "Alarm Trap",
+  "trap.alarm.lore": "Reveals invisible players as\nwell as their name and team.",
+  "trap.miner_fatigue.name": "Miner Fatigue Trap",
+  "trap.miner_fatigue.lore": "Inflict Mining Fatigue for 10\nseconds",
+
+  "no-trap.title": "Trap #%number%:",
+  "no-trap.word": "No trap!",
+  "no-trap.lore": "Le %word% ennemi qui vient\ndans votre base déclenchera ce\npiège!",
+  "no-trap.sub_lore": "Acheter un piège le stockera\nici. Son coût sera proportionnel\nau nombre de pièges stockés.",
+
+  "first.word": "premier",
+  "second.word": "seconde",
+  "third.word": "troisième",
+
+  "bed.broken.title": "Bed Broken!",
+  "bed.broken.subtitle": "Your bed is broken!",
+  "bed.broken.subtitle.player": "Your bed is broken by %enemy%!"
+}
