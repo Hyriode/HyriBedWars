@@ -47,8 +47,9 @@
   "shop.inventory.item.maxed": "MAXED",
 
   "shop.inventory.item.cost": "Cost: ",
-  "shop.purchased": "You purchased %s",
-  "shop.missing": "You don't have enought %s! Need %s more!",
+  "shop.purchased": "You purchased %item%",
+  "shop.purchased.team": "%player% purchased %item%",
+  "shop.missing": "You don't have enought %name%! Need %amount% more!",
 
   "inv.shop.click.view": "Click to view!",
 
@@ -146,7 +147,6 @@
 
   "upgrade.sharpness.name": "Sharpened Swords",
   "upgrade.sharpness.lore": "Your team permanently gains\nSharpness I on all swords and axes!",
-  "upgrade.sharpness.tier_1.name": "Sharpness",
 
   "upgrade.protection.name": "Reinforced Armor",
   "upgrade.protection.lore": "Your team permanently gains\nProtection on all armor pieces!",
@@ -187,11 +187,23 @@
   "no-trap.lore": "Le %word% ennemi qui vient\ndans votre base déclenchera ce\npiège!",
   "no-trap.sub_lore": "Acheter un piège le stockera\nici. Son coût sera proportionnel\nau nombre de pièges stockés.",
 
+  "trap.title": "TRAP TRIGGERED!",
+  "trap.subtitle": "Your %trap% has been triggered!",
+  "trap.alarm.title": "ALARM!!!",
+  "trap.alarm.subtitle": "Alarm trap set off by %team% team!",
+
+  "trap.timer.magic_milk": "Magic Milk",
+
   "first.word": "premier",
   "second.word": "seconde",
   "third.word": "troisième",
 
   "bed.broken.title": "Bed Broken!",
   "bed.broken.subtitle": "Your bed is broken!",
-  "bed.broken.subtitle.player": "Your bed is broken by %enemy%!"
+  "bed.broken.subtitle.player": "Your bed is broken by %enemy%!",
+
+  "generator.diamond": "DIAMOND",
+  "generator.emerald": "EMERALD",
+
+  "inventory.shop.quick_buy.choice_slot.title": "Choice Slot truc"
 }

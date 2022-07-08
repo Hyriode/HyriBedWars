@@ -1,9 +1,13 @@
 package fr.hyriode.bedwars.game.listener.world;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.utils.MetadataReferences;
+import fr.hyriode.bedwars.utils.NBTGetter;
+import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
+import fr.hyriode.hyrame.utils.Area;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -15,6 +19,9 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.metadata.FixedMetadataValue;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class WorldListener extends HyriListener<HyriBedWars> {
 
     public WorldListener(HyriBedWars plugin) {
@@ -23,7 +30,6 @@ public class WorldListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event){
-
         if(!event.getBlock().hasMetadata(MetadataReferences.PLACEBYPLAYER)){
             event.setCancelled(true);
         }
@@ -34,6 +40,7 @@ public class WorldListener extends HyriListener<HyriBedWars> {
         Player player = event.getPlayer();
         Block block = event.getBlock();
         Location loc = block.getLocation();
+        BWConfiguration config = this.plugin.getConfiguration();
 
         for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
             if(team.getConfig().getBaseProtectArea().isInArea(loc)){
@@ -41,11 +48,36 @@ public class WorldListener extends HyriListener<HyriBedWars> {
                 return;
             }
         }
+        List<Location> generators = new ArrayList<>(config.getDiamondGeneratorLocations());
+        generators.addAll(config.getEmeraldGeneratorLocations());
+
+        for (Location locGenerator : generators) {
+            if(new Area(locGenerator.clone().subtract(3, 3, 3), locGenerator.clone().add(2, 3, 2)).isInArea(loc)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        for (Area area : this.plugin.getConfiguration().getProtectionArea()) {
+            if(area.isInArea(loc)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        if(!this.plugin.getConfiguration().getGameArea().getArea().isInArea(loc)){
+            event.setCancelled(true);
+            return;
+        }
 
         if(MetadataReferences.isMetaItem(MetadataReferences.SPONGE, player.getItemInHand())) return;
 
         if(!event.isCancelled() && block.getType() != Material.AIR) {
             block.setMetadata(MetadataReferences.PLACEBYPLAYER, new FixedMetadataValue(this.plugin, player.getUniqueId()));
+            NBTGetter nbt = new NBTGetter(event.getItemInHand());
+            nbt.getNBTMap().forEach((tag, value) -> {
+                block.setMetadata(tag, new FixedMetadataValue(this.plugin, value));
+            });
         }
     }
 

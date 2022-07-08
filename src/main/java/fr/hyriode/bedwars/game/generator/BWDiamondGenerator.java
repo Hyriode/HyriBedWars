@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import java.util.function.Function;
 
 public enum BWDiamondGenerator implements IHyriGeneratorTier {
-    DIAMOND_TIER_I("I", 30*20),
-    DIAMOND_TIER_II("II", 23*20),
-    DIAMOND_TIER_III("III", 12*20),
+    TIER_I("I", 30*20),
+    TIER_II("II", 23*20),
+    TIER_III("III", 12*20),
     ;
 
     private final String name;

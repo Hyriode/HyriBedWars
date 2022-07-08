@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.shop;
 
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Collections;
@@ -28,7 +29,7 @@ public class MaterialArmorShop extends MaterialShop{
     }
 
     @Override
-    public void buy(BWGamePlayer player) {
+    public void buy(InventoryClickEvent event, BWGamePlayer player) {
         player.setArmor(this.getAsArmor());
         player.giveArmor();
     }

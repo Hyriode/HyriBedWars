@@ -4,15 +4,21 @@ import fr.hyriode.api.HyriAPI;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.BWGame;
+import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.player.scoreboard.BWPlayerScoreboard;
 import fr.hyriode.bedwars.game.shop.*;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
+import fr.hyriode.bedwars.game.upgrade.Upgrade;
+import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.item.ItemBuilder;
+import fr.hyriode.hyrame.utils.PlayerUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
@@ -23,21 +29,23 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class BWGamePlayer extends HyriGamePlayer {
 
     public static final String RESPAWN_COUNTDOWN = "respawn";
     public static final String FIREBALL_COUNTDOWN = "fireball";
+    public static final String TRAP_COUNTDOWN = "trap";
 
     private HyriBedWars plugin;
     private BWPlayerScoreboard scoreboard;
+    private HyriBWPlayer account;
 
     private MaterialArmorShop armor;
     private final List<MaterialShop> itemsPermanent;
     private final List<UpgradeMaterial> materialsUpgrade;
-    private final List<String> countdowns;
+    private final List<CountdownPlayer> countdowns;
 
     private int kills;
     private int finalKills;
@@ -49,6 +57,12 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.materialsUpgrade = new ArrayList<>();
         this.itemsPermanent = new ArrayList<>();
         this.countdowns = new ArrayList<>();
+
+        this.account = this.asHyriPlayer().getData("bedwars", HyriBWPlayer.class);
+
+        if(this.account == null) {
+            this.account = new HyriBWPlayer();
+        }
     }
 
     public void handleLogin(HyriBedWars plugin){
@@ -67,22 +81,18 @@ public class BWGamePlayer extends HyriGamePlayer {
                 List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
 
                 for (ItemPrice money : itemStacks) {
-                    hitter.sendMessage("+" + money.getAmount() + " " + money.getName(hitter));
+                    hitter.sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
                     hitter.getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
                 }
             }
             return true;
         }
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.plugin.getGame().checkWin(), 1L);
         return false;
     }
 
     public HyriBWPlayer getAccount() {
-        HyriBWPlayer player = HyriAPI.get().getPlayerManager().getPlayer(this.getUUID()).getData("bedwars", HyriBWPlayer.class);
-
-        if(player != null) {
-            return player;
-        }
-        return new HyriBWPlayer();
+        return this.account;
     }
 
     private BWGame getGame(){
@@ -93,11 +103,9 @@ public class BWGamePlayer extends HyriGamePlayer {
         return (BWGameTeam) this.team;
     }
 
-    public void cooldownRespawn() {
-        this.addCountdown("respawn", 20*2);
-    }
+    public void respawn(boolean respawn) {
+        BWGameTeam team = this.getBWTeam();
 
-    public void respawn() {
         this.player.teleport(this.getBWTeam().getConfig().getRespawnLocation());
         this.player.setGameMode(GameMode.SURVIVAL);
         this.giveArmor();
@@ -108,28 +116,60 @@ public class BWGamePlayer extends HyriGamePlayer {
             material.removeTier();
             InventoryUtils.giveInSlot(this.player, 0 /*Faire selon la hotbar*/, material.getItemShopByTier().getItemStack(this));
         });
+        this.applyUpgrades();
+        if(respawn) {
+            this.addCountdown(RESPAWN_COUNTDOWN, 20*2);
+        }
+    }
+
+    private void applyUpgrades(){
+        BWGameTeam team = this.getBWTeam();
+
+        team.getUpgradeTeam().getUpgrades().forEach(upgradeLite -> {
+            Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(upgradeLite.getName());
+            if(upgrade.isForPlayer()) {
+                upgrade.upgrade(this, upgrade.getTier(team.getUpgradeTeam().getTier(upgradeLite.getName())), false);
+            }
+        });
     }
 
     public void giveSword(){
-        InventoryUtils.giveInSlot(this.player, 0 /*Faire selon la hotbar*/, this.getSword());
+        BWGameTeam team = this.getBWTeam();
+        ItemStack sword = this.getSword();
+
+        if(this.player.getItemOnCursor().getType() != sword.getType()) {
+            int hotbar = this.getAccount().getSlotByHotbar(player.getPlayer(), sword, HotbarCategory.MELEE);
+            InventoryUtils.giveInSlot(this.player, hotbar, sword);
+        }
+
+        this.applySharpness();
     }
 
     public ItemStack getSword(){
-        ItemBuilder itemBuilder = new ItemBuilder(Material.WOOD_SWORD).unbreakable()
+        return new ItemBuilder(Material.WOOD_SWORD).unbreakable()
                 .withItemFlags(ItemFlag.HIDE_UNBREAKABLE)
-                .nbt().setBoolean(MetadataReferences.ISPERMANENT, true).toBuilder();
+                .nbt().setBoolean(MetadataReferences.ISPERMANENT, true).build().clone();
+    }
 
-// TODO
-//        if(this.getBWTeam().getUpgrades().contains(SHARPNESS)){
-//            itemBuilder.withEnchant(Enchantment.DAMAGE_ALL);
-//        }
-        return itemBuilder.build().clone();
+    public void applySharpness(){
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
+
+            if(upgradeTeam.hasUpgrade(UpgradeManager.SHARPNESS)){
+                Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.SHARPNESS);
+                upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.SHARPNESS)), false);
+            }
+        }, 1L);
     }
 
     public void changeGamePlayStyle() {
         HyriBWPlayer account = this.getAccount();
         account.changeGamePlayStyle();
         account.update(this.getUUID());
+    }
+
+    public void update(){
+        this.account.update(this.getUUID());
     }
 
     public List<UpgradeMaterial> getMaterialsUpgrade() {
@@ -178,9 +218,6 @@ public class BWGamePlayer extends HyriGamePlayer {
             this.player.getInventory().setBoots(new ItemBuilder(Material.LEATHER_BOOTS)
                     .withLeatherArmorColor(color).unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).build());
         }
-        for (ItemStack armor : this.player.getInventory().getArmorContents()) {
-            //TODO sharpness this.getBWTeam().getUpgrade()
-        }
     }
 
     public List<MaterialShop> getItemsPermanent() {
@@ -200,23 +237,28 @@ public class BWGamePlayer extends HyriGamePlayer {
         return false;
     }
 
-    public void addCountdown(String name, int timeFinal) {
-        this.countdowns.add(name);
-        new BukkitRunnable() {
-            int time = timeFinal;
-            @Override
-            public void run() {
-                if(isSpectator() || isDead() || time < 0){
-                    removeCountdown(name);
-                    this.cancel();
-                }
-                time--;
-            }
-        }.runTaskTimerAsynchronously(this.plugin, 0L, 1L);
+    public void addCountdown(String name, int time){
+        this.addCountdown(name, time, null);
     }
 
-    public boolean isCountdown(String name){
-        return this.countdowns.contains(name);
+    public void addCountdown(String name, int timeFinal, String keyName) {
+        if(this.hasCountdown(name)) {
+            this.getCountdown(name).setTime(timeFinal);
+            return;
+        }
+        this.countdowns.add(new CountdownPlayer(this, name).start(this.plugin, timeFinal, keyName));
+    }
+
+    public CountdownPlayer getCountdown(String name) {
+        return this.countdowns.stream().filter(cp -> cp.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public boolean hasCountdown(String name){
+        return this.getCountdown(name) != null;
+    }
+
+    public void removeCountdown(String name) {
+        this.countdowns.remove(this.getCountdown(name));
     }
 
     public int getKills() {
@@ -247,11 +289,21 @@ public class BWGamePlayer extends HyriGamePlayer {
         return plugin;
     }
 
-    public List<String> getCountdowns() {
+    public List<CountdownPlayer> getCountdowns() {
         return countdowns;
     }
 
-    public void removeCountdown(String name) {
-        this.countdowns.remove(name);
+    public void hideArmor() {
+        for (BWGamePlayer player : this.plugin.getGame().getPlayers()) {
+            if(!player.getBWTeam().equals(this.getBWTeam())){
+                PlayerUtil.hideArmor(this.player, player.getPlayer());
+            }
+        }
+    }
+
+    public void showArmor() {
+        for (BWGamePlayer player : this.plugin.getGame().getPlayers()) {
+            PlayerUtil.showArmor(this.player, player.getPlayer());
+        }
     }
 }

@@ -2,28 +2,35 @@ package fr.hyriode.bedwars.game.shop;
 
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.utils.InventoryUtils;
+import fr.hyriode.bedwars.utils.TriConsumer;
 import org.bukkit.Bukkit;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.function.BiConsumer;
 
 public class MaterialShop {
 
     private final List<ItemShop> items;
     private final String name;
     private final ShopCategory category;
-    private final BiConsumer<BWGamePlayer, ItemStack> action;
+    private final TriConsumer<BWGamePlayer, ItemStack, Integer> action;
     private boolean permanent;
     private boolean disable;
 
     public MaterialShop(String name, ShopCategory category, boolean permanent, List<ItemShop> itemShops) {
-        this(name, category, permanent, (player, itemStack) -> {
-            Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> InventoryUtils.giveInSlot(player.getPlayer(), 0 /*Faire selon la hotbar click/manager*/, itemStack), 1L);
+        this(name, category, permanent, (player, itemStack, slot) -> {
+            Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> {
+                if(slot == -1) {
+                    InventoryUtils.giveInSlot(player.getPlayer(), 0, itemStack);
+                    return;
+                }
+                InventoryUtils.setInSlot(player.getPlayer(), slot, itemStack);
+            }, 1L);
         }, itemShops);
     }
 
-    public MaterialShop(String name, ShopCategory category, boolean permanent, BiConsumer<BWGamePlayer, ItemStack> action, List<ItemShop> itemShops) {
+    public MaterialShop(String name, ShopCategory category, boolean permanent, TriConsumer<BWGamePlayer, ItemStack, Integer> action, List<ItemShop> itemShops) {
         this.name = name;
         this.category = category;
         this.permanent = permanent;
@@ -31,12 +38,10 @@ public class MaterialShop {
         this.action = action;
 
         if(!this.items.isEmpty()) {
-            if (this.items.size() > 1) {
-                for (int tier = 0; tier < this.items.size(); ++tier) {
-                    this.items.get(tier).setName(name + "_tier_" + (tier + 1)).setCategory(category);
-                }
-            } else {
-                this.items.get(0).setName(name).setCategory(category);
+            for (int tier = 0; tier < this.items.size(); ++tier) {
+                this.items.get(tier).setName(name + (this.items.size() > 1 ? "_tier_" + (tier + 1) : ""))
+                        .setMaterialName(name)
+                        .setCategory(category);
             }
         }
     }
@@ -97,7 +102,7 @@ public class MaterialShop {
         return this.items.size() - 1;
     }
 
-    public void buy(BWGamePlayer player) {
+    public void buy(InventoryClickEvent event, BWGamePlayer player) {
         ItemStack itemStack = null;
 
         if(this.isUpgradable()) {
@@ -119,7 +124,30 @@ public class MaterialShop {
             itemStack = this.getFirstItem().getItemStack(player);
         }
 
-        this.action.accept(player, itemStack);
+        int hotbar = player.getAccount().getSlotByHotbar(player.getPlayer(), itemStack, this.getCategory().getHotbar());
+        int slot = event.getHotbarButton() < 0
+                ? hotbar
+                : event.getHotbarButton();
+
+        this.action.accept(player, itemStack, slot);
+        if(this.getCategory() == ShopCategory.MELEE){
+            player.applySharpness();
+        }
+
+    }
+
+    /**
+     * Get item shop for the player to buy
+     *
+     * @param player The player
+     * @return ItemShop to give to the player
+     */
+    public ItemShop getItemShopForPlayer(BWGamePlayer player) {
+        if (this.isUpgradable() && player.containsMaterialUpgrade(this)) {
+            UpgradeMaterial m = player.getMaterialUpgrade(this);
+            return m.getItemShopByNextTier();
+        }
+        return this.getFirstItem();
     }
 
     @Override
@@ -131,4 +159,5 @@ public class MaterialShop {
                 ", disable=" + disable +
                 '}';
     }
+
 }

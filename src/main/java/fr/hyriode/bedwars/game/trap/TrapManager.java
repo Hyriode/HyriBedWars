@@ -7,6 +7,7 @@ import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import fr.hyriode.hyrame.item.ItemBuilder;
+import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.title.Title;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -44,9 +45,13 @@ public class TrapManager {
             team.getPlayers().forEach(player -> {
                 Title.sendTitle(player.getPlayer(), ChatColor.RED + "ALARM", ChatColor.GRAY + "Alarm activate by " + enemy.getBWTeam().getColor().getChatColor() + enemy.getBWTeam().getName(), 10, 20*3, 10);
             });
+            team.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("trap.alarm.title").getForPlayer(p),
+                    p -> ChatColor.RED + HyriLanguageMessage.get("trap.alarm.subtitle").getForPlayer(p)
+                            .replace("%team%", team.getColor().getDyeColor() + team.getDisplayName().getForPlayer(p) + ChatColor.RESET),
+                    10, 20, 10);
         }, false);
         this.add("miner_fatigue", new ItemBuilder(Material.IRON_PICKAXE).withAllItemFlags().build(), 10, (enemy, team, trap) -> {
-            enemy.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, trap.getTimeSeconds(), 0));
+            enemy.getPlayer().addPotionEffect(new PotionEffect(PotionEffectType.SLOW_DIGGING, trap.getTimeSeconds() * 20, 0));
         });
     }
 

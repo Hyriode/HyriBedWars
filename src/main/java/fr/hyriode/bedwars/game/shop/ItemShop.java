@@ -13,6 +13,8 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +22,7 @@ import java.util.List;
 public class ItemShop {
 
     private String name;
+    private String materialName;
     private ItemBuilder item;
     private ShopCategory category;
     private final ItemPrice price;
@@ -42,6 +45,11 @@ public class ItemShop {
         return this;
     }
 
+    public ItemShop setMaterialName(String materialName) {
+        this.materialName = materialName;
+        return this;
+    }
+
     public ItemShop setCategory(ShopCategory category) {
         this.category = category;
         return this;
@@ -55,24 +63,41 @@ public class ItemShop {
         return HyriLanguageMessage.get("item." + this.getName() + ".description");
     }
 
-    public ItemBuilder getItem() {
+    public String getMaterialName() {
+        return materialName;
+    }
+
+    public ItemStack getItem() {
+        if(this.item.build().getType().isBlock()){
+            return this.item.build();
+        }
+        ItemMeta itemMeta = this.item.build().getItemMeta();
+
         if(this.getMaterialShop().isPermanent()) {
             this.item = item.nbt().setBoolean(MetadataReferences.ISPERMANENT, true).toBuilder();
         }
-        return this.item.unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+        ItemStack output = this.item.unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setString(MetadataReferences.MATERIAL, this.materialName).build();
+        output.setItemMeta(itemMeta);
+        return output;
     }
 
     @SuppressWarnings("deprecation")
     public ItemStack getItemColored(HyriGameTeam team){
-        ItemStack itemStack = this.getItem().build().clone();
-        return new ItemBuilder(itemStack.getType(), itemStack.getAmount(), team.getColor().getDyeColor().getWoolData()).build();
+        ItemStack itemStack = this.getItem().clone();
+        itemStack.setDurability(team.getColor().getDyeColor().getWoolData());
+        return itemStack;
     }
 
     public ItemStack getItemStack(BWGamePlayer player){
         if(this.isColorable() && player != null) {
             return this.getItemColored(player.getTeam());
         }
-        return this.getItem().build().clone();
+        ItemStack item = this.getItem().clone();
+        if(item.getItemMeta() instanceof PotionMeta){
+            System.out.println("Mettttttaaaa");
+            System.out.println(((PotionMeta) item.getItemMeta()).getCustomEffects());
+        }
+        return item;
     }
 
     public ItemPrice getPrice() {
@@ -119,7 +144,7 @@ public class ItemShop {
         }
 
         return new ItemBuilder(this.getItemStack(null))
-                .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + " " + this.getDisplayName().getForPlayer(player))
+                .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + this.getDisplayName().getForPlayer(player))
                 .withLore(lore).withAllItemFlags()
                 .build();
     }

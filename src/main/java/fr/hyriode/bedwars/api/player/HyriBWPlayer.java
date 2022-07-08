@@ -7,6 +7,10 @@ import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.shop.MaterialShop;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -38,12 +42,18 @@ public class HyriBWPlayer extends HyriPlayerData {
         return finalQuickBuy;
     }
 
+    public int getSlotQuickBuyByMaterialName(String nameMaterial){
+        return this.quickBuy.keySet().stream().filter(slot -> this.quickBuy.get(slot).equals(nameMaterial)).findFirst().orElse(-1);
+    }
+
     public void putMaterialQuickBuy(int slot, String nameMaterial){
-        this.getQuickBuy().put(slot, nameMaterial);
+        this.quickBuy.remove(this.getSlotQuickBuyByMaterialName(nameMaterial));
+        this.quickBuy.remove(slot);
+        this.quickBuy.put(slot, nameMaterial);
     }
 
     public void removeSlotQuickBuy(int slot){
-        this.getQuickBuy().remove(slot);
+        this.quickBuy.remove(slot);
     }
 
     public Map<Integer, HotbarCategory> getHotBar() {
@@ -51,6 +61,9 @@ public class HyriBWPlayer extends HyriPlayerData {
     }
 
     public void putMaterialHotBar(int slot, HotbarCategory category){
+        if(!category.isCanDuplicate()){
+            this.getSlotByHotbar(category).forEach(this::removeMaterialHotBar);
+        }
         this.hotBar.remove(slot);
         this.hotBar.put(slot, category);
     }
@@ -58,6 +71,13 @@ public class HyriBWPlayer extends HyriPlayerData {
     public List<Integer> getSlotByHotbar(HotbarCategory category){
         return this.hotBar.keySet().stream().filter(slot -> !this.hotBar.isEmpty() && this.hotBar.get(slot) == category)
                 .collect(Collectors.toList());
+    }
+
+    public int getSlotByHotbar(Player player, ItemStack item, HotbarCategory category){
+        return this.getSlotByHotbar(category).stream().filter(slot -> {
+            ItemStack itemStack = player.getInventory().getItem(slot);
+            return itemStack == null || !item.isSimilar(itemStack) || item.isSimilar(itemStack) && itemStack.getAmount() < 64;
+        }).findFirst().orElse(-1);
     }
 
     public void removeMaterialHotBar(int slot){

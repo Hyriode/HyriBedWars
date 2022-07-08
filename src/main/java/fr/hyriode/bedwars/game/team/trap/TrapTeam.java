@@ -1,8 +1,13 @@
 package fr.hyriode.bedwars.game.team.trap;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
+import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.trap.Trap;
+import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,13 +15,19 @@ import java.util.List;
 public class TrapTeam {
 
     private final List<String> traps;
+    private final BWGameTeam team;
 
-    public TrapTeam(){
+    public TrapTeam(BWGameTeam team){
         this.traps = new ArrayList<>();
+        this.team = team;
     }
 
     public void addTrap(String name){
         this.traps.add(name);
+    }
+
+    public boolean removeTrap(Trap trap){
+        return this.traps.remove(trap.getName());
     }
 
     public boolean removeTrap(String name){
@@ -36,5 +47,21 @@ public class TrapTeam {
 
     public boolean isFull() {
         return this.traps.size() >= 3;
+    }
+
+    public void trap(BWGamePlayer player) {
+        if(this.traps.isEmpty()) return;
+        Trap trap = HyriBedWars.getTrapManager().getTrapByName(this.traps.get(0));
+
+        trap.active(player, this.team);
+        if(trap.isShowTitle()){
+            this.team.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("trap.title").getForPlayer(p),
+                    p -> ChatColor.RED + HyriLanguageMessage.get("trap.subtitle").getForPlayer(p)
+                            .replace("%trap%", trap.getDisplayName().getForPlayer(p)),
+                    10, 20, 10);
+        }
+
+        player.addCountdown(BWGamePlayer.TRAP_COUNTDOWN, 15*20);
+        this.removeTrap(trap);
     }
 }

@@ -17,6 +17,7 @@ public class MetadataReferences {
     public static final String BRIDGE_EGG = "BridgeEgg";
     public static final String MAGIC_MILK = "MagikMilk";
     public static final String SPONGE = "Sponge";
+    public static final String MATERIAL = "Material";
 
     public static boolean isPermanent(ItemStack itemStack){
         if(itemStack != null && itemStack.getType() != Material.AIR){

@@ -5,7 +5,6 @@ import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
 import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
-import fr.hyriode.hyrame.utils.ThreadUtil;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -16,24 +15,24 @@ public enum BWNextEvent {
     START(0, "start", 0, plugin -> {}),
     DIAMOND_GENERATOR_TIER_II(1, "diamond.II", 360, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(BWDiamondGenerator.DIAMOND_TIER_II));
+                generator -> generator.upgrade(BWDiamondGenerator.TIER_II));
     }),
     DIAMOND_GENERATOR_TIER_III(2, "diamond.III", 720, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(BWDiamondGenerator.DIAMOND_TIER_III));
+                generator -> generator.upgrade(BWDiamondGenerator.TIER_III));
     }),
     EMERALD_GENERATOR_TIER_II(3, "emerald.II", 1080, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> {
-                    generator.upgrade(BWEmeraldGenerator.EMERALD_TIER_II);
+                    generator.upgrade(BWEmeraldGenerator.TIER_II);
                 });
     }),
     EMERALD_GENERATOR_TIER_III(4, "emerald.III", 1440, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
-                generator -> generator.upgrade(BWEmeraldGenerator.EMERALD_TIER_III));
+                generator -> generator.upgrade(BWEmeraldGenerator.TIER_III));
     }),
     BEDS_DESTROY(5, "beds-destroy", 1800, plugin -> {
-        plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBed);
+        plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBedWithBlock);
     }),
     ENDER_DRAGON(6, "dragons-spawn", 2400, plugin -> {
 //TODO

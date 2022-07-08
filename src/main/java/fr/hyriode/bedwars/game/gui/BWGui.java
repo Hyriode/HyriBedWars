@@ -22,21 +22,37 @@ import java.util.function.Consumer;
 public abstract class BWGui extends HyriInventory {
 
     protected HyriBedWars plugin;
+    private BWGui backGui;
 
-    public BWGui(Player owner, HyriBedWars plugin, HyriLanguageMessage languageMessage, TypeSize size) {
-        this(owner, plugin, languageMessage.getForPlayer(owner), size);
-
+    public BWGui(Player owner, HyriBedWars plugin, HyriLanguageMessage languageMessage, TypeSize size, BWGui backGui) {
+        this(owner, plugin, languageMessage.getForPlayer(owner), size, backGui, true);
     }
 
-    public BWGui(Player owner, HyriBedWars plugin, String name, TypeSize size) {
+    public BWGui(Player owner, HyriBedWars plugin, HyriLanguageMessage languageMessage, TypeSize size, BWGui backGui, boolean autoInit) {
+        this(owner, plugin, languageMessage.getForPlayer(owner), size, backGui, autoInit);
+    }
+
+    public BWGui(Player owner, HyriBedWars plugin, String name, TypeSize size, BWGui backGui) {
+        this(owner, plugin, name, size, backGui, true);
+    }
+
+    public BWGui(Player owner, HyriBedWars plugin, String name, TypeSize size, BWGui backGui, boolean autoInit) {
         super(owner, name, size.getSize());
 
+        this.backGui = backGui;
         this.plugin = plugin;
+        if(autoInit) this.initGui();
     }
 
     protected abstract void initGui();
 
     protected abstract void refresh();
+
+    protected void back(){
+        if(this.backGui != null) {
+            this.backGui.open();
+        }
+    }
 
     public HyriBedWars getPlugin() {
         return plugin;

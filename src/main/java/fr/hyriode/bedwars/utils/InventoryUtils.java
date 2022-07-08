@@ -1,7 +1,11 @@
 package fr.hyriode.bedwars.utils;
 
+import fr.hyriode.api.player.IHyriPlayer;
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
+import fr.hyriode.bedwars.game.shop.ItemShop;
+import fr.hyriode.bedwars.game.shop.MaterialShop;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -48,6 +52,26 @@ public class InventoryUtils {
             }
         }
         inventory.addItem(itemStack);
+    }
+
+    public static void giveInSlot(BWGamePlayer player, MaterialShop materialShop){
+        if(materialShop.getCategory() != null && materialShop.getCategory().getHotbar() != null){
+            List<Integer> slots = player.getAccount().getSlotByHotbar(materialShop.getCategory().getHotbar());
+            PlayerInventory inventory = player.getPlayer().getInventory();
+
+            for (int slot = 0; slot < 9; slot++) {
+                System.out.println(slot);
+                ItemStack itemStack = inventory.getItem(slot);
+                if (itemStack != null && itemStack.getType() == Material.AIR) {
+                    if (slots.contains(slot)) {
+                        giveInSlot(player.getPlayer(), slot, materialShop.getItemShopForPlayer(player).getItemStack(player));
+                        return;
+                    }
+                }
+            }
+            return;
+        }
+        giveInSlot(player.getPlayer(), 0, materialShop.getItemShopForPlayer(player).getItemStack(player));
     }
 
     public static void replace(Player player, ItemStack itemOrigin, ItemStack itemReplace) {
@@ -222,10 +246,24 @@ public class InventoryUtils {
         return getAmount(player, itemStack) > 0;
     }
 
+    public static boolean hasMaterial(Player player, Material material) {
+        return getAmount(player, material) > 0;
+    }
+
     public static int getAmount(Player player, ItemStack itemStack){
         int amount = 0;
         for (ItemStack stack : player.getInventory()) {
             if(stack != null && stack.isSimilar(itemStack)){
+                amount += stack.getAmount();
+            }
+        }
+        return amount;
+    }
+
+    public static int getAmount(Player player, Material material){
+        int amount = 0;
+        for (ItemStack stack : player.getInventory()) {
+            if(stack != null && stack.getType() == material){
                 amount += stack.getAmount();
             }
         }

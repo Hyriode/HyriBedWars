@@ -4,6 +4,7 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
+import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
@@ -63,23 +64,38 @@ public class Upgrade {
         this.tiers.add(tier);
     }
 
-    public void upgrade(BWGamePlayer player, Tier tier) {
+    public void upgrade(BWGamePlayer player, Tier tier){
+        this.upgrade(player, tier, true);
+    }
+
+    public void upgrade(BWGamePlayer player, Tier tier, boolean nextUpgrade) {
         BWGameTeam team = player.getBWTeam();
         UpgradeTeam upgradeTeam = team.getUpgradeTeam();
 
-        if(this.player) {
+        if(this.player && nextUpgrade) {
             for (BWGamePlayer bwPlayer : team.getBWPlayers()) {
                 action.accept(bwPlayer, tier.getTier());
             }
         }else {
             action.accept(player, tier.getTier());
         }
-        if(upgradeTeam.hasUpgrade(this.name)) {
-            UpgradeTeam.Upgrade upgrade =  upgradeTeam.getUpgradeByName(this.name);
-            upgrade.addTier();
-            return;
+
+        if(nextUpgrade) {
+            team.getPlayers().forEach(p -> {
+                Player pl = p.getPlayer();
+                SoundUtils.playBuy(pl);
+                p.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getForPlayer(pl)
+                        .replace("%item%", ChatColor.GOLD + this.getDisplayName(pl) + (tier.getDisplayName() != null ? " (" + tier.getDisplayName().getForPlayer(pl) + ")" : ""))
+                        .replace("%player%", pl.getName()));
+            });
+
+            if (upgradeTeam.hasUpgrade(this.name)) {
+                UpgradeTeam.Upgrade upgrade = upgradeTeam.getUpgradeByName(this.name);
+                upgrade.addTier();
+                return;
+            }
+            upgradeTeam.addUpgrade(this.name);
         }
-        upgradeTeam.addUpgrade(this.name);
     }
 
     public int getMaxTier() {
@@ -108,12 +124,13 @@ public class Upgrade {
             });
         }
         if(unlocked) {
+            lore.add(" ");
             lore.add(ChatColor.GREEN + "UNLOCKED");
             itemBuilder.withGlow();
         }
 
         return itemBuilder
-                .withName(StringUtils.getTitleBuy(unlocked, hasPrice) + " " + this.getDisplayName(player))
+                .withName(StringUtils.getTitleBuy(unlocked, hasPrice) + this.getDisplayName(player))
                 .withLore(lore)
                 .withAllItemFlags()
                 .build();

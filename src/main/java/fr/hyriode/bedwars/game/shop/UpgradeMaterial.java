@@ -1,7 +1,5 @@
 package fr.hyriode.bedwars.game.shop;
 
-import fr.hyriode.bedwars.game.player.BWGamePlayer;
-
 public class UpgradeMaterial {
 
     private final MaterialShop material;
@@ -38,9 +36,7 @@ public class UpgradeMaterial {
     }
 
     public boolean isMaxed() {
-        boolean maxed = this.material.getMaxTier() <= this.tier;
-        System.out.println("maxed " + maxed);
-        return maxed;
+        return this.material.getMaxTier() <= this.tier;
     }
 
     public ItemShop getItemShopByNextTier(){

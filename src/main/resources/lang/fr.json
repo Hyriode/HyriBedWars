@@ -10,6 +10,8 @@
   "team.white.display": "Blanc",
   "team.gray.display": "Gris",
 
+  "death.final": "§b§lFINAL KILL",
+
   "game.next-event.diamond.II": "&bDiamant II",
   "game.next-event.diamond.III": "&bDiamant III",
   "game.next-event.emerald.II": "&aEmeraude II",
@@ -47,8 +49,9 @@
   "shop.inventory.item.maxed": "MAXÉ",
 
   "shop.inventory.item.cost": "Prix: ",
-  "shop.purchased": "Vous avez acheté %s",
-  "shop.missing": "Vous n'avez pas assez de %s ! Besoin de %s de plus !",
+  "shop.purchased": "Vous avez acheté %item%",
+  "shop.purchased.team": "%player% a acheté %item%",
+  "shop.missing": "Vous n'avez pas assez de %name% ! Besoin de %amount% de plus !",
 
   "inv.shop.click.view": "Clic pour voir !",
 
@@ -146,7 +149,6 @@
 
   "upgrade.sharpness.name": "Sharpened Swords",
   "upgrade.sharpness.lore": "Your team permanently gains\nSharpness I on all swords and axes!",
-  "upgrade.sharpness.tier_1.name": "Sharpness",
 
   "upgrade.protection.name": "Reinforced Armor",
   "upgrade.protection.lore": "Your team permanently gains\nProtection on all armor pieces!",
@@ -191,7 +193,28 @@
   "second.word": "seconde",
   "third.word": "troisième",
 
-  "bed.broken.title": "Votre lit a été cassé !",
+  "bed.broken.title": "LIT DETRUIT !",
   "bed.broken.subtitle": "Vous ne pourrez plus réapparaitre.",
-  "bed.broken.subtitle.player": "Votre lit a été cassé par %enemy%."
+  "bed.broken.subtitle.player": "Votre lit a été cassé par %enemy%.",
+  "bed.broken.message": "\n§lBED DESTRUCTION >§7 Le lit des %team% a été cassé\n ",
+  "bed.broken.message.player": "\n§lBED DESTRUCTION >§7 Le lit des %team% a été cassé par %enemy%\n ",
+
+  "generator.diamond": "DIAMANT",
+  "generator.emerald": "EMERAUDE",
+
+  "inventory.hotbar_manager.title": "Hotbar Manager",
+  "hotbar.inventory.compass.title": "Compass",
+  "hotbar.inventory.compass.lore": "Comapss lore",
+  "hotbar.inventory.blocks.lore": "Blocks lore",
+  "hotbar.inventory.melee.lore": "sqdf",
+  "hotbar.inventory.tools.lore": "gfds",
+  "hotbar.inventory.ranged.lore": "xcv",
+  "hotbar.inventory.potions.lore": "gfd",
+  "hotbar.inventory.utility.lore": "zer",
+
+  "gui.back": "Retour",
+  "gui.back.lore": "Retourner en arrière",
+
+  "gui.reset": "Reset",
+  "gui.reset.lore": "Réinitialiser"
 }

@@ -10,6 +10,7 @@ import fr.hyriode.bedwars.game.trap.Trap;
 import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import fr.hyriode.bedwars.utils.InventoryUtils;
+import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.hyrame.language.HyriLanguageMessage;
@@ -24,10 +25,8 @@ import java.util.stream.Collectors;
 
 public class UpgradeGui extends BWGui {
 
-    public UpgradeGui(Player owner, HyriBedWars plugin) {
-        super(owner, plugin, HyriLanguageMessage.get("inventory.upgrade.title"), TypeSize.LINE_6);
-
-        this.initGui();
+    public UpgradeGui(Player owner, HyriBedWars plugin, BWGui backGui) {
+        super(owner, plugin, HyriLanguageMessage.get("inventory.upgrade.title"), TypeSize.LINE_6, backGui);
     }
 
     @Override
@@ -50,11 +49,19 @@ public class UpgradeGui extends BWGui {
                             : upgrade.getTier(Math.min(currentTier + 1, upgrade.getMaxTier()));
                     boolean unlocked = upgradeTeam.hasUpgrade(upgrade.getName()) && currentTier >= upgrade.getMaxTier();
                     this.setItem(2 + x, 3 + y, upgrade.getIconForUpgrade(player.getPlayer(), upgradeTeam), event -> {
-                        ItemPrice price = nextTier.getPrice();
-                        if(!unlocked && price.hasPrice(this.owner)) {
-                            InventoryUtils.removeMoney(this.owner, price);
-                            upgrade.upgrade(player, nextTier);
-                            this.refresh();
+                        if(!unlocked) {
+                            ItemPrice price = nextTier.getPrice();
+
+                            if (price.hasPrice(this.owner)) {
+                                InventoryUtils.removeMoney(this.owner, price);
+                                upgrade.upgrade(player, nextTier);
+                                this.refresh();
+                                return;
+                            }
+
+                            SoundUtils.playCantBuy(player.getPlayer());
+                            this.owner.sendMessage(net.md_5.bungee.api.ChatColor.RED + HyriLanguageMessage.get("shop.missing").getForPlayer(this.owner)
+                                    .replace("%name%", price.getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, price) + ""));
                         }
                     });
                 }

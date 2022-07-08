@@ -14,7 +14,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -36,7 +35,7 @@ public class ItemFirballListener extends HyriListener<HyriBedWars> {
             final Player player = event.getPlayer();
             final BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
 
-            if(!bwPlayer.isCountdown(BWGamePlayer.FIREBALL_COUNTDOWN)) {
+            if(!bwPlayer.hasCountdown(BWGamePlayer.FIREBALL_COUNTDOWN)) {
                 player.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 10, 1));
                 Fireball fireball = player.launchProjectile(Fireball.class);
 

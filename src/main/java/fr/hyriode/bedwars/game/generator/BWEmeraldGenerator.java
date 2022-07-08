@@ -6,9 +6,9 @@ import org.bukkit.entity.Player;
 import java.util.function.Function;
 
 public enum BWEmeraldGenerator implements IHyriGeneratorTier {
-    EMERALD_TIER_I("I", 65 * 20),
-    EMERALD_TIER_II("II", 50 * 20),
-    EMERALD_TIER_III("III", 30 * 20),
+    TIER_I("I", 65 * 20),
+    TIER_II("II", 50 * 20),
+    TIER_III("III", 30 * 20),
 
     ;
 

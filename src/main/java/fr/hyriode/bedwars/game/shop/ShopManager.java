@@ -21,7 +21,7 @@ public class ShopManager {
         this.add("glass", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.GLASS, 4), new ItemPrice(ItemMoney.IRON, 12)));
         this.add("end_stone", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.ENDER_STONE, 12), new ItemPrice(ItemMoney.IRON, 24)));
         this.add("ladder", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.LADDER, 8), new ItemPrice(ItemMoney.IRON, 4)));
-        this.add("wood", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.WOOD, 4), new ItemPrice(ItemMoney.GOLD, 4)));
+        this.add("wood", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.WOOD, 16), new ItemPrice(ItemMoney.GOLD, 4)));
         this.add("obsidian", ShopCategory.BLOCKS, new ItemShop(new ItemBuilder(Material.OBSIDIAN, 4), new ItemPrice(ItemMoney.EMERALD, 4)));
 
         this.add("stone_sword", ShopCategory.MELEE, new ItemShop(new ItemBuilder(Material.STONE_SWORD), new ItemPrice(ItemMoney.IRON, 10)));

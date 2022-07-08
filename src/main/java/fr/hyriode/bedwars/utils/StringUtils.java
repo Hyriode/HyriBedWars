@@ -55,6 +55,6 @@ public class StringUtils {
     }
 
     public static String getTitleBuy(boolean maxed, boolean canBuy){
-        return (maxed ? ChatColor.GOLD + "✔" : canBuy ? ChatColor.GREEN + "✔" : ChatColor.RED + "✘");
+        return (maxed ? ChatColor.GREEN + "" : canBuy ? ChatColor.GREEN + "✔ " : ChatColor.RED + "✘ ");
     }
 }
