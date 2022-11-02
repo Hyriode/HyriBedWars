@@ -1,6 +1,9 @@
-package fr.hyriode.bedwars.game.shop;
+package fr.hyriode.bedwars.game.shop.material;
 
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.shop.ItemShop;
+import fr.hyriode.bedwars.game.shop.ShopCategory;
+import fr.hyriode.bedwars.game.shop.material.upgrade.UpgradeMaterial;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import org.bukkit.Bukkit;
@@ -39,7 +42,7 @@ public class MaterialShop {
 
         if(!this.items.isEmpty()) {
             for (int tier = 0; tier < this.items.size(); ++tier) {
-                this.items.get(tier).setName(name + (this.items.size() > 1 ? "_tier_" + (tier + 1) : ""))
+                this.items.get(tier).setName(name + (this.items.size() > 1 ? "-tier-" + (tier + 1) : ""))
                         .setMaterialName(name)
                         .setCategory(category);
             }
@@ -92,10 +95,6 @@ public class MaterialShop {
 
     public ItemShop getItem(int i){
         return this.items.get(this.items.size() >= i + 1 ? i : this.items.size() - 1);
-    }
-
-    public boolean isFake() {
-        return this instanceof FakeMaterialShop;
     }
 
     public int getMaxTier(){

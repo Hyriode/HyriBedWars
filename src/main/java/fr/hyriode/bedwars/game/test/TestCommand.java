@@ -1,56 +1,57 @@
 package fr.hyriode.bedwars.game.test;
 
-import fr.hyriode.api.rank.type.HyriStaffRankType;
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.host.BWForgeValues;
 import fr.hyriode.hyrame.command.HyriCommand;
+import fr.hyriode.hyrame.command.HyriCommandCheck;
 import fr.hyriode.hyrame.command.HyriCommandContext;
 import fr.hyriode.hyrame.command.HyriCommandInfo;
-import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
-import fr.hyriode.hyrame.utils.LocationWrapper;
-import org.bukkit.entity.Player;
+
+import java.util.Arrays;
 
 public class TestCommand extends HyriCommand<HyriBedWars> {
-
     public TestCommand(HyriBedWars plugin) {
-        super(plugin, new HyriCommandInfo("bwdebug")
-                .withUsage("Debug Bedwars")
-                .withPermission(player -> player.getRank().isStaff()));
+        super(plugin, new HyriCommandInfo("test")
+                .withDescription("test")
+                .withPermission(p -> p.getRank().isStaff()));
     }
 
     @Override
     public void handle(HyriCommandContext ctx) {
-        String result = "rien saisie";
-        try {
-            HyriWaitingRoom.Config waitingRoom = this.plugin.getConfiguration().getWaitingRoom();
-            switch (ctx.getArgs()[0]) {
-                case "waiting":
-                    result = waitingRoom.toString();
-                    break;
-                case "pos1":
-                    LocationWrapper loc1 = waitingRoom.getFirstPos();
-                    result = loc1.toString() + "\nx=" + loc1.getX() + " y=" + loc1.getY() + " z=" + loc1.getZ();
-                    break;
-                case "pos2":
-                    LocationWrapper loc2 = waitingRoom.getSecondPos();
-                    result = loc2.toString() + "\nx=" + loc2.getX() + " y=" + loc2.getY() + " z=" + loc2.getZ();
-                    break;
-                case "npc":
-                    LocationWrapper npc = waitingRoom.getNPCLocation();
-                    result = npc.toString() + "\nx=" + npc.getX() + " y=" + npc.getY() + " z=" + npc.getZ();
-                    break;
-                case "spawn":
-                    LocationWrapper spawn = waitingRoom.getSpawn();
-                    result = spawn.toString() + "\nx=" + spawn.getX() + " y=" + spawn.getY() + " z=" + spawn.getZ();
-                    break;
-                case "op":
-                    result = "Et hop !";
-                    ((Player) ctx).setOp(true);
-                    break;
-            }
-        }catch (Exception e){
-            System.out.println(e.getMessage());
-            result = e.getMessage();
-        }
-        ctx.getSender().sendMessage("Resultat : " + result);
+
+        this.handleArgument(ctx, "spawnBetween " + HyriCommandCheck.INPUT, output -> {
+            String[] args = output.get(String.class).split("-");
+            String name = args[0];
+            int tier = Integer.parseInt(args[1]);
+            String drop = args[2];
+
+            ctx.getSender().sendMessage("spawnBetween: " + Arrays.toString(args));
+            ctx.getSender().sendMessage("spawnBetween: " + name + " " + tier + " " + drop);
+            ctx.getSender().sendMessage("spawnBetween: " + BWForgeValues.getSpawnBetween(name, tier, drop));
+        });
+
+        this.handleArgument(ctx, "spawnLimit " + HyriCommandCheck.INPUT, output -> {
+            String[] args = output.get(String.class).split("-");
+            String name = args[0];
+            int tier = Integer.parseInt(args[1]);
+            String drop = args[2];
+
+            ctx.getSender().sendMessage("spawnLimit: " + Arrays.toString(args));
+            ctx.getSender().sendMessage("spawnLimit: " + name + " " + tier + " " + drop);
+            ctx.getSender().sendMessage("spawnLimit: " + BWForgeValues.getSpawnLimit(name, tier, drop));
+        });
+
+        this.handleArgument(ctx, "splitting " + HyriCommandCheck.INPUT, output -> {
+            String[] args = output.get(String.class).split("-");
+            String name = args[0];
+            int tier = Integer.parseInt(args[1]);
+            String drop = args[2];
+
+            ctx.getSender().sendMessage("splitting: " + Arrays.toString(args));
+            ctx.getSender().sendMessage("splitting: " + name + " " + tier + " " + drop);
+            ctx.getSender().sendMessage("splitting: " + BWForgeValues.getSplitting(name, tier, drop));
+        });
+
+
     }
 }

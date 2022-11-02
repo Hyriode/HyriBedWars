@@ -6,7 +6,7 @@ import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,13 +59,13 @@ public class Trap {
     }
 
     public ItemStack getIconForUpgrade(Player player, TrapTeam trapTeam) {
-        List<String> lore = new ArrayList<>(StringUtils.loreToList(this.getDisplayLore().getForPlayer(player)));
+        List<String> lore = new ArrayList<>(StringUtils.loreToList(this.getDisplayLore().getValue(player)));
 
         lore.add(" ");
         lore.add(StringUtils.getDisplayCostPrice(player, trapTeam.getPrice()));
 
         return new ItemBuilder(this.icon.clone())
-                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player)) + this.getDisplayName().getForPlayer(player))
+                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player)) + this.getDisplayName().getValue(player))
                 .withLore(lore)
                 .build();
     }

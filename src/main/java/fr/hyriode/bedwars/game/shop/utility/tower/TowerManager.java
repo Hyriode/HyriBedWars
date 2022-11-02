@@ -13,7 +13,6 @@ import java.util.Arrays;
 public class TowerManager {
 
     public static void placeTower(HyriBedWars plugin, Block origin, BWGamePlayer player, Direction direction){
-        System.out.println(direction.name());
         try {
             Tower tower = direction.getTower().getConstructor(HyriBedWars.class, Block.class, BWGamePlayer.class)
                     .newInstance(plugin, origin, player);

@@ -6,7 +6,7 @@ import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.trap.Trap;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 
 import java.util.ArrayList;
@@ -55,9 +55,9 @@ public class TrapTeam {
 
         trap.active(player, this.team);
         if(trap.isShowTitle()){
-            this.team.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("trap.title").getForPlayer(p),
-                    p -> ChatColor.RED + HyriLanguageMessage.get("trap.subtitle").getForPlayer(p)
-                            .replace("%trap%", trap.getDisplayName().getForPlayer(p)),
+            this.team.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("trap.title").getValue(p),
+                    p -> ChatColor.RED + HyriLanguageMessage.get("trap.subtitle").getValue(p)
+                            .replace("%trap%", trap.getDisplayName().getValue(p)),
                     10, 20, 10);
         }
 

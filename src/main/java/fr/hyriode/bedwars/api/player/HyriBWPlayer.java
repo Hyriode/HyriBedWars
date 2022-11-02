@@ -6,11 +6,9 @@ import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
-import fr.hyriode.bedwars.game.shop.MaterialShop;
-import org.bukkit.Material;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.HashMap;
 import java.util.List;
@@ -116,25 +114,25 @@ public class HyriBWPlayer extends HyriPlayerData {
 //TODO
         int i = 0;
         this.putMaterialQuickBuy(i, "wool");
-        this.putMaterialQuickBuy(++i, "stone_sword");
-        this.putMaterialQuickBuy(++i, "chainmail_armor");
+        this.putMaterialQuickBuy(++i, "stone-sword");
+        this.putMaterialQuickBuy(++i, "chainmail-armor");
         this.putMaterialQuickBuy(++i, "pickaxe");
         this.putMaterialQuickBuy(++i, "bow");
-        this.putMaterialQuickBuy(++i, "potion_speed");
+        this.putMaterialQuickBuy(++i, "potion-speed");
         this.putMaterialQuickBuy(++i, "tnt");
         this.putMaterialQuickBuy(++i, "wood");
-        this.putMaterialQuickBuy(++i, "iron_sword");
-        this.putMaterialQuickBuy(++i, "iron_armor");
+        this.putMaterialQuickBuy(++i, "iron-sword");
+        this.putMaterialQuickBuy(++i, "iron-armor");
         this.putMaterialQuickBuy(++i, "shears");
         this.putMaterialQuickBuy(++i, "arrow");
-        this.putMaterialQuickBuy(++i, "potion_jump");
-        this.putMaterialQuickBuy(++i, "water_bucket");
-        this.putMaterialQuickBuy(++i, "end_stone");
-        this.putMaterialQuickBuy(++i, "diamond_sword");
-        this.putMaterialQuickBuy(++i, "diamond_armor");
+        this.putMaterialQuickBuy(++i, "potion-jump");
+        this.putMaterialQuickBuy(++i, "water-bucket");
+        this.putMaterialQuickBuy(++i, "end-stone");
+        this.putMaterialQuickBuy(++i, "diamond-sword");
+        this.putMaterialQuickBuy(++i, "diamond-armor");
         this.putMaterialQuickBuy(++i, "axe");
-        this.putMaterialQuickBuy(++i, "bow_punch");
-        this.putMaterialQuickBuy(++i, "potion_invisibility");
-        this.putMaterialQuickBuy(++i, "golden_apple");
+        this.putMaterialQuickBuy(++i, "bow-punch");
+        this.putMaterialQuickBuy(++i, "potion-invisibility");
+        this.putMaterialQuickBuy(++i, "golden-apple");
     }
 }

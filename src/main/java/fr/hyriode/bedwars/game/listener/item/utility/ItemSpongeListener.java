@@ -37,9 +37,6 @@ public class ItemSpongeListener extends HyriListener<HyriBedWars> {
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onWet(BlockFormEvent event){//TODO Plus tard ça fait perdre du temps
-//        System.out.println("form");
-//        System.out.println(event.getBlock().getType());
-//        System.out.println(event.getChangedType());
         if(event.getBlock().hasMetadata(MetadataReferences.SPONGE))
             event.setCancelled(true);
     }

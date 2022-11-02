@@ -10,7 +10,7 @@ import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.game.scoreboard.HyriGameScoreboard;
 import fr.hyriode.hyrame.game.scoreboard.HyriScoreboardIpConsumer;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.scoreboard.HyriScoreboard;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -67,14 +67,14 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         long timeSecond = timeBeforeEvent - this.game.getTask().getTime();
 
         if (currentNextEvent.getNextEvent() != null)
-            return currentNextEvent.getNextEvent().get().getForPlayer(this.player)
+            return currentNextEvent.getNextEvent().get().getValue(this.player)
                     + " " + this.getLinePrefix("in") + " " + StringUtils.formatTime(timeSecond);
         else
-            return this.getLinePrefix("game_end");
+            return this.getLinePrefix("game-end");
     }
 
     private String getTeamLine(BWGameTeam team) {
-        return team.getColor().getChatColor() + team.getDisplayName().getForPlayer(player) + ChatColor.RESET + " » " + this.getStateAsSymbol(team) + (this.game.getPlayer(player.getUniqueId()).isInTeam(team) ? " " + this.getLinePrefix("you") : "");
+        return team.getColor().getChatColor() + team.getDisplayName().getValue(player) + ChatColor.RESET + " » " + this.getStateAsSymbol(team) + (this.game.getPlayer(player.getUniqueId()).isInTeam(team) ? " " + this.getLinePrefix("you") : "");
     }
 
     public String getStateAsSymbol(BWGameTeam team) {
@@ -96,7 +96,7 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
     }
 
     private String getLinePrefix(String prefix) {
-        return HyriLanguageMessage.get("scoreboard." + prefix + ".display").getForPlayer(this.player);
+        return HyriLanguageMessage.get("scoreboard." + prefix + ".display").getValue(this.player);
     }
 
     private BWGamePlayer getGamePlayer(){

@@ -28,7 +28,7 @@ public class UpgradeManager {
     public static final String PROTECTION = "protection";
     public static final String MINER = "miner";
     public static final String FORGE = "forge";
-    public static final String HEAL_POOL = "heal_pool";
+    public static final String HEAL_POOL = "heal-pool";
     public static final String DRAGON_BUFF = "dragon";
 
     public UpgradeManager(){

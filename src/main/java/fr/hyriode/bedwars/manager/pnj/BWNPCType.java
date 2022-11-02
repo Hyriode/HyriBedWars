@@ -1,9 +1,10 @@
 package fr.hyriode.bedwars.manager.pnj;
 
-import fr.hyriode.api.settings.HyriLanguage;
+import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.api.util.Skin;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import net.md_5.bungee.api.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.Arrays;
 import java.util.List;
@@ -37,7 +38,7 @@ public enum BWNPCType {
         return HyriLanguageMessage.get(this.keyName);
     }
 
-    public List<String> getLore(HyriLanguage language){
+    public List<String> getLore(Player language){
         return Arrays.asList(ChatColor.AQUA + this.getLanguageName().getValue(language),
                 ChatColor.YELLOW + "" + ChatColor.BOLD + HyriLanguageMessage.get("npc.click").getValue(language));
     }

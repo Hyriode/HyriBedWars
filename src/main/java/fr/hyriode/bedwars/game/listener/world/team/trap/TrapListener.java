@@ -19,7 +19,7 @@ public class TrapListener extends HyriListener<HyriBedWars> {
     @EventHandler
     public void onTriggered(PlayerMoveEvent event){
         BWGame game = this.plugin.getGame();
-        if(game.getState() != HyriGameState.PLAYING) return;
+        if(game == null || game.getState() != HyriGameState.PLAYING) return;
         BWGamePlayer player = game.getPlayer(event.getPlayer());
 
         for (BWGameTeam team : game.getBWTeams()) {

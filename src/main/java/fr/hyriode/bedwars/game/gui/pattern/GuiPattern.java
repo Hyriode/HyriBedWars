@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.gui.pattern;
 
 import fr.hyriode.bedwars.game.gui.shop.ShopGui;
+import fr.hyriode.bedwars.utils.InventoryUtils;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,9 +29,7 @@ public abstract class GuiPattern {
     }
 
     public void setSlot(int x /* max 9 */, int y /* max 6 */, ItemStack itemStack, Consumer<InventoryClickEvent> click){
-        x -= 1;
-        y -= 1;
-        this.setSlot(x+(y*9), itemStack, click);
+        this.setSlot(InventoryUtils.getSlotByXY(x, y), itemStack, click);
     }
 
     protected void setLineVertical(int x, int y, int width, ItemStack itemStack){

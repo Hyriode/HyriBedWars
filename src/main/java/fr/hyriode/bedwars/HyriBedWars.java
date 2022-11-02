@@ -5,16 +5,16 @@ import fr.hyriode.api.server.IHyriServer;
 import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.entity.EntityManager;
+import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.shop.ShopManager;
-import fr.hyriode.bedwars.game.team.BWGameTeamColor;
 import fr.hyriode.bedwars.game.test.TestConfiguration;
 import fr.hyriode.bedwars.game.trap.TrapManager;
-import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
+import fr.hyriode.bedwars.host.BWHostManager;
+import fr.hyriode.bedwars.manager.pnj.EntityInteractManager;
 import fr.hyriode.hyrame.HyrameLoader;
+import fr.hyriode.bedwars.host.BWForgeValues;
 import fr.hyriode.hyrame.IHyrame;
-import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
-import fr.hyriode.hyrame.utils.LocationWrapper;
 import net.minecraft.server.v1_8_R3.Block;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -22,7 +22,6 @@ import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
 import java.util.logging.Level;
 
 public class HyriBedWars extends JavaPlugin {
@@ -37,6 +36,8 @@ public class HyriBedWars extends JavaPlugin {
     private static UpgradeManager upgradeManager;
     private static EntityManager entityManager;
     private static TrapManager trapManager;
+    private static GeneratorManager generatorManager;
+    private BWHostManager hostManager;
 
     @Override
     public void onEnable() {
@@ -54,26 +55,26 @@ public class HyriBedWars extends JavaPlugin {
 
         log("Starting " + NAME + "...");
 
-        if(HyriAPI.get().getConfiguration().isDevEnvironment()) {
-            this.configuration = TestConfiguration.getPoseidonSolo();
-//            HyriAPI.get().getHystiaAPI().getConfigManager().getConfig(BWConfiguration.class, "bedwars", BWGameType.SOLO.getName(), "Poseidon").whenComplete((bwConfiguration, throwable) -> System.out.println(bwConfiguration));
-//            HyriAPI.get().getHystiaAPI().getConfigManager().saveConfig(TestConfiguration.getPoseidonSolo(), "bedwars", BWGameType.SOLO.getName(), "Poseidon").whenComplete((aBoolean, throwable) -> System.out.println(aBoolean ? "Config saved" : "Config not saved"));
-//            return;
-        } else {
-            this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
-//            System.out.println(this.configuration.toString());
-        }
-
-        shopManager = new ShopManager();
-        upgradeManager = new UpgradeManager();
-        entityManager = new EntityManager();
-        trapManager = new TrapManager();
         this.registerBlockResistance();
 
         this.hyrame = HyrameLoader.load(new HyriBWProvider(this));
+        EntityInteractManager.init(this);
+//            HyriAPI.get().getHystiaAPI().getConfigManager().getConfig(BWConfiguration.class, "bedwars", BWGameType.SOLO.getName(), "Poseidon").whenComplete((bwConfiguration, throwable) -> System.out.println(bwConfiguration));
+//            HyriAPI.get().getHystiaAPI().getConfigManager().saveConfig(TestConfiguration.getPoseidonSolo(), "bedwars", BWGameType.SOLO.getName(), "Poseidon").whenComplete((aBoolean, throwable) -> System.out.println(aBoolean ? "Config saved" : "Config not saved"));
+//            return;
+        this.configuration = TestConfiguration.getPoseidonTrio();
+//        if(HyriAPI.get().getConfig().isDevEnvironment()) {
+//        } else {
+//            this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
+//        }
+//        Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "bedwars", BWGameType.SOLO.getName(), "HostCool"));
 
         this.game = new BWGame(this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
+        initManager();
+
+//        this.hostManager = new BWHostManager();
+//        this.hostManager.attach();
 
         HyriAPI.get().getServer().setState(IHyriServer.State.READY);
         System.out.println("Bedwars Ready");
@@ -82,6 +83,15 @@ public class HyriBedWars extends JavaPlugin {
     @Override
     public void onDisable() {
         this.hyrame.getGameManager().unregisterGame(this.game);
+    }
+
+    public void initManager() {
+        shopManager = new ShopManager();
+        upgradeManager = new UpgradeManager();
+        entityManager = new EntityManager();
+        trapManager = new TrapManager();
+        BWForgeValues.init();
+        generatorManager = new GeneratorManager(this.configuration);
     }
 
     public IHyrame getHyrame() {
@@ -100,12 +110,16 @@ public class HyriBedWars extends JavaPlugin {
         return upgradeManager;
     }
 
-    public static EntityManager getEntityManager() {
+    public static fr.hyriode.bedwars.game.entity.EntityManager getEntityManager() {
         return entityManager;
     }
 
     public static TrapManager getTrapManager() {
         return trapManager;
+    }
+
+    public static GeneratorManager getGeneratorManager() {
+        return generatorManager;
     }
 
     public BWConfiguration getConfiguration() {
@@ -136,7 +150,7 @@ public class HyriBedWars extends JavaPlugin {
             field.set(Block.getByName("glass"), 300f);
             field.set(Block.getByName("stained_glass"), 300f);
             field.set(Block.getByName("end_stone"), 69f);
-        } catch (NoSuchFieldException | IllegalAccessException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }

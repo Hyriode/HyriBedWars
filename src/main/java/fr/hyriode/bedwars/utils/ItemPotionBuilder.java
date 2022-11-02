@@ -43,7 +43,6 @@ public class ItemPotionBuilder extends ItemBuilder {
                 potionMeta.setLore(Collections.singletonList(ChatColor.GRAY + "Jump Boost" + " " + StringUtils.getLevelLang(amplifier + 1) + " (" + StringUtils.formatTime(duration/20) + ")"));
         }
         itemStack.setItemMeta(potionMeta);
-        System.out.println(((PotionMeta) itemStack.getItemMeta()).getCustomEffects());
         if(this.isSplash){
             itemStack.setDurability((short) ((short) this.type.getDamageValue() | 16384));
         }else itemStack.setDurability((short) this.type.getDamageValue());

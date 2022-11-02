@@ -6,7 +6,7 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.utils.BWItemBuilder;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.item.HyriItem;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -33,8 +33,8 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
         HyriBWPlayer account = this.plugin.getGame().getPlayer(player).getAccount();
 
         return new BWItemBuilder(itemStack)
-                .withDescription(HyriLanguageMessage.get("item.gamestyle.lore").getForPlayer(player))
-                .withName(ChatColor.WHITE + HyriLanguageMessage.get("item.gamestyle.title").getForPlayer(player) + ": " +
+                .withDescription(HyriLanguageMessage.get("item.gamestyle.lore").getValue(player))
+                .withName(ChatColor.WHITE + HyriLanguageMessage.get("item.gamestyle.title").getValue(player) + ": " +
                     account.getGameStyle().getNameColor())
                 .build();
     }
@@ -60,8 +60,8 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
 
     public static ItemStack getItemStack(BWGamePlayer player){
         return new BWItemBuilder(Material.REDSTONE_COMPARATOR)
-                .withDescription(HyriLanguageMessage.get("item.gamestyle.lore").getForPlayer(player.getPlayer()))
-                .withName(ChatColor.WHITE + HyriLanguageMessage.get("item.gamestyle.title").getForPlayer(player.getPlayer()) + ": " + player.getAccount().getGameStyle().getNameColor())
+                .withDescription(HyriLanguageMessage.get("item.gamestyle.lore").getValue(player.getPlayer()))
+                .withName(ChatColor.WHITE + HyriLanguageMessage.get("item.gamestyle.title").getValue(player.getPlayer()) + ": " + player.getAccount().getGameStyle().getNameColor())
                 .build();
     }
 }

@@ -1,6 +1,8 @@
-package fr.hyriode.bedwars.game.shop;
+package fr.hyriode.bedwars.game.shop.material;
 
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.shop.ItemShop;
+import fr.hyriode.bedwars.game.shop.ShopCategory;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -8,9 +10,9 @@ import java.util.Collections;
 
 public class MaterialArmorShop extends MaterialShop{
 
-    private int level;
-    private ItemStack leggings;
-    private ItemStack boots;
+    private final int level;
+    private final ItemStack leggings;
+    private final ItemStack boots;
 
     public MaterialArmorShop(String name, ShopCategory category, ItemShop icon, int level, boolean permanent,
                              ItemStack leggings, ItemStack boots) {

@@ -2,22 +2,23 @@ package fr.hyriode.bedwars.game.shop;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.inventory.meta.PotionMeta;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 
 public class ItemShop {
 
@@ -25,9 +26,13 @@ public class ItemShop {
     private String materialName;
     private ItemBuilder item;
     private ShopCategory category;
-    private final ItemPrice price;
+    private final Supplier<ItemPrice> price;
 
     public ItemShop(ItemBuilder item, ItemPrice price){
+        this(item, () -> price);
+    }
+
+    public ItemShop(ItemBuilder item, Supplier<ItemPrice> price){
         this.item = item;
         this.price = price;
     }
@@ -60,7 +65,7 @@ public class ItemShop {
     }
 
     public HyriLanguageMessage getDescription(){
-        return HyriLanguageMessage.get("item." + this.getName() + ".description");
+        return HyriLanguageMessage.get("item." + this.getName() + ".lore");
     }
 
     public String getMaterialName() {
@@ -92,19 +97,14 @@ public class ItemShop {
         if(this.isColorable() && player != null) {
             return this.getItemColored(player.getTeam());
         }
-        ItemStack item = this.getItem().clone();
-        if(item.getItemMeta() instanceof PotionMeta){
-            System.out.println("Mettttttaaaa");
-            System.out.println(((PotionMeta) item.getItemMeta()).getCustomEffects());
-        }
-        return item;
+        return this.getItem().clone();
     }
 
     public ItemPrice getPrice() {
-        return this.price;
+        return this.price.get();
     }
 
-    public ItemStack getForShop(BWGamePlayer bwPlayer){
+    public ItemStack getForShop(BWGamePlayer bwPlayer, ShopCategory category){
         if(this.item == null || this.item.build().getType() == Material.AIR)
             return null;
         Player player = bwPlayer.getPlayer();
@@ -115,6 +115,7 @@ public class ItemShop {
         final boolean unlocked = bwPlayer.containsItemPermanent(material);
         final boolean maxed = bwPlayer.containsMaterialUpgrade(material) && bwPlayer.getMaterialUpgrade(material).isMaxed();
         final boolean upgradable = material.isUpgradable();
+        final boolean quickbuy = category == ShopCategory.QUICK_BUY;
         final List<String> lore = new ArrayList<>();
 
         if(upgradable) {
@@ -128,23 +129,29 @@ public class ItemShop {
         lore.add(" ");
 
         if(description != null) {
-            lore.addAll(StringUtils.loreToList(description.getForPlayer(player)));
+            lore.addAll(StringUtils.loreToList(description.getValue(player)));
             lore.add(" ");
         }
 
         if(unlocked){
-            lore.add(ChatColor.GREEN + HyriLanguageMessage.get("shop.inventory.item.unlocked").getForPlayer(player));
+            lore.add(ChatColor.GREEN + HyriLanguageMessage.get("shop.inventory.item.unlocked").getValue(player));
         } else if(maxed) {
-            lore.add(ChatColor.GREEN + HyriLanguageMessage.get("shop.inventory.item.maxed").getForPlayer(player));
+            lore.add(ChatColor.GREEN + HyriLanguageMessage.get("shop.inventory.item.maxed").getValue(player));
         }else {
             lore.add(canBuy
-                    ? ChatColor.YELLOW + HyriLanguageMessage.get("inv.click-purchase").getForPlayer(player)
+                    ? ChatColor.YELLOW + HyriLanguageMessage.get("inv.click-purchase").getValue(player)
                     : ChatColor.RED + String.format(HyriLanguageMessage.get("shop.inventory.item.missing")
-                    .getForPlayer(player), missingPrice, this.getPrice().getName(player)));
+                    .getValue(player), missingPrice, this.getPrice().getName(player)));
+        }
+
+        if(quickbuy) {
+            lore.add(ChatColor.AQUA + "Shift right click to remove from quick buy");
+        } else {
+            lore.add(ChatColor.AQUA + "Shift right click to add in quick buy");
         }
 
         return new ItemBuilder(this.getItemStack(null))
-                .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + this.getDisplayName().getForPlayer(player))
+                .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + this.getDisplayName().getValue(player))
                 .withLore(lore).withAllItemFlags()
                 .build();
     }
@@ -157,12 +164,12 @@ public class ItemShop {
         if(this.getPrice() == null){
             return false;
         }
-        return InventoryUtils.hasPrice(player, this.price);
+        return InventoryUtils.hasPrice(player, this.getPrice());
     }
 
 
     protected String getDisplayPrice(Player player){
-        return StringUtils.getDisplayCostPrice(player, this.price);
+        return StringUtils.getDisplayCostPrice(player, this.getPrice());
     }
 
     public boolean isColorable() {

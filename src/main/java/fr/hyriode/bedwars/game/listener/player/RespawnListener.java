@@ -5,7 +5,7 @@ import fr.hyriode.api.event.HyriEventHandler;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.hyrame.game.event.player.HyriGameDeathEvent;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -16,7 +16,6 @@ public class RespawnListener extends HyriListener<HyriBedWars> {
 
     public RespawnListener(HyriBedWars plugin) {
         super(plugin);
-
         HyriAPI.get().getEventBus().register(this);
     }
 

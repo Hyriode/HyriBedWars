@@ -1,10 +1,11 @@
 package fr.hyriode.bedwars.game;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.generator.BWDiamondGenerator;
-import fr.hyriode.bedwars.game.generator.BWEmeraldGenerator;
+import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
+import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -15,38 +16,38 @@ public enum BWNextEvent {
     START(0, "start", 0, plugin -> {}),
     DIAMOND_GENERATOR_TIER_II(1, "diamond.II", 360, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(BWDiamondGenerator.TIER_II));
+                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
+                        .getTier(1).getTierGenerator().get(0)));
     }),
     DIAMOND_GENERATOR_TIER_III(2, "diamond.III", 720, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(BWDiamondGenerator.TIER_III));
+                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
+                        .getTier(2).getTierGenerator().get(0)));
     }),
     EMERALD_GENERATOR_TIER_II(3, "emerald.II", 1080, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> {
-                    generator.upgrade(BWEmeraldGenerator.TIER_II);
+                    generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
+                            .getTier(1).getTierGenerator().get(0));
                 });
     }),
     EMERALD_GENERATOR_TIER_III(4, "emerald.III", 1440, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
-                generator -> generator.upgrade(BWEmeraldGenerator.TIER_III));
+                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
+                        .getTier(2).getTierGenerator().get(0)));
     }),
     BEDS_DESTROY(5, "beds-destroy", 1800, plugin -> {
         plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBedWithBlock);
     }),
     ENDER_DRAGON(6, "dragons-spawn", 2400, plugin -> {
-//TODO
-//        plugin.getGame().getBWTeams().stream().filter(team -> !team.isEliminated() && team.hasBed()).forEach(team -> {
-//            ThreadUtil.backOnMainThread(plugin, () -> {
-//                team.spawnEnderDragon();
-//                if(team.getUpgrades().containsUpgrade(EBWUpgrades.DRAGON)){
-//                    team.spawnEnderDragon();
-//                }
-//            });
-//        });
+        plugin.getGame().getBWTeams(team -> !team.isEliminated() && team.hasBed()).forEach(team -> {
+            team.spawnEnderDragon();
+            if(team.getUpgradeTeam().hasUpgrade(UpgradeManager.DRAGON_BUFF)){
+                Bukkit.getScheduler().runTaskLater(plugin, team::spawnEnderDragon, 20L);
+            }
+        });
     }),
     GAME_END(7, "game-end", 3000, plugin -> plugin.getGame().end()),
-
     ;
 
     private final int id;

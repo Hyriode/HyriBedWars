@@ -3,7 +3,7 @@ package fr.hyriode.bedwars.game.player;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.actionbar.ActionBar;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -30,7 +30,7 @@ public class CountdownPlayer {
             @Override
             public void run() {
                 if(keyName != null){
-                    new ActionBar(HyriLanguageMessage.get(keyName).getForPlayer(p) + ChatColor.DARK_AQUA + " - " + ChatColor.AQUA + StringUtils.formatTime(time / 20))
+                    new ActionBar(HyriLanguageMessage.get(keyName).getValue(p) + ChatColor.DARK_AQUA + " - " + ChatColor.AQUA + StringUtils.formatTime(time / 20))
                             .send(p);
                 }
                 if(player.isSpectator() || player.isDead() || time < 0){

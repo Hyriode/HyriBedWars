@@ -9,18 +9,19 @@ import fr.hyriode.bedwars.game.gui.pattern.DefaultGuiPattern;
 import fr.hyriode.bedwars.game.gui.pattern.GuiPattern;
 import fr.hyriode.bedwars.game.gui.shop.hotbar.HotBarManagerGui;
 import fr.hyriode.bedwars.game.gui.shop.quickbuy.ChoiceSlotGui;
+import fr.hyriode.bedwars.game.gui.shop.tracker.TrackerGui;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.*;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.SoundUtils;
+import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Map;
@@ -50,10 +51,7 @@ public class ShopGui extends BWGui {
                 : account.getQuickBuyShop();
 
         if(this.category == ShopCategory.MELEE && account.getGameStyle() == HyriGameStyle.HYRIODE){
-            materials.put(materials.size() + 1, new FakeMaterialShop());
-            materials.put(materials.size() + 1, new FakeMaterialShop());
-            materials.put(materials.size() + 1, new FakeMaterialShop());
-            materials.putAll(HyriBedWars.getShopManager().getItemShopByCategoryToMap(materials.size(), ShopCategory.RANGED));
+            materials.putAll(HyriBedWars.getShopManager().getItemShopByCategoryToMap(materials.size() + 3, ShopCategory.RANGED));
         }
 
         int i = 0;
@@ -65,11 +63,7 @@ public class ShopGui extends BWGui {
                     final MaterialShop material = materials.get(slot);
                     if(material == null) continue;
                     final ItemShop itemShop = material.getItemShopForPlayer(player);
-                    this.setItem(size.getStartX() + x, size.getStartY() + y, itemShop.getForShop(player), event -> {
-                        if (material.isFake()) {
-                            return;
-                        }
-
+                    this.setItem(size.getStartX() + x, size.getStartY() + y, itemShop.getForShop(player, this.category), event -> {
                         if(event.getClick().isShiftClick() && event.getClick().isRightClick()){
                             if(this.category != ShopCategory.QUICK_BUY){
                                 new ChoiceSlotGui(this.owner, this.plugin, material, this).open();
@@ -80,31 +74,27 @@ public class ShopGui extends BWGui {
                             this.refresh();
                             return;
                         }
-
-                        if (material.isArmor() && player.getArmor() != null
+                        if(player.isFullInventory()){
+                            player.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.inventory.full").getValue(this.owner));
+                        } else if (material.isArmor() && player.getArmor() != null
                                 && player.getArmor().getLevel() >= material.getAsArmor().getLevel()) {
-                            this.owner.sendMessage("LSQKMJD");
-                            return;
-                        }
-                        if (player.getItemsPermanent().contains(material)) {
-                            this.owner.sendMessage("Vous avez déjà débloqué cet item");
-                            return;
-                        }
-                        if (player.containsMaterialUpgrade(material) && player.getMaterialUpgrade(material).isMaxed()) {
-                            this.owner.sendMessage("Vous avez déjà votre item au max");
-                            return;
-                        }
-                        if (itemShop.hasPrice(this.owner)) {
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.armor.lower").getValue(this.owner));
+                        }else if (player.getItemsPermanent().contains(material)) {
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.item.unlocked").getValue(this.owner));
+                        } else if (player.containsMaterialUpgrade(material) && player.getMaterialUpgrade(material).isMaxed()) {
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.item.maxed").getValue(this.owner));
+                        }else if (itemShop.hasPrice(this.owner)) {
                             InventoryUtils.removeMoney(this.owner, itemShop.getPrice());
                             material.buy(event, player);
                             SoundUtils.playBuy(owner);
-                            this.owner.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased").getForPlayer(this.owner).replace("%item%", ChatColor.GOLD + itemShop.getDisplayName().getForPlayer(this.owner)));
+                            this.owner.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased").getValue(this.owner).replace("%item%", ChatColor.GOLD + itemShop.getDisplayName().getValue(this.owner)));
                             this.refresh();
                             return;
+                        }else {
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
+                                    .replace("%name%", itemShop.getPrice().getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, itemShop.getPrice()) + ""));
                         }
                         SoundUtils.playCantBuy(owner);
-                        this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getForPlayer(this.owner)
-                                .replace("%name%", itemShop.getPrice().getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, itemShop.getPrice()) + ""));
                     });
                     continue;
                 }
@@ -115,19 +105,31 @@ public class ShopGui extends BWGui {
         }
 
         this.setItem(9, 5, BWGamePlayItem.getItemStack(player), event -> {
-            player.changeGamePlayStyle();
+            player.getAccount().changeGamePlayStyle();
+            player.update();
             this.refresh();
         });
 
         this.setItem(9, 6, this.getItemHotbar(), event -> {
             new HotBarManagerGui(this.owner, this.plugin, null, this).open();
         });
+
+        this.setItem(1, 6, this.getItemTraker(), event -> {
+            new TrackerGui(this.owner, this.plugin, this).open();
+        });
     }
 
     private ItemStack getItemHotbar(){
         return new ItemBuilder(Material.BLAZE_POWDER)
-                .withName("Hotbar Manager")
-                .withLore("Tqt mec")
+                .withName(ChatColor.GOLD + HyriLanguageMessage.get("shop.hotbar-manager.name").getValue(this.owner))
+                .withLore(StringUtils.loreToList(HyriLanguageMessage.get("shop.hotbar-manager.lore").getValue(this.owner)))
+                .build();
+    }
+
+    private ItemStack getItemTraker(){
+        return new ItemBuilder(Material.COMPASS)
+                .withName(ChatColor.GREEN + HyriLanguageMessage.get("shop.tracker.name").getValue(this.owner))
+                .withLore(StringUtils.loreToList(HyriLanguageMessage.get("shop.tracker.lore").getValue(this.owner)))
                 .build();
     }
 

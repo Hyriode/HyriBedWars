@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.shop;
 
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import org.bukkit.ChatColor;
@@ -47,7 +48,11 @@ public class ItemPrice {
     }
 
     public String getName(Player player){
-        return this.itemMoney.getDisplayName().getForPlayer(player);
+        return this.itemMoney.getDisplayName().getValue(player);
+    }
+
+    public String getName(BWGamePlayer player){
+        return this.itemMoney.getDisplayName().getValue(player);
     }
 
     public long getAmount() {

@@ -6,7 +6,7 @@ import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.utils.ItemPotionBuilder;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -15,7 +15,7 @@ import org.bukkit.potion.PotionType;
 
 public enum ShopCategory {
 
-    QUICK_BUY(0, "quick_buy", new ItemStack(Material.NETHER_STAR), null),
+    QUICK_BUY(0, "quick-buy", new ItemStack(Material.NETHER_STAR), null),
     BLOCKS(1, "blocks", new ItemStack(Material.HARD_CLAY), HotbarCategory.BLOCKS),
     MELEE(2, "melee", new ItemStack(Material.GOLD_SWORD), new ItemStack(Material.DIAMOND_SWORD), HotbarCategory.MELEE),
     ARMOR(3, "armor", new ItemStack(Material.CHAINMAIL_BOOTS), new ItemStack(Material.DIAMOND_BOOTS), null),
@@ -70,13 +70,13 @@ public enum ShopCategory {
         ItemBuilder itemBuilder = new ItemBuilder(this.getItemStack(isHyriode))
                 .withName((this == QUICK_BUY ? ChatColor.AQUA : ChatColor.GREEN) + this.getTitleLanguage(isHyriode, player));
         if(!active)
-            itemBuilder.withLore(ChatColor.YELLOW + HyriLanguageMessage.get("inv.shop.click.view").getForPlayer(player));
+            itemBuilder.withLore(ChatColor.YELLOW + HyriLanguageMessage.get("inv.shop.click.view").getValue(player));
 
         return itemBuilder.withAllItemFlags().build();
     }
 
     public String getTitleLanguage(boolean isHyriode, Player player){
-        return HyriLanguageMessage.get(getTitleKey()).getForPlayer(player)
+        return HyriLanguageMessage.get(getTitleKey()).getValue(player)
                 + (this == MELEE && isHyriode ? " & " + RANGED.getTitleLanguage(true, player) : "");
     }
 

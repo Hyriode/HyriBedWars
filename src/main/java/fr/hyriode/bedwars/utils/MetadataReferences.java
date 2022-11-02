@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 public class MetadataReferences {
 
+    //TODO To change this for remove or move
     public static final String ISPERMANENT = "IsPermanent";
     public static final String PLACEBYPLAYER = "PlacedByPlayer";
     public static final String ISINVISIBLE = "IsInvisible";
@@ -18,6 +19,7 @@ public class MetadataReferences {
     public static final String MAGIC_MILK = "MagikMilk";
     public static final String SPONGE = "Sponge";
     public static final String MATERIAL = "Material";
+    public static final String COMPASS = "Compass";
 
     public static boolean isPermanent(ItemStack itemStack){
         if(itemStack != null && itemStack.getType() != Material.AIR){

@@ -2,11 +2,13 @@ package fr.hyriode.bedwars.game.listener.item;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.listener.HyriListener;
+import fr.hyriode.hyrame.tablist.ITabListManager;
 import fr.hyriode.hyrame.utils.ItemUtil;
 import fr.hyriode.hyrame.utils.PlayerUtil;
 import fr.hyriode.hyrame.utils.block.Cuboid;
@@ -67,8 +69,20 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         ItemStack itemStackDropped = itemDropped.getItemStack();
 
         if(MetadataReferences.isPermanent(itemStackDropped)) {
+            int slot = 0;
             itemDropped.remove();
-            InventoryUtils.giveInSlot(player, 0, itemStackDropped);
+
+            if(MetadataReferences.isMetaItem(MetadataReferences.COMPASS, itemStackDropped)){
+                BWGamePlayer bwPlayer = this.getGamePlayer(player);
+                List<Integer> compass = bwPlayer.getAccount().getSlotByHotbar(HotbarCategory.COMPASS);
+                if(compass.size() > 0) {
+                    slot = compass.get(0);
+                } else {
+                    slot = 17;
+                }
+            }
+
+            InventoryUtils.giveInSlot(player, slot, itemStackDropped);
             return;
         }
 
@@ -169,19 +183,19 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         if(item.getType() == Material.POTION) {
             Player player = event.getPlayer();
             PlayerInventory inventory = player.getInventory();
-            System.out.println("test");
 
             Bukkit.getScheduler().runTaskLater(this.plugin, () -> inventory.setItemInHand(null), 1L);
             ItemMeta itemMeta = item.getItemMeta();
             if (itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).getCustomEffects().get(0).getType().getName().equals(PotionEffectType.INVISIBILITY.getName())) {
-                System.out.println("uiui");
+                ITabListManager tabManager = plugin.getHyrame().getTabListManager();
                 BWGamePlayer bwPlayer = this.getGamePlayer(player);
-                System.out.println("hide");
+                tabManager.hideNameTag(player);
                 new BukkitRunnable(){
                     @Override
                     public void run() {
                         bwPlayer.hideArmor();
                         if(!player.hasPotionEffect(PotionEffectType.INVISIBILITY)){
+                            tabManager.showNameTag(player);
                             bwPlayer.showArmor();
                             this.cancel();
                         }

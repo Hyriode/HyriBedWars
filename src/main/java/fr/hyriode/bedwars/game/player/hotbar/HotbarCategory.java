@@ -1,29 +1,31 @@
 package fr.hyriode.bedwars.game.player.hotbar;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.utils.ItemPotionBuilder;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public enum HotbarCategory {
 
-    BLOCKS(0, "shop.inventory.blocks.title", "hotbar.inventory.blocks.lore", new ItemStack(Material.HARD_CLAY), true),
-    MELEE(1, "shop.inventory.melee.title", "hotbar.inventory.melee.lore", new ItemStack(Material.GOLD_SWORD), new ItemStack(Material.GOLD_SWORD), true),
-    TOOLS(2, "shop.inventory.tools.title", "hotbar.inventory.tools.lore", new ItemStack(Material.STONE_PICKAXE), new ItemStack(Material.DIAMOND_PICKAXE), true),
-    RANGED(3, "shop.inventory.ranged.title", "hotbar.inventory.ranged.lore", new ItemStack(Material.BOW), true),
-    POTIONS(4, "shop.inventory.potions.title", "hotbar.inventory.potions.lore", new ItemStack(Material.BREWING_STAND_ITEM), new ItemPotionBuilder(PotionType.SPEED, 0, 0).build(), true),
-    UTILITY(5, "shop.inventory.utility.title", "hotbar.inventory.utility.lore", new ItemStack(Material.TNT), true),
+    BLOCKS(0, "shop.inventory.blocks.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.HARD_CLAY), true),
+    MELEE(1, "shop.inventory.melee.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.GOLD_SWORD), new ItemStack(Material.GOLD_SWORD), true),
+    TOOLS(2, "shop.inventory.tools.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.STONE_PICKAXE), new ItemStack(Material.DIAMOND_PICKAXE), true),
+    RANGED(3, "shop.inventory.ranged.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.BOW), true),
+    POTIONS(4, "shop.inventory.potions.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.BREWING_STAND_ITEM), new ItemPotionBuilder(PotionType.SPEED, 0, 0).build(), true),
+    UTILITY(5, "shop.inventory.utility.title", "hotbar.inventory.navbar.lore", new ItemStack(Material.TNT), true),
     COMPASS(6, "hotbar.inventory.compass.title", "hotbar.inventory.compass.lore", new ItemStack(Material.COMPASS), false)
     ;
 
@@ -71,8 +73,8 @@ public enum HotbarCategory {
         return lore;
     }
 
-    public List<String> getLore(IHyriPlayer player){
-        return StringUtils.loreToList(HyriLanguageMessage.get(this.lore).getForPlayer(player));
+    public List<String> getLore(BWGamePlayer player){
+        return StringUtils.loreToList(HyriLanguageMessage.get(this.lore).getValue(player));
     }
 
     public ItemStack getItemHypixel() {
@@ -87,12 +89,22 @@ public enum HotbarCategory {
         return canDuplicate;
     }
 
-    public ItemStack getItemStack(IHyriPlayer player){
-        HyriBWPlayer hyriPlayer = player.getData("bedwars", HyriBWPlayer.class);
+    public ItemStack getItemStack(BWGamePlayer player, boolean placed){
+        HyriBWPlayer hyriPlayer = player.getAccount();
         ItemStack item = hyriPlayer.getGameStyle() == HyriGameStyle.HYPIXEL ? this.hypixel.clone() : this.hyriode.clone();
+        List<String> lore = new ArrayList<>();
+        if(placed) {
+            lore.addAll(StringUtils.loreToList(HyriLanguageMessage.get("hotbar.inventory.navbar.placed.lore").getValue(player).replace("%name%", this.getName().getValue(player))));
+            lore.add(" ");
+            lore.add(ChatColor.YELLOW + HyriLanguageMessage.get("gui.hotbar.delete").getValue(player));
+        }else {
+            lore.addAll(this.getLore(player));
+            lore.add(" ");
+            lore.add(ChatColor.YELLOW + HyriLanguageMessage.get("gui.hotbar.move").getValue(player));
+        }
         return new ItemBuilder(item)
-                .withName(ChatColor.GREEN + this.getName().getForPlayer(player))
-                .withLore(this.getLore(player)).withAllItemFlags().build();
+                .withName(ChatColor.GREEN + this.getName().getValue(player))
+                .withLore(lore).withAllItemFlags().build();
     }
 
     public ShopCategory getCategory() {

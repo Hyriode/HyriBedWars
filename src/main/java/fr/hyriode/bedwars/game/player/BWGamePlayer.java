@@ -1,36 +1,40 @@
 package fr.hyriode.bedwars.game.player;
 
-import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.api.player.BWPlayerStatistics;
 import fr.hyriode.bedwars.api.player.HyriBWPlayer;
 import fr.hyriode.bedwars.game.BWGame;
+import fr.hyriode.bedwars.game.player.cosmetic.npc.NPCSkin;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.player.scoreboard.BWPlayerScoreboard;
+import fr.hyriode.bedwars.game.player.traker.TeamTraker;
 import fr.hyriode.bedwars.game.shop.*;
+import fr.hyriode.bedwars.game.shop.material.MaterialArmorShop;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
+import fr.hyriode.bedwars.game.shop.material.upgrade.UpgradeMaterial;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
+import fr.hyriode.bedwars.manager.pnj.PNJ;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
+import fr.hyriode.hyrame.game.HyriGameType;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.hyrame.utils.PlayerUtil;
-import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.GameMode;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
 
 public class BWGamePlayer extends HyriGamePlayer {
 
@@ -41,7 +45,9 @@ public class BWGamePlayer extends HyriGamePlayer {
     private HyriBedWars plugin;
     private BWPlayerScoreboard scoreboard;
     private HyriBWPlayer account;
+    private NPCSkin npcSkin;
 
+    private TeamTraker teamTracker;
     private MaterialArmorShop armor;
     private final List<MaterialShop> itemsPermanent;
     private final List<UpgradeMaterial> materialsUpgrade;
@@ -57,6 +63,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.materialsUpgrade = new ArrayList<>();
         this.itemsPermanent = new ArrayList<>();
         this.countdowns = new ArrayList<>();
+        this.npcSkin = new NPCSkin(new NPCSkin.Skin(PNJ.Type.BLAZE), new NPCSkin.Skin(PNJ.Type.VILLAGER));
 
         this.account = this.asHyriPlayer().getData("bedwars", HyriBWPlayer.class);
 
@@ -67,28 +74,57 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public void handleLogin(HyriBedWars plugin){
         this.plugin = plugin;
-//        this.tracker = new BWTracker(plugin, this);
+        this.teamTracker = new TeamTraker(plugin, this);
+    }
+
+    public void updateStatistics(boolean isWinner) {
+        BWPlayerStatistics playerStatistics = this.getStatistics();
+        BWPlayerStatistics.Data statistics = playerStatistics.getData(this.plugin.getGame().getType());
+        statistics.addKills(this.kills);
+        statistics.addFinalKills(this.finalKills);
+        statistics.addDeaths(this.deaths);
+        statistics.addBedsBroken(this.bedsBroken);
+        statistics.addPlayTime(this.getPlayedTime());
+        statistics.addPlayedGames(1);
+        if(isWinner){
+            statistics.addWins(1);
+            statistics.addCurrentWinStreak(1);
+            if(statistics.getCurrentWinStreak() > statistics.getBestWinStreak()){
+                statistics.setBestWinStreak(statistics.getCurrentWinStreak());
+            }
+        }else {
+            statistics.setCurrentWinStreak(0);
+        }
+
+        playerStatistics.update(this.asHyriPlayer());
     }
 
     public boolean kill() {
-        BWGameTeam team = this.getBWTeam();
-        if(team.hasBed()) {
-            HyriLastHitterProtocol hitterProtocol = this.plugin.getGame().getProtocolManager().getProtocol(HyriLastHitterProtocol.class);
-            List<HyriLastHitterProtocol.LastHitter> lastHitters = hitterProtocol.getLastHitters(this.player);
+        HyriLastHitterProtocol hitterProtocol = this.plugin.getGame().getProtocolManager().getProtocol(HyriLastHitterProtocol.class);
+        List<HyriLastHitterProtocol.LastHitter> lastHitters = hitterProtocol.getLastHitters(this.player);
+        boolean finalKill = !this.getBWTeam().hasBed();
 
-            if (lastHitters != null && !lastHitters.isEmpty()) {
-                Player hitter = lastHitters.get(0).asPlayer();
-                List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
+        this.addDeaths(1);
 
-                for (ItemPrice money : itemStacks) {
-                    hitter.sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
-                    hitter.getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
-                }
+        if (lastHitters != null && !lastHitters.isEmpty()) {
+            BWGamePlayer hitter = (BWGamePlayer) lastHitters.get(0).asGamePlayer();
+            List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
+
+            for (ItemPrice money : itemStacks) {
+                hitter.sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
+                hitter.getPlayer().getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
             }
-            return true;
+
+            hitter.addKills(1);
+            if(finalKill) {
+                hitter.addFinalKills(1);
+            }
         }
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.plugin.getGame().checkWin(), 1L);
-        return false;
+
+        if(finalKill) {
+            Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.plugin.getGame().checkWin(), 1L);
+        }
+        return !finalKill;
     }
 
     public HyriBWPlayer getAccount() {
@@ -110,6 +146,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.player.setGameMode(GameMode.SURVIVAL);
         this.giveArmor();
         this.giveSword();
+        this.giveTracker();
         this.itemsPermanent.forEach(
                 material -> InventoryUtils.giveInSlot(this.player, 0 /*Faire selon la hotbar*/, material.getFirstItem().getItemStack(this)));
         this.materialsUpgrade.forEach(material -> {
@@ -134,11 +171,10 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public void giveSword(){
-        BWGameTeam team = this.getBWTeam();
         ItemStack sword = this.getSword();
 
         if(this.player.getItemOnCursor().getType() != sword.getType()) {
-            int hotbar = this.getAccount().getSlotByHotbar(player.getPlayer(), sword, HotbarCategory.MELEE);
+            int hotbar = this.getAccount().getSlotByHotbar(this.player, sword, HotbarCategory.MELEE);
             InventoryUtils.giveInSlot(this.player, hotbar, sword);
         }
 
@@ -162,14 +198,27 @@ public class BWGamePlayer extends HyriGamePlayer {
         }, 1L);
     }
 
-    public void changeGamePlayStyle() {
-        HyriBWPlayer account = this.getAccount();
-        account.changeGamePlayStyle();
-        account.update(this.getUUID());
+    public void giveTracker() {
+        ItemStack tracker = this.getItemTracker();
+
+        if(this.player.getItemOnCursor().getType() != tracker.getType()) {
+            int slot = this.getAccount().getSlotByHotbar(this.player, tracker, HotbarCategory.COMPASS);
+            if(slot == -1) slot = 17;
+            InventoryUtils.giveInSlot(this.player, slot, tracker);
+        }
+    }
+
+    public ItemStack getItemTracker(){
+        return new ItemBuilder(Material.COMPASS)
+                .withName(ChatColor.GREEN + "Tracker")
+                .nbt()
+                .setBoolean(MetadataReferences.COMPASS, true)
+                .setBoolean(MetadataReferences.ISPERMANENT, true)
+                .build().clone();
     }
 
     public void update(){
-        this.account.update(this.getUUID());
+        this.account.update(this.getUniqueId());
     }
 
     public List<UpgradeMaterial> getMaterialsUpgrade() {
@@ -305,5 +354,73 @@ public class BWGamePlayer extends HyriGamePlayer {
         for (BWGamePlayer player : this.plugin.getGame().getPlayers()) {
             PlayerUtil.showArmor(this.player, player.getPlayer());
         }
+    }
+
+    public boolean isFullInventory() {
+        return InventoryUtils.isFull(this.player);
+    }
+
+    public TeamTraker getTracker() {
+        return this.teamTracker;
+    }
+
+    public BWPlayerStatistics getStatistics() {
+        IHyriPlayer player = this.asHyriPlayer();
+        BWPlayerStatistics playerStatistics = player.getStatistics("bedwars", BWPlayerStatistics.class);
+
+        if(playerStatistics == null) {
+            playerStatistics = new BWPlayerStatistics();
+            playerStatistics.update(player);
+        }
+
+        return playerStatistics;
+    }
+
+    public BWPlayerStatistics.Data getStatistic(BWGameType gameType) {
+        return this.getStatistics().getData(gameType);
+    }
+
+    public BWPlayerStatistics.Data getStatistic(HyriGameType gameType) {
+        return this.getStatistics().getData((BWGameType) gameType);
+    }
+
+    public BWPlayerStatistics.Data getAllStatistics() {
+        return this.getStatistics().getAllData();
+    }
+
+    public void setKills(int kills) {
+        this.kills = kills;
+    }
+
+    public void setDeaths(int deaths) {
+        this.deaths = deaths;
+    }
+
+    public void setFinalKills(int finalKills) {
+        this.finalKills = finalKills;
+    }
+
+    public void setBedsBroken(int bedsBroken) {
+        this.bedsBroken = bedsBroken;
+    }
+
+    public void addKills(int kills) {
+        this.kills += kills;
+    }
+
+    public void addDeaths(int deaths) {
+        this.deaths += deaths;
+    }
+
+    public void addFinalKills(int finalKills) {
+        this.finalKills += finalKills;
+    }
+
+    public void addBedsBroken(int bedsBroken) {
+        this.bedsBroken += bedsBroken;
+    }
+
+    public NPCSkin getNPCSkin() {
+        return this.npcSkin;
     }
 }

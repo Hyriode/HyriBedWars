@@ -1,22 +1,24 @@
 package fr.hyriode.bedwars.game.listener.world.explosion;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.config.BWConfiguration;
+import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.listener.HyriListener;
+import fr.hyriode.hyrame.utils.Area;
 import org.bukkit.*;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Fireball;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
+import org.bukkit.projectiles.ProjectileSource;
 import org.bukkit.util.Vector;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -38,9 +40,9 @@ public class ExplodeListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onExplode(EntityExplodeEvent event){
-        event.setCancelled(true);
-        IHyrame.WORLD.get().playEffect(event.getEntity().getLocation(), Effect.EXPLOSION_HUGE, 1, 8);
         if(event.getEntity().getType() == EntityType.PRIMED_TNT || event.getEntity().getType() == EntityType.FIREBALL){
+            event.setCancelled(true);
+            IHyrame.WORLD.get().playEffect(event.getEntity().getLocation(), Effect.EXPLOSION_HUGE, 1, 8);
             Location location = event.getEntity().getLocation();
             Vector vector = location.toVector();
 
@@ -61,13 +63,49 @@ public class ExplodeListener extends HyriListener<HyriBedWars> {
                     block.setType(Material.AIR);
                 }
             }
+            return;
+        }
+
+        BWConfiguration config = this.plugin.getConfiguration();
+        List<Area> protectArea = new ArrayList<>();
+        protectArea.addAll(config.getTeams().stream().map(BWConfiguration.Team::getBaseProtectArea).collect(Collectors.toList()));
+        protectArea.addAll(config.getProtectionArea());
+
+        for (Block block : event.blockList()) {
+            for (Area area : protectArea) {
+                if(area.isInArea(block.getLocation())){
+                    event.setCancelled(true);
+                    return;
+                }
+            }
         }
     }
 
     @EventHandler
     public void onDamage(EntityDamageByEntityEvent event){
-        if (event.getCause() == EntityDamageEvent.DamageCause.ENTITY_EXPLOSION) {
-            event.setDamage(2.0F);
+        Entity entity = event.getDamager();
+        if(entity instanceof Fireball || entity instanceof TNTPrimed) {
+            if(entity instanceof Projectile) {
+                ProjectileSource shooter = ((Projectile) entity).getShooter();
+                if(shooter instanceof Player) {
+                    Player player = (Player) shooter;
+                    if(player.getUniqueId().equals(event.getEntity().getUniqueId())) {
+                        event.setDamage(2.0F);
+                        return;
+                    }
+                    BWGame game = this.plugin.getGame();
+                    BWGamePlayer bwPlayerShooter = game.getPlayer(player.getUniqueId());
+                    BWGamePlayer victim = game.getPlayer(event.getDamager().getUniqueId());
+                    if(bwPlayerShooter != null && victim != null) {
+                        if(bwPlayerShooter.getTeam().equals(victim.getTeam())) {
+                            event.setDamage(3.0F);
+                            return;
+                        }
+                    }
+
+                }
+            }
         }
+        event.setDamage(6.0F);
     }
 }

@@ -1,4 +1,7 @@
-package fr.hyriode.bedwars.game.shop;
+package fr.hyriode.bedwars.game.shop.material.upgrade;
+
+import fr.hyriode.bedwars.game.shop.ItemShop;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 
 public class UpgradeMaterial {
 

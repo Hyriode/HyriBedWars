@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.team;
 
 import fr.hyriode.hyrame.game.team.HyriGameTeamColor;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 
 import java.util.function.Supplier;
 

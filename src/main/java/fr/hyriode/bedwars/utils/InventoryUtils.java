@@ -1,11 +1,9 @@
 package fr.hyriode.bedwars.utils;
 
-import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
-import fr.hyriode.bedwars.game.shop.ItemShop;
-import fr.hyriode.bedwars.game.shop.MaterialShop;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,7 +13,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class InventoryUtils {
@@ -45,11 +42,11 @@ public class InventoryUtils {
             ItemStack output = itemStack.clone();
             ItemStack itemSlot = inventory.getItem(slot);
 
-            if(itemSlot != null) {
+            if(itemSlot != null && itemSlot.isSimilar(output)){
                 output.setAmount(itemSlot.getAmount() + itemStack.getAmount());
-                inventory.setItem(slot, output);
-                return;
             }
+            inventory.setItem(slot, output);
+            return;
         }
         inventory.addItem(itemStack);
     }
@@ -60,7 +57,6 @@ public class InventoryUtils {
             PlayerInventory inventory = player.getPlayer().getInventory();
 
             for (int slot = 0; slot < 9; slot++) {
-                System.out.println(slot);
                 ItemStack itemStack = inventory.getItem(slot);
                 if (itemStack != null && itemStack.getType() == Material.AIR) {
                     if (slots.contains(slot)) {
@@ -302,10 +298,7 @@ public class InventoryUtils {
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
             ItemStack itemStack = inventory.getItem(slot);
-            System.out.println("mais");
-            System.out.println(itemStack);
             if(itemStack != null && ItemMoney.contains(itemStack)){
-                System.out.println("Found money: " + itemStack.getType());
                 if(!money.stream().map(price -> ItemMoney.asMoney(price.getItemStack())).collect(Collectors.toList())
                         .contains(ItemMoney.asMoney(itemStack))) {
                     money.add(new ItemPrice(ItemMoney.asMoney(itemStack), itemStack.getAmount()));
@@ -319,5 +312,22 @@ public class InventoryUtils {
         }
 
         return money;
+    }
+
+    public static boolean isFull(Player player) {
+        PlayerInventory inventory = player.getInventory();
+        for (int slot = inventory.getSize(); slot >= 0; slot--) {
+            ItemStack itemStack = inventory.getItem(slot);
+            if(itemStack == null || itemStack.getType() == Material.AIR){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static int getSlotByXY(int x, int y) {
+        x -= 1;
+        y -= 1;
+        return x+(y*9);
     }
 }

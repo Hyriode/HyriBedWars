@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.game.shop.ItemPrice;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -38,7 +38,7 @@ public class StringUtils {
     }
 
     public static String getDisplayCostPrice(Player player, ItemPrice price) {
-        return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getForPlayer(player)
+        return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getValue(player)
                 + getDisplayPrice(player, price);
     }
 

@@ -2,34 +2,29 @@ package fr.hyriode.bedwars.game.gui;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
-import fr.hyriode.bedwars.game.shop.FakeMaterialShop;
-import fr.hyriode.bedwars.game.shop.ItemPrice;
-import fr.hyriode.bedwars.game.shop.MaterialShop;
+import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.hyrame.inventory.HyriInventory;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
-import net.md_5.bungee.api.ChatColor;
+import fr.hyriode.api.language.HyriLanguageMessage;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
 public abstract class BWGui extends HyriInventory {
 
     protected HyriBedWars plugin;
-    private BWGui backGui;
+    protected BWGui backGui;
 
     public BWGui(Player owner, HyriBedWars plugin, HyriLanguageMessage languageMessage, TypeSize size, BWGui backGui) {
-        this(owner, plugin, languageMessage.getForPlayer(owner), size, backGui, true);
+        this(owner, plugin, languageMessage.getValue(owner), size, backGui, true);
     }
 
     public BWGui(Player owner, HyriBedWars plugin, HyriLanguageMessage languageMessage, TypeSize size, BWGui backGui, boolean autoInit) {
-        this(owner, plugin, languageMessage.getForPlayer(owner), size, backGui, autoInit);
+        this(owner, plugin, languageMessage.getValue(owner), size, backGui, autoInit);
     }
 
     public BWGui(Player owner, HyriBedWars plugin, String name, TypeSize size, BWGui backGui) {
@@ -63,9 +58,7 @@ public abstract class BWGui extends HyriInventory {
     }
 
     public void setItem(int x /* max 9 */, int y /* max 6 */, ItemStack itemStack, Consumer<InventoryClickEvent> click){
-        x -= 1;
-        y -= 1;
-        super.setItem(x+(y*9), itemStack, click);
+        super.setItem(InventoryUtils.getSlotByXY(x, y), itemStack, click);
     }
 
     public void setItem(int x /* max 9 */, int y /* max 6 */, ItemStack itemStack){
@@ -76,16 +69,21 @@ public abstract class BWGui extends HyriInventory {
         return new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 9).withName(" ").build();
     }
 
+    protected ItemStack getItemBack() {
+        return new ItemBuilder(Material.ARROW)
+                .withName(ChatColor.RED + HyriLanguageMessage.get("gui.back").getValue(this.owner))
+                .withLore(this.backGui != null ? ChatColor.GRAY + HyriLanguageMessage.get("gui.back.lore").getValue(this.owner) + " " +  this.backGui.getName() : " ")
+                .build();
+    }
+
     public enum TypeSize{
         LINE_1(9),
         LINE_2(18),
         LINE_3(27),
-        LINE_4(39),
+        LINE_4(36),
         LINE_5(45),
-        LINE_6(54),
+        LINE_6(54);
 
-        ;
-        
         private final int size;
         
         TypeSize(int size){

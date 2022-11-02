@@ -1,28 +1,41 @@
 package fr.hyriode.bedwars.game.team;
 
+import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.BWGame;
-import fr.hyriode.bedwars.game.generator.BWBaseGenerator;
+import fr.hyriode.bedwars.game.generator.BWGenerator;
+import fr.hyriode.bedwars.game.generator.GeneratorManager;
+import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
-import fr.hyriode.bedwars.game.shop.ItemMoney;
+import fr.hyriode.bedwars.game.player.scoreboard.BWPlayerScoreboard;
+import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
+import fr.hyriode.bedwars.manager.pnj.BWNPCType;
+import fr.hyriode.bedwars.manager.pnj.EntityInteractManager;
+import fr.hyriode.bedwars.manager.pnj.PNJ;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.generator.HyriGenerator;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
-import fr.hyriode.hyrame.title.Title;
+import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.hyrame.npc.NPCManager;
 import fr.hyriode.hyrame.utils.block.Cuboid;
 import org.bukkit.*;
+import org.bukkit.entity.EnderDragon;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.bukkit.scoreboard.Criterias;
+import org.bukkit.scoreboard.DisplaySlot;
+import org.bukkit.scoreboard.Objective;
+import org.bukkit.scoreboard.Scoreboard;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -34,8 +47,7 @@ public class BWGameTeam extends HyriGameTeam {
 
     private boolean hasBed;
 
-    private final HyriGenerator ironGenerator;
-    private final HyriGenerator goldGenerator;
+    private final Map<String, HyriGenerator> forgeGenerator = new HashMap<>();
     private final UpgradeTeam upgradeTeam;
     private final TrapTeam trapTeam;
 
@@ -45,21 +57,109 @@ public class BWGameTeam extends HyriGameTeam {
         this.hasBed = true;
         this.config = this.plugin.getConfiguration().getTeam(this.getName());
 
-        this.ironGenerator = new HyriGenerator.Builder(plugin, this.config.getGeneratorLocation(), BWBaseGenerator.get(game.getType(), BWBaseGenerator.Type.IRON, 1)).withItem(new ItemStack(ItemMoney.IRON.getMaterial())).build();
-        this.goldGenerator = new HyriGenerator.Builder(plugin, this.config.getGeneratorLocation(), BWBaseGenerator.get(game.getType(), BWBaseGenerator.Type.GOLD, 1)).withItem(new ItemStack(ItemMoney.GOLD.getMaterial())).build();
         this.upgradeTeam = new UpgradeTeam();
         this.trapTeam = new TrapTeam(this);
-
-        this.setSpawnLocation(this.config.getRespawnLocation());
     }
 
-    public HyriGenerator getIronGenerator() {
-        return ironGenerator;
+    public Map<String, HyriGenerator> getForgeGenerator() {
+        return this.forgeGenerator;
     }
 
-    public HyriGenerator getGoldGenerator() {
-        return goldGenerator;
+    public void start() {
+        GeneratorManager gm = HyriBedWars.getGeneratorManager();
+        BWGenerator.Tier tier = gm.getGeneratorByName(GeneratorManager.FORGE).getTier(0);
+        tier.getDrops().forEach((name, drop) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.config.getGeneratorLocation()).get(name)));
+
+        if(this.isEliminated()) {
+            this.breakBedWithBlock();
+        }
+        this.createForgeGenerator();
+        this.spawnNPC();
+
+        this.teleportPlayers();
+        this.getBWPlayers().forEach(player -> {
+            this.createScoreboard(player);
+            player.respawn(false);
+        });
     }
+
+    private void createScoreboard(BWGamePlayer player){
+        Player p = player.getPlayer();
+        BWPlayerScoreboard scoreboard = new BWPlayerScoreboard(this.plugin, this.plugin.getGame(), p);
+
+        player.setScoreboard(scoreboard);
+        scoreboard.show();
+
+        this.showHeart(p);
+    }
+
+
+    private void showHeart(Player player){
+        Scoreboard s = player.getScoreboard();
+        Objective h = s.getObjective("showheatlth") != null
+                ? s.getObjective("showheatlth")
+                : s.registerNewObjective("showheatlth", Criterias.HEALTH);
+        h.getScore(player.getName()).setScore(20);
+        h.setDisplaySlot(DisplaySlot.BELOW_NAME);
+        h.setDisplayName(ChatColor.RED + "❤");
+    }
+
+    private void teleportPlayers() {
+        this.teleport(this.config.getRespawnLocation());
+    }
+
+    private void spawnNPC(){
+        for (BWGamePlayer player : this.plugin.getGame().getPlayers()) {
+            Player pl = player.getPlayer();
+            PNJ.Type skinShop = player.getNPCSkin().getShop().getSkinEntity();
+            PNJ.Type skinUpgrade = player.getNPCSkin().getUpgrade().getSkinEntity();
+            if(skinShop == PNJ.Type.NPC){
+                NPCManager.sendNPC(NPCManager.createNPC(this.getConfig().getShopNPCLocation(),
+                                BWNPCType.SHOP.getDefaultSkin(),
+                                BWNPCType.SHOP.getLore(pl))
+                        .setShowingToAll(false)
+                        .addPlayer(pl)
+                        .setInteractCallback((rightClick, p) -> {
+                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
+                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+                        }));
+            } else {
+                EntityInteractManager.createEntity(this.getConfig().getShopNPCLocation(), skinShop.getClassEntity(), BWNPCType.SHOP.getLore(pl))
+                        .setVisibleAll(false)
+                        .addPlayer(pl)
+                        .setInteractCallback((rightClick, p) -> {
+                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
+                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+                        }).spawn();
+            }
+            if(skinUpgrade == PNJ.Type.NPC){
+                NPCManager.sendNPC(NPCManager.createNPC(this.getConfig().getUpgradeNPCLocation(),
+                                BWNPCType.UPGRADE.getDefaultSkin(),
+                                BWNPCType.UPGRADE.getLore(pl))
+                        .setShowingToAll(false)
+                        .addPlayer(pl)
+                        .setInteractCallback((rightClick, p) -> {
+                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
+                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
+                        }));
+            }else {
+                EntityInteractManager.createEntity(this.getConfig().getUpgradeNPCLocation(), skinUpgrade.getClassEntity(), BWNPCType.UPGRADE.getLore(pl))
+                        .setVisibleAll(false)
+                        .addPlayer(pl)
+                        .setInteractCallback((rightClick, p) -> {
+                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
+                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
+                        }).spawn();
+            }
+        }
+    }
+
+    private void createForgeGenerator(){
+        this.getForgeGenerator().forEach((__, generator) -> {
+            generator.create();
+        });
+    }
+
 
     public BWConfiguration.Team getConfig() {
         return config;
@@ -128,27 +228,30 @@ public class BWGameTeam extends HyriGameTeam {
         this.breakBed(null);
     }
 
-    public void breakBed(BWGamePlayer player){
-        Function<Player, String> enemy = p -> player.getTeam().getColor().getChatColor() + player.getPlayer().getName() + ChatColor.GRAY;
-        Function<Player, String> team = p -> this.getColor().getChatColor() + this.getDisplayName().getForPlayer(p) + ChatColor.GRAY;
+    public void breakBed(BWGamePlayer breaker){
+        Function<Player, String> enemy = __ -> breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName() + ChatColor.GRAY;
+        Function<Player, String> team = p -> this.getColor().getChatColor() + this.getDisplayName().getValue(p) + ChatColor.GRAY;
 
+        if(breaker != null && this.hasBed){
+            breaker.addBedsBroken(1);
+        }
         this.setHasBed(false);
-        this.plugin.getGame().getPlayers().forEach(bwPlayer -> {
-            Player p = bwPlayer.getPlayer();
-            p.getPlayer().playSound(p.getPlayer().getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
+
+        this.plugin.getGame().getPlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
+            p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         });
 
-        this.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("bed.broken.title").getForPlayer(p),
-                p -> ChatColor.GRAY + (player != null
-                        ? HyriLanguageMessage.get("bed.broken.subtitle.player").getForPlayer(p)
+        this.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("bed.broken.title").getValue(p),
+                p -> ChatColor.GRAY + (breaker != null
+                        ? HyriLanguageMessage.get("bed.broken.subtitle.player").getValue(p)
                         .replace("%enemy%", enemy.apply(p))
-                        : HyriLanguageMessage.get("bed.broken.subtitle").getForPlayer(p)),
+                        : HyriLanguageMessage.get("bed.broken.subtitle").getValue(p)),
                 10, 40, 10);
-        this.plugin.getGame().sendMessageToAll(p -> player != null
-                ? HyriLanguageMessage.get("bed.broken.message.player").getForPlayer(p)
+        this.plugin.getGame().sendMessageToAll(p -> breaker != null
+                ? HyriLanguageMessage.get("bed.broken.message.player").getValue(p)
                 .replace("%team%", team.apply(p))
                 .replace("%enemy%", enemy.apply(p))
-                : HyriLanguageMessage.get("bed.broken.message").getForPlayer(p).replace("%team%", team.apply(p)));
+                : HyriLanguageMessage.get("bed.broken.message").getValue(p).replace("%team%", team.apply(p)));
     }
 
     public boolean hasDragonBuff(){
@@ -156,15 +259,17 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public void upgradeGenerator(int tier) {
-        if (tier == 2) {
-            HyriGenerator generator = new HyriGenerator
-                    .Builder(this.plugin, this.ironGenerator.getLocation(), BWBaseGenerator.TIER_EMERALD)
-                    .withItem(new ItemStack(ItemMoney.EMERALD.getMaterial())).build();
-            generator.create();
-            return;
-        }
-        this.ironGenerator.upgrade(BWBaseGenerator.get(this.plugin.getGame().getType(), BWBaseGenerator.Type.IRON, tier + 1));
-        this.goldGenerator.upgrade(BWBaseGenerator.get(this.plugin.getGame().getType(), BWBaseGenerator.Type.GOLD, tier + 1));
+        GeneratorManager gm = HyriBedWars.getGeneratorManager();
 
+        this.forgeGenerator.forEach((name, generator) -> {
+            BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
+            generator.upgrade(bwGenerator.getTier(tier + 1).getDrops().get(name).get().getTier());
+            //TODO CA PETE LE CRANE CETTE CHOSE CAR JE SAIS PAS COMMENT FAIRE CREATE LE GENERATOR D'EMERALD
+        });
+    }
+
+    public void spawnEnderDragon() {
+        EnderDragon enderDragon = IHyrame.WORLD.get().spawn(this.getConfig().getRespawnLocation(), EnderDragon.class);
+        enderDragon.setCustomName(this.getColor().getChatColor() + this.getDisplayName().getValue(HyriLanguage.EN));
     }
 }

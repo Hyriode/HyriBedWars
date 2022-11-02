@@ -4,7 +4,6 @@ import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.gui.pattern.GuiPattern;
 import fr.hyriode.bedwars.game.gui.shop.ShopGui;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
-import static fr.hyriode.bedwars.game.shop.ShopCategory.*;
 
 import fr.hyriode.hyrame.item.ItemBuilder;
 import org.bukkit.Material;
@@ -12,6 +11,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.function.Consumer;
+
+import static fr.hyriode.bedwars.game.shop.ShopCategory.*;
 
 public class ShopHyriodeGuiPattern extends GuiPattern {
 
@@ -24,7 +25,6 @@ public class ShopHyriodeGuiPattern extends GuiPattern {
         this.setLineHorizontal(1, 2, 5, this.getItemDeco());
         this.setLineVertical(1, 6, 9, this.getItemDeco());
         this.setLineHorizontal(9, 2, 5, this.getItemDeco());
-
     }
 
     private void setNavbar(){

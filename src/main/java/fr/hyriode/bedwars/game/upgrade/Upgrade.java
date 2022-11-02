@@ -7,7 +7,7 @@ import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -30,7 +30,7 @@ public class Upgrade {
         this.tiers = tiers;
         this.tiers.forEach(tier -> {
             int tierNumber = tier.getTier() + 1;
-            tier.setName("upgrade." + this.name + ".tier_" + tierNumber + ".name");
+            tier.setName("upgrade." + this.name + ".tier-" + tierNumber + ".name");
         });
     }
 
@@ -39,11 +39,11 @@ public class Upgrade {
     }
 
     public String getDisplayDescription(Player player) {
-        return HyriLanguageMessage.get("upgrade." + this.name + ".lore").getForPlayer(player);
+        return HyriLanguageMessage.get("upgrade." + this.name + ".lore").getValue(player);
     }
 
     public String getDisplayName(Player player) {
-       return HyriLanguageMessage.get("upgrade." + this.name + ".name").getForPlayer(player);
+       return HyriLanguageMessage.get("upgrade." + this.name + ".name").getValue(player);
     }
 
     public List<Tier> getTiers() {
@@ -84,8 +84,8 @@ public class Upgrade {
             team.getPlayers().forEach(p -> {
                 Player pl = p.getPlayer();
                 SoundUtils.playBuy(pl);
-                p.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getForPlayer(pl)
-                        .replace("%item%", ChatColor.GOLD + this.getDisplayName(pl) + (tier.getDisplayName() != null ? " (" + tier.getDisplayName().getForPlayer(pl) + ")" : ""))
+                p.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getValue(pl)
+                        .replace("%item%", ChatColor.GOLD + this.getDisplayName(pl) + (tier.getDisplayName() != null ? " (" + tier.getDisplayName().getValue(pl) + ")" : ""))
                         .replace("%player%", pl.getName()));
             });
 
@@ -120,7 +120,7 @@ public class Upgrade {
             this.tiers.forEach(tier -> {
                 boolean hasTier = upgradeTeam.hasUpgrade(this.name) && currentTier.getTier() >= tier.getTier();
                 lore.add((hasTier ? ChatColor.GREEN : ChatColor.GRAY) + "Tier " + (tier.getTier() + 1) + ": " +
-                        tier.getDisplayName().getForPlayer(player) + ", " + tier.getPrice().getDisplayPrice(player));
+                        tier.getDisplayName().getValue(player) + ", " + tier.getPrice().getDisplayPrice(player));
             });
         }
         if(unlocked) {

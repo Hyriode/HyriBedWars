@@ -6,11 +6,10 @@ import fr.hyriode.bedwars.game.gui.BWGui;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemShop;
-import fr.hyriode.bedwars.game.shop.MaterialShop;
+import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
-import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
-import fr.hyriode.hyrame.language.HyriLanguageMessage;
+import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -23,7 +22,7 @@ public class ChoiceSlotGui extends BWGui {
     private final MaterialShop materialShop;
 
     public ChoiceSlotGui(Player owner, HyriBedWars plugin, MaterialShop materialShop, BWGui backGui) {
-        super(owner, plugin, HyriLanguageMessage.get("inventory.shop.quick_buy.choice_slot.title"), TypeSize.LINE_6, backGui, false);
+        super(owner, plugin, HyriLanguageMessage.get("inventory.shop.quick-buy.choice-slot.title"), TypeSize.LINE_6, backGui, false);
         this.materialShop = materialShop;
         this.initGui();
     }
@@ -65,7 +64,7 @@ public class ChoiceSlotGui extends BWGui {
         ItemShop itemShop = this.materialShop.getItemShopForPlayer(player);
 
         return new ItemBuilder(itemShop.getItemStack(null))
-                .withName(itemShop.getDisplayName().getForPlayer(player.getPlayer()))
+                .withName(itemShop.getDisplayName().getValue(player.getPlayer()))
                 .withLore(ChatColor.YELLOW + "Veuillez choisir un slot")
                 .build();
     }
