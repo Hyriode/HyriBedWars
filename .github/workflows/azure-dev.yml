@@ -17,8 +17,8 @@ jobs:
           java-version: '8'
           distribution: 'adopt'
 
-      - name: Edit libraries folder permissions
-        run: sudo chmod -R 777 libs/
+      #- name: Edit libraries folder permissions
+      #  run: sudo chmod -R 777 libs/
 
       - name: Add SHORT_SHA env property with commit short sha
         run: echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
