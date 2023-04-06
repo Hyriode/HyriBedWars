@@ -65,11 +65,11 @@ public class HyriBedWars extends JavaPlugin {
 
         this.hyrame = HyrameLoader.load(new HyriBWProvider(this));
         EntityInteractManager.init(this);
-        this.configuration = TestConfiguration.getPoseidonTrio();
-//        if(HyriAPI.get().getConfig().isDevEnvironment()) {
-//        } else {
-//            this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
-//        }
+        if(HyriAPI.get().getConfig().isDevEnvironment()) {
+            this.configuration = TestConfiguration.getPoseidonTrio();
+        } else {
+            this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
+        }
 //        Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
 
         this.game = new BWGame(this);

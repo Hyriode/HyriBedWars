@@ -133,16 +133,17 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
             final long hyris = HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner);
             final double xp = HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner);
-            final List<String> rewards = new ArrayList<>();
+            final StringBuilder rewards = new StringBuilder();
 
             IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
 
-            rewards.add(ChatColor.LIGHT_PURPLE + String.valueOf(hyriPlayer.getHyris().add(hyris).withMessage(false).exec()) + " Hyris");
-            rewards.add(ChatColor.GREEN + String.valueOf(hyriPlayer.getNetworkLeveling().addExperience(xp)) + " XP");
+            rewards.append(ChatColor.LIGHT_PURPLE + String.valueOf(hyriPlayer.getHyris().add(hyris).withMessage(false).exec()) + " Hyris");
+            rewards.append(" ");
+            rewards.append(ChatColor.GREEN + String.valueOf(hyriPlayer.getNetworkLeveling().addExperience(xp)) + " XP");
 
             hyriPlayer.update();
 
-            player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killsLines, rewards));
+            player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killsLines, rewards.toString()));
         });
 
     }
