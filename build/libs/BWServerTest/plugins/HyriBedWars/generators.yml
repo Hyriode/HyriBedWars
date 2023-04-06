@@ -1,7 +1,0 @@
-base:
-  iron:
-    spawnLimit: 48
-    timeBetweenSpawns: 20
-  gold:
-    spawnLimit: 16
-    timeBetweenSpawns: 20

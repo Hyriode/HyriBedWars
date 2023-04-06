@@ -1,5 +1,0 @@
-name: HyriBedWars
-main: fr.hyriode.bedwars.HyriBedWars
-author: KinjerBueno
-depend: [Hyrame]
-version: 1.0.0
