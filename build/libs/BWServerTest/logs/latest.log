@@ -1,487 +1,404 @@
-[19:34:18] [Server thread/INFO]: Starting minecraft server version 1.8.8
-[19:34:18] [Server thread/INFO]: Loading properties
-[19:34:18] [Server thread/INFO]: Default game type: SURVIVAL
-[19:34:18] [Server thread/INFO]: This server is running CraftBukkit version git-Spigot-db6de12-18fbb24 (MC: 1.8.8) (Implementing API version 1.8.8-R0.1-SNAPSHOT)
-[19:34:18] [Server thread/INFO]: Debug logging is disabled
-[19:34:18] [Server thread/INFO]: Server Ping Player Sample Count: 12
-[19:34:18] [Server thread/INFO]: Using 4 threads for Netty based IO
-[19:34:18] [Server thread/INFO]: Generating keypair
-[19:34:19] [Server thread/INFO]: Starting Minecraft server on *:25789
-[19:34:19] [Server thread/INFO]: Using default channel type
-[19:34:19] [Server thread/INFO]: Set PluginClassLoader as parallel capable
-[19:34:19] [Server thread/INFO]: [HyriAPI] Loading HyriAPI v1.2.3
-[19:34:19] [Server thread/INFO]: [Hyrame] Loading Hyrame v1.2.6
-[19:34:19] [Server thread/INFO]: [WorldEdit] Loading WorldEdit v6.1;no_git_id
-[19:34:19] [Server thread/INFO]: [ViaVersion] Loading ViaVersion v4.3.1
-[19:34:19] [Server thread/INFO]: [ViaVersion] ViaVersion 4.3.1 is now loaded, injecting!
-[19:34:19] [Via-Mappingloader-0/INFO]: [ViaVersion] Loading 1.12 -> 1.13 mappings...
-[19:34:19] [Via-Mappingloader-1/INFO]: [ViaVersion] Loading 1.13 -> 1.13.2 mappings...
-[19:34:20] [Via-Mappingloader-3/INFO]: [ViaVersion] Loading 1.14 -> 1.15 mappings...
-[19:34:20] [Via-Mappingloader-2/INFO]: [ViaVersion] Loading 1.13.2 -> 1.14 mappings...
-[19:34:20] [Via-Mappingloader-5/INFO]: [ViaVersion] Loading 1.16 -> 1.16.2 mappings...
-[19:34:20] [Via-Mappingloader-4/INFO]: [ViaVersion] Loading 1.15 -> 1.16 mappings...
-[19:34:20] [Via-Mappingloader-0/INFO]: [ViaVersion] Loading block connection mappings ...
-[19:34:20] [Via-Mappingloader-1/INFO]: [ViaVersion] Loading 1.16.2 -> 1.17 mappings...
-[19:34:20] [Via-Mappingloader-3/INFO]: [ViaVersion] Loading 1.17 -> 1.18 mappings...
-[19:34:20] [Server thread/INFO]: [HyriBedWars] Loading HyriBedWars v1.0.0
-[19:34:20] [Via-Mappingloader-2/INFO]: [ViaVersion] Loading 1.18 -> 1.19 mappings...
-[19:34:20] [Server thread/INFO]: [HyriAPI] Enabling HyriAPI v1.2.3
-[19:34:20] [Server thread/INFO]: [HyriAPI]   _  _          _   _   ___ ___ 
-[19:34:20] [Server thread/INFO]: [HyriAPI]  | || |_  _ _ _(_) /_\ | _ \_ _|
-[19:34:20] [Server thread/INFO]: [HyriAPI]  | __ | || | '_| |/ _ \|  _/| | 
-[19:34:20] [Server thread/INFO]: [HyriAPI]  |_||_|\_, |_| |_/_/ \_\_| |___|
-[19:34:20] [Server thread/INFO]: [HyriAPI]        |__/                     
-[19:34:20] [Server thread/INFO]: [HyriAPI] Registered fr.hyriode.api.impl.server.HyriAPIImplementation as an implementation of HyriAPI.
-[19:34:20] [Server thread/INFO]: [HyriAPI] Connection set between HyriAPI and Redis
-[19:34:20] [Server thread/INFO]: [HyriAPI] Connection set between HyriAPI and Redis
-[19:34:20] [Server thread/INFO]: [HyriAPI] Starting Redis PubSub...
-[19:34:20] [Server thread/INFO]: [HyriAPI] Subscribing 'HyriNetworkEventBus' on events
-[19:34:20] [Server thread/INFO]: [HyriAPI] Subscribing 'HyriJoinReceiver' on join
-[19:34:20] [Server thread/INFO]: [HyriAPI] Subscribing 'HyriChatReceiver' on chat
-[19:34:20] [Server thread/INFO]: [HyriAPI] Subscribing 'HyriSoundReceiver' on sounds
-[19:34:20] [Server thread/WARN]: **** SERVER IS RUNNING IN OFFLINE/INSECURE MODE!
-[19:34:20] [Server thread/WARN]: The server will make no attempt to authenticate usernames. Beware.
-[19:34:20] [Server thread/WARN]: While this makes the game possible to play without internet access, it also opens up the ability for hackers to connect with any username they choose.
-[19:34:20] [Server thread/WARN]: To change this, set "online-mode" to "true" in the server.properties file.
-[19:34:20] [Server thread/INFO]: **** Beginning UUID conversion, this may take A LONG time ****
-[19:34:20] [Server thread/INFO]: Preparing level "world"
-[19:34:20] [Server thread/INFO]: -------- World Settings For [world] --------
-[19:34:20] [Server thread/INFO]: View Distance: 10
-[19:34:20] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
-[19:34:20] [Server thread/INFO]: Arrow Despawn Rate: 1200
-[19:34:20] [Server thread/INFO]: Item Merge Radius: 2.5
-[19:34:20] [Server thread/INFO]: Item Despawn Rate: 6000
-[19:34:20] [Server thread/INFO]: Chunks to Grow per Tick: 650
-[19:34:20] [Server thread/INFO]: Clear tick list: false
-[19:34:20] [Server thread/INFO]: Experience Merge Radius: 3.0
-[19:34:20] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
-[19:34:20] [Server thread/INFO]: Sending up to 10 chunks per packet
-[19:34:20] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
-[19:34:20] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
-[19:34:20] [Server thread/INFO]: Cactus Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Cane Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Melon Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Mushroom Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Sapling Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Wheat Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: NetherWart Growth Modifier: 100%
-[19:34:20] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
-[19:34:20] [Server thread/INFO]: Mob Spawn Range: 4
-[19:34:20] [Server thread/INFO]: Structure Info Saving: true
-[19:34:20] [Server thread/INFO]: Anti X-Ray: true
-[19:34:20] [Server thread/INFO]: 	Engine Mode: 1
-[19:34:20] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
-[19:34:20] [Server thread/INFO]: 	Replace Blocks: [1, 5]
-[19:34:20] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
-[19:34:20] [Server thread/INFO]: Random Lighting Updates: false
-[19:34:20] [Server thread/INFO]: Max TNT Explosions: 100
-[19:34:20] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
-[19:34:20] [Server thread/INFO]: Max Entity Collisions: 8
-[19:34:20] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
-[19:34:21] [Server thread/INFO]: -------- World Settings For [world_nether] --------
-[19:34:21] [Server thread/INFO]: View Distance: 10
-[19:34:21] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
-[19:34:21] [Server thread/INFO]: Arrow Despawn Rate: 1200
-[19:34:21] [Server thread/INFO]: Item Merge Radius: 2.5
-[19:34:21] [Server thread/INFO]: Item Despawn Rate: 6000
-[19:34:21] [Server thread/INFO]: Chunks to Grow per Tick: 650
-[19:34:21] [Server thread/INFO]: Clear tick list: false
-[19:34:21] [Server thread/INFO]: Experience Merge Radius: 3.0
-[19:34:21] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
-[19:34:21] [Server thread/INFO]: Sending up to 10 chunks per packet
-[19:34:21] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
-[19:34:21] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
-[19:34:21] [Server thread/INFO]: Cactus Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Cane Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Melon Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Mushroom Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Sapling Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Wheat Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: NetherWart Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
-[19:34:21] [Server thread/INFO]: Mob Spawn Range: 4
-[19:34:21] [Server thread/INFO]: Structure Info Saving: true
-[19:34:21] [Server thread/INFO]: Anti X-Ray: true
-[19:34:21] [Server thread/INFO]: 	Engine Mode: 1
-[19:34:21] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
-[19:34:21] [Server thread/INFO]: 	Replace Blocks: [1, 5]
-[19:34:21] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
-[19:34:21] [Server thread/INFO]: Random Lighting Updates: false
-[19:34:21] [Server thread/INFO]: Max TNT Explosions: 100
-[19:34:21] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
-[19:34:21] [Server thread/INFO]: Max Entity Collisions: 8
-[19:34:21] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
-[19:34:21] [Server thread/INFO]: -------- World Settings For [world_the_end] --------
-[19:34:21] [Server thread/INFO]: View Distance: 10
-[19:34:21] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
-[19:34:21] [Server thread/INFO]: Arrow Despawn Rate: 1200
-[19:34:21] [Server thread/INFO]: Item Merge Radius: 2.5
-[19:34:21] [Server thread/INFO]: Item Despawn Rate: 6000
-[19:34:21] [Server thread/INFO]: Chunks to Grow per Tick: 650
-[19:34:21] [Server thread/INFO]: Clear tick list: false
-[19:34:21] [Server thread/INFO]: Experience Merge Radius: 3.0
-[19:34:21] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
-[19:34:21] [Server thread/INFO]: Sending up to 10 chunks per packet
-[19:34:21] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
-[19:34:21] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
-[19:34:21] [Server thread/INFO]: Cactus Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Cane Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Melon Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Mushroom Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Sapling Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Wheat Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: NetherWart Growth Modifier: 100%
-[19:34:21] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
-[19:34:21] [Server thread/INFO]: Mob Spawn Range: 4
-[19:34:21] [Server thread/INFO]: Structure Info Saving: true
-[19:34:21] [Server thread/INFO]: Anti X-Ray: true
-[19:34:21] [Server thread/INFO]: 	Engine Mode: 1
-[19:34:21] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
-[19:34:21] [Server thread/INFO]: 	Replace Blocks: [1, 5]
-[19:34:21] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
-[19:34:21] [Server thread/INFO]: Random Lighting Updates: false
-[19:34:21] [Server thread/INFO]: Max TNT Explosions: 100
-[19:34:21] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
-[19:34:21] [Server thread/INFO]: Max Entity Collisions: 8
-[19:34:21] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
-[19:34:21] [Server thread/INFO]: Preparing start region for level 0 (Seed: -4216530450634206070)
-[19:34:22] [Server thread/INFO]: Preparing spawn area: 99%
-[19:34:22] [Server thread/INFO]: Preparing start region for level 1 (Seed: -1068113956847443781)
-[19:34:22] [Server thread/INFO]: Preparing start region for level 2 (Seed: -1068113956847443781)
-[19:34:22] [Server thread/INFO]: [Hyrame] Enabling Hyrame v1.2.6
-[19:34:22] [Server thread/INFO]:   _  _                         
-[19:34:22] [Server thread/INFO]:  | || |_  _ _ _ __ _ _ __  ___ 
-[19:34:22] [Server thread/INFO]:  | __ | || | '_/ _` | '  \/ -_)
-[19:34:22] [Server thread/INFO]:  |_||_|\_, |_| \__,_|_|_|_\___|
-[19:34:22] [Server thread/INFO]:        |__/                    
-[19:34:22] [Server thread/INFO]: [Hyrame] Initializing packet types...
-[19:34:22] [Server thread/INFO]: [Hyrame] Starting intercepting packets.
-[19:34:22] [Server thread/INFO]: [Hyrame] Removing default Spigot and Minecraft commands...
-[19:34:22] [Server thread/WARN]: java.io.IOException: Le chemin d’accès spécifié est introuvable
-[19:34:22] [Server thread/WARN]: 	at java.io.WinNTFileSystem.createFileExclusively(Native Method)
-[19:34:22] [Server thread/WARN]: 	at java.io.File.createNewFile(File.java:1023)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.<init>(NicknameModule.java:58)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.Hyrame.<init>(Hyrame.java:104)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.lambda$onEnable$0(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.HyrameLoader.register(HyrameLoader.java:57)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.onEnable(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:321)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:340)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:405)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.loadPlugin(CraftServer.java:357)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.enablePlugins(CraftServer.java:317)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.s(MinecraftServer.java:414)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.k(MinecraftServer.java:378)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.a(MinecraftServer.java:333)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:263)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:525)
-[19:34:22] [Server thread/WARN]: 	at java.lang.Thread.run(Thread.java:750)
-[19:34:22] [Server thread/WARN]: java.io.IOException: Le chemin d’accès spécifié est introuvable
-[19:34:22] [Server thread/WARN]: 	at java.io.WinNTFileSystem.createFileExclusively(Native Method)
-[19:34:22] [Server thread/WARN]: 	at java.io.File.createNewFile(File.java:1023)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.<init>(NicknameModule.java:66)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.Hyrame.<init>(Hyrame.java:104)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.lambda$onEnable$0(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.HyrameLoader.register(HyrameLoader.java:57)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.onEnable(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:321)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:340)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:405)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.loadPlugin(CraftServer.java:357)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.enablePlugins(CraftServer.java:317)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.s(MinecraftServer.java:414)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.k(MinecraftServer.java:378)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.a(MinecraftServer.java:333)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:263)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:525)
-[19:34:22] [Server thread/WARN]: 	at java.lang.Thread.run(Thread.java:750)
-[19:34:22] [Server thread/INFO]: [Hyrame] Loading random nicknames...
-[19:34:22] [Server thread/WARN]: java.io.FileNotFoundException: plugins\Hyrame\nicknames.txt (Le chemin d’accès spécifié est introuvable)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.open0(Native Method)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.open(FileInputStream.java:195)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileReader.<init>(FileReader.java:72)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.loadRandomNicknames(NicknameModule.java:81)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.<init>(NicknameModule.java:72)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.Hyrame.<init>(Hyrame.java:104)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.lambda$onEnable$0(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.HyrameLoader.register(HyrameLoader.java:57)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.onEnable(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:321)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:340)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:405)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.loadPlugin(CraftServer.java:357)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.enablePlugins(CraftServer.java:317)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.s(MinecraftServer.java:414)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.k(MinecraftServer.java:378)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.a(MinecraftServer.java:333)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:263)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:525)
-[19:34:22] [Server thread/WARN]: 	at java.lang.Thread.run(Thread.java:750)
-[19:34:22] [Server thread/INFO]: [Hyrame] Loaded random nicknames (0).
-[19:34:22] [Server thread/INFO]: [Hyrame] Loading random skins...
-[19:34:22] [Server thread/WARN]: java.io.FileNotFoundException: plugins\Hyrame\skins.txt (Le chemin d’accès spécifié est introuvable)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.open0(Native Method)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.open(FileInputStream.java:195)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileInputStream.<init>(FileInputStream.java:138)
-[19:34:22] [Server thread/WARN]: 	at java.io.FileReader.<init>(FileReader.java:72)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.loadRandomSkins(NicknameModule.java:96)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.module.nickname.NicknameModule.<init>(NicknameModule.java:73)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.Hyrame.<init>(Hyrame.java:104)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.lambda$onEnable$0(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.HyrameLoader.register(HyrameLoader.java:57)
-[19:34:22] [Server thread/WARN]: 	at fr.hyriode.hyrame.impl.HyramePlugin.onEnable(HyramePlugin.java:21)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:321)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.java.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:340)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:405)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.loadPlugin(CraftServer.java:357)
-[19:34:22] [Server thread/WARN]: 	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.enablePlugins(CraftServer.java:317)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.s(MinecraftServer.java:414)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.k(MinecraftServer.java:378)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.a(MinecraftServer.java:333)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:263)
-[19:34:22] [Server thread/WARN]: 	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:525)
-[19:34:22] [Server thread/WARN]: 	at java.lang.Thread.run(Thread.java:750)
-[19:34:22] [Server thread/INFO]: [Hyrame] Loaded random skins (0).
-[19:34:22] [Server thread/INFO]: [HyriAPI] Subscribing 'FriendReceiver' on friends
-[19:34:22] [Server thread/INFO]: [HyriAPI] Subscribing 'PartyReceiver' on parties
-[19:34:22] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.placeholder.PlaceholderImpl' as PlaceholderAPI implementation.
-[19:34:22] [Server thread/INFO]: [Hyrame] Registering default placeholders...
-[19:34:22] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.Hyrame' as an implementation of Hyrame.
-[19:34:23] [Server thread/INFO]: [Hyrame] Searching for items in 'fr.hyriode.hyrame' package | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:config_location_eyes' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:team_selector' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:config_boolean_yes' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:spectator_teleporter' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:leave_game' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:spectator_settings' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:config_boolean_no' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:restart_game' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'hyrame:config_location_set' item | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Loading languages from /lang/ folder ... | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Loading en language from en.json... | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Loading fr language from fr.json... | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Searching for listeners in 'fr.hyriode.hyrame' package | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.global.PlayerListener' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.InventoryHandler' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.NPCHandler' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.LeaderboardHandler' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.chat.ChatListener' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.item.HyriItemHandler' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.global.TabListener' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.BossBarHandler' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.scoreboard.HyriScoreboardListener' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.global.WorldListener' listener | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Searching for commands in 'fr.hyriode.hyrame' package | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.network.WhitelistCommand' command with name 'hyriwhitelist' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.party.PartyCommand' command with name 'party' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.PingCommand' command with name 'ping' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.network.BroadcastMessage' command with name 'say' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.help.HelpCommand' command with name 'help' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.help.StoreCommand' command with name 'store' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.network.MaintenanceCommand' command with name 'maintenance' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.VanishCommand' command with name 'vanish' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.party.PartyChatCommand' command with name 'partychat' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.game.util.HyriGameCommand' command with name 'hyrigame' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.chat.message.PrivateMessageCommand' command with name 'msg' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.chat.message.PrivateMessageReplyCommand' command with name 'reply' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.RankCommand' command with name 'rank' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.PluginCommand' command with name 'plugins' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.help.DiscordCommand' command with name 'discord' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.network.HyriServerCommand' command with name 'hyriserver' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.help.WebsiteCommand' command with name 'website' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.network.LobbyCommand' command with name 'lobby' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.chat.ForceMessageCommand' command with name 'forcemsg' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.command.model.RejoinCommand' command with name 'rejoin' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.friend.FriendCommand' command with name 'friend' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.chat.ChatCommand' command with name 'chat' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.module.nickname.NicknameCommand' command with name 'nick' | HyrameProvider
-[19:34:23] [Server thread/INFO]: [HyriAPI] Changing state to READY
-[19:34:23] [Server thread/INFO]: [WorldEdit] Enabling WorldEdit v6.1;no_git_id
-[19:34:23] [Thread-8/INFO]: UUID of player Krinjer is b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0
-[19:34:23] [Server thread/INFO]: WEPIF: Using the Bukkit Permissions API.
-[19:34:23] [Server thread/INFO]: [WorldEdit] Using com.sk89q.worldedit.bukkit.adapter.impl.Spigot_v1_8_R3 as the Bukkit adapter
-[19:34:23] [Server thread/INFO]: [ViaVersion] Enabling ViaVersion v4.3.1
-[19:34:23] [Server thread/INFO]: [HyriBedWars] Enabling HyriBedWars v1.0.0
-[19:34:23] [Server thread/INFO]:   _    _            _ ____           ___          __            
-[19:34:23] [Server thread/INFO]:  | |  | |          (_)  _ \         | \ \        / /            
-[19:34:23] [Server thread/INFO]:  | |__| |_   _ _ __ _| |_) | ___  __| |\ \  /\  / /_ _ _ __ ___ 
-[19:34:23] [Server thread/INFO]:  |  __  | | | | '__| |  _ < / _ \/ _` | \ \/  \/ / _` | '__/ __|
-[19:34:23] [Server thread/INFO]:  | |  | | |_| | |  | | |_) |  __/ (_| |  \  /\  / (_| | |  \__ \
-[19:34:23] [Server thread/INFO]:  |_|  |_|\__, |_|  |_|____/ \___|\__,_|   \/  \/ \__,_|_|  |___/
-[19:34:23] [Server thread/INFO]:           __/ |                                                 
-[19:34:23] [Server thread/INFO]:          |___/                                                  
-[19:34:23] [Server thread/INFO]: [BedWars] Starting BedWars...
-[19:34:23] [Server thread/INFO]: [SPEED:(0t-x0)]
-[19:34:23] [Server thread/INFO]: [SPEED:(0t-x0)]
-[19:34:24] [Server thread/INFO]: [Hyrame] Searching for items in 'fr.hyriode.bedwars' package | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'bedwars:gamestylemode' item | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Loading languages from /lang/ folder ... | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Loading en language from en.json... | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Loading fr language from fr.json... | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Searching for listeners in 'fr.hyriode.bedwars' package | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.explosion.ExplodeListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.trap.TrapListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.ItemListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemPopupTowerListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemFirballListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.explosion.TNTListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemSpongeListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.entity.EntityListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.player.RespawnListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.BedListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.WorldListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemDreamDefenderListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemBedBugListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.ChestListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemBridgeEggListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemMilkListener' listener | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Searching for commands in 'fr.hyriode.bedwars' package | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.test.TestCommand' command with name 'bwdebug' | HyriBWProvider
-[19:34:24] [Server thread/INFO]: [Hyrame] Creating waiting room...
-[19:34:24] [Server thread/INFO]: [Hyrame] Registered 'bedwars' game.
-[19:34:24] [Server thread/INFO]: [HyriAPI] Changing state to READY
-[19:34:24] [Server thread/INFO]: Bedwars Ready
-[19:34:24] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
-[19:34:24] [Server thread/INFO]: Done (3,568s)! For help, type "help" or "?"
-[19:34:24] [Server thread/INFO]: [ViaVersion] ViaVersion detected server version: 1.8.x (47)
-[19:34:24] [Server thread/WARN]: [ViaVersion] This version of Minecraft is extremely outdated and support for it has reached its end of life. You will still be able to run Via on this Minecraft version, but we are unlikely to provide any further fixes or help with problems specific to legacy Minecraft versions. Please consider updating to give your players a better experience and to avoid issues that have long been fixed.
-[19:34:24] [Server thread/WARN]: [ViaVersion] You are running an outdated Java version, please consider updating it to at least Java 17 (your version is 1.8.0_332). At some point in the future, ViaVersion will no longer be compatible with this version of Java.
-[19:34:24] [Server thread/INFO]: [ViaVersion] Finished mapping loading, shutting down loader executor!
-[19:34:25] [Server thread/INFO]: Krinjer[/127.0.0.1:54064] logged in with entity id 0 at ([world]0.5, 170.0, 0.5)
-[19:34:25] [Thread-10/INFO]: UUID of player Atsuko_Tanaka is b9eecc2a-e203-3676-8f86-30d57b4e7fc1
-[19:34:26] [Server thread/INFO]: Atsuko_Tanaka[/127.0.0.1:54073] logged in with entity id 38 at ([world]0.5, 170.0, 0.5)
-[19:34:28] [Server thread/INFO]: Atsuko_Tanaka issued server command: /hyrigame start
-[19:34:28] [Server thread/INFO]: [HyriAPI] Changing state to PLAYING
-[19:34:28] [Server thread/INFO]: [Hyrame] Removing waiting room...
-[19:34:28] [Server thread/INFO]: Temps de démarrage : 544
-[19:34:29] [Server thread/INFO]: Atsuko_Tanaka issued server command: /gamemode 1
-[19:34:29] [Server thread/INFO]: [Atsuko_Tanaka: Set own game mode to Creative Mode]
-[19:34:40] [Server thread/INFO]: [SPEED:(900t-x1)]
-[19:34:40] [Server thread/INFO]: [SPEED:(900t-x1)]
-[19:34:40] [Server thread/INFO]: [SPEED:(900t-x1)]
-[19:34:40] [Server thread/INFO]: [SPEED:(900t-x1)]
-[19:34:40] [Server thread/INFO]: Mettttttaaaa
-[19:34:40] [Server thread/INFO]: [SPEED:(900t-x1)]
-[19:34:40] [Server thread/INFO]: [JUMP:(900t-x4)]
-[19:34:40] [Server thread/INFO]: [JUMP:(900t-x4)]
-[19:34:40] [Server thread/INFO]: [JUMP:(900t-x4)]
-[19:34:40] [Server thread/INFO]: [JUMP:(900t-x4)]
-[19:34:40] [Server thread/INFO]: Mettttttaaaa
-[19:34:40] [Server thread/INFO]: [JUMP:(900t-x4)]
-[19:34:40] [Server thread/INFO]: [INVISIBILITY:(600t-x0)]
-[19:34:40] [Server thread/INFO]: [INVISIBILITY:(600t-x0)]
-[19:34:40] [Server thread/INFO]: [INVISIBILITY:(600t-x0)]
-[19:34:40] [Server thread/INFO]: [INVISIBILITY:(600t-x0)]
-[19:34:40] [Server thread/INFO]: Mettttttaaaa
-[19:34:40] [Server thread/INFO]: [INVISIBILITY:(600t-x0)]
-[19:34:54] [Server thread/INFO]: Atsuko_Tanaka issued server command: /gamemode 0
-[19:34:54] [Server thread/INFO]: [Atsuko_Tanaka: Set own game mode to Survival Mode]
-[19:57:07] [Server thread/INFO]: Atsuko_Tanaka issued server command: /gamemode 1
-[19:57:07] [Server thread/INFO]: [Atsuko_Tanaka: Set own game mode to Creative Mode]
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: ItemStack{WOOD_SWORD x 1, UNSPECIFIC_META:{meta-type=UNSPECIFIC, Unbreakable=true, ItemFlags=[HIDE_UNBREAKABLE], internal=H4sIAAAAAAAAAONiYGBk4PYsDkgtyk3MS80rYWQAALJcvSoTAAAA}}
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: ItemStack{IRON_INGOT x 23}
-[20:04:29] [Server thread/INFO]: Found money: IRON_INGOT
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: ItemStack{GOLD_INGOT x 10}
-[20:04:29] [Server thread/INFO]: Found money: GOLD_INGOT
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: ItemStack{DIAMOND x 1}
-[20:04:29] [Server thread/INFO]: Found money: DIAMOND
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:04:29] [Server thread/INFO]: mais
-[20:04:29] [Server thread/INFO]: null
-[20:05:04] [Server thread/INFO]: [HyriAPI] Changing state to SHUTDOWN
-[20:05:09] [Server thread/INFO]: Atsuko_Tanaka issued server command: /gamemode 1
-[20:05:09] [Server thread/INFO]: [Atsuko_Tanaka: Set own game mode to Creative Mode]
-[20:39:13] [Server thread/INFO]: Atsuko_Tanaka lost connection: Internal Exception: java.io.IOException: Une connexion existante a dû être fermée par l’hôte distant
-[20:39:16] [Server thread/INFO]: Krinjer lost connection: Internal Exception: java.io.IOException: Une connexion existante a dû être fermée par l’hôte distant
-[20:47:17] [Thread-11/INFO]: Disconnecting com.mojang.authlib.GameProfile@2a6055af[id=b9eecc2a-e203-3676-8f86-30d57b4e7fc1,name=Atsuko_Tanaka,properties={},legacy=false] (/127.0.0.1:64065): §cPartie en cours.
-[20:47:17] [Server thread/INFO]: com.mojang.authlib.GameProfile@2a6055af[id=b9eecc2a-e203-3676-8f86-30d57b4e7fc1,name=Atsuko_Tanaka,properties={},legacy=false] (/127.0.0.1:64065) lost connection: Disconnected
-[23:50:04] [Server thread/INFO]: Stopping the server
-[23:50:04] [Server thread/INFO]: Stopping server
-[23:50:04] [Server thread/INFO]: [HyriBedWars] Disabling HyriBedWars v1.0.0
-[23:50:04] [Server thread/INFO]: [Hyrame] Unregistered 'bedwars' game.
-[23:50:04] [Server thread/INFO]: [ViaVersion] Disabling ViaVersion v4.3.1
-[23:50:04] [Server thread/INFO]: [ViaVersion] ViaVersion is disabling, if this is a reload and you experience issues consider rebooting.
-[23:50:04] [Server thread/INFO]: [WorldEdit] Disabling WorldEdit v6.1;no_git_id
-[23:50:04] [Server thread/INFO]: [Hyrame] Disabling Hyrame v1.2.6
-[23:50:04] [Server thread/INFO]: [Hyrame] Stopping Hyrame... Bye!
-[23:50:04] [Server thread/INFO]: [Hyrame] Stopping intercepting packets.
-[23:50:04] [Server thread/INFO]: [HyriAPI] Disabling HyriAPI v1.2.3
-[23:50:04] [Server thread/INFO]: [HyriAPI] Stopping Redis PubSub...
-[23:50:04] [Server thread/INFO]: [HyriAPI] Stopping Redis processor (waiting for last requests to be done)...
-[23:50:05] [Server thread/INFO]: [HyriAPI] Redis processor couldn't handle last Redis requests!
-[23:50:05] [Server thread/INFO]: [HyriAPI] Stopping Redis connection...
-[23:50:05] [Server thread/INFO]: [HyriAPI] HyriAPI is now disabled. See you soon!
-[23:50:05] [Server thread/INFO]: Saving players
-[23:50:05] [Server thread/INFO]: Saving worlds
-[23:50:05] [Server thread/INFO]: Saving chunks for level 'world'/Overworld
-[23:50:05] [Server thread/INFO]: Saving chunks for level 'world_nether'/Nether
-[23:50:05] [Server thread/INFO]: Saving chunks for level 'world_the_end'/The End
+[18:50:27] [Server thread/INFO]: Starting minecraft server version 1.8.8
+[18:50:27] [Server thread/INFO]: Loading properties
+[18:50:27] [Server thread/INFO]: Default game type: SURVIVAL
+[18:50:28] [Server thread/INFO]: This server is running CraftBukkit version git-Spigot-db6de12-18fbb24 (MC: 1.8.8) (Implementing API version 1.8.8-R0.1-SNAPSHOT)
+[18:50:28] [Server thread/INFO]: Debug logging is disabled
+[18:50:28] [Server thread/INFO]: Server Ping Player Sample Count: 12
+[18:50:28] [Server thread/INFO]: Using 4 threads for Netty based IO
+[18:50:28] [Server thread/INFO]: Generating keypair
+[18:50:28] [Server thread/INFO]: Starting Minecraft server on *:25789
+[18:50:28] [Server thread/INFO]: Using default channel type
+[18:50:29] [Server thread/INFO]: Set PluginClassLoader as parallel capable
+[18:50:29] [Server thread/INFO]: [HyriAPI] Loading HyriAPI v1.5.2-SNAPSHOT-xxxxxxx-X
+[18:50:29] [Server thread/INFO]: [Hyrame] Loading Hyrame v1.3.9-SNAPSHOT-bceeeb20-49
+[18:50:29] [Server thread/INFO]: [WorldEdit] Loading WorldEdit v6.1;no_git_id
+[18:50:29] [Server thread/INFO]: [ViaVersion] Loading ViaVersion v4.3.1
+[18:50:29] [Server thread/INFO]: [ViaVersion] ViaVersion 4.3.1 is now loaded, injecting!
+[18:50:30] [Via-Mappingloader-0/INFO]: [ViaVersion] Loading 1.12 -> 1.13 mappings...
+[18:50:30] [Via-Mappingloader-1/INFO]: [ViaVersion] Loading 1.13 -> 1.13.2 mappings...
+[18:50:30] [Via-Mappingloader-2/INFO]: [ViaVersion] Loading 1.13.2 -> 1.14 mappings...
+[18:50:30] [Via-Mappingloader-3/INFO]: [ViaVersion] Loading 1.14 -> 1.15 mappings...
+[18:50:30] [Via-Mappingloader-4/INFO]: [ViaVersion] Loading 1.15 -> 1.16 mappings...
+[18:50:30] [Via-Mappingloader-3/INFO]: [ViaVersion] Loading 1.16 -> 1.16.2 mappings...
+[18:50:30] [Via-Mappingloader-0/INFO]: [ViaVersion] Loading block connection mappings ...
+[18:50:30] [Via-Mappingloader-4/INFO]: [ViaVersion] Loading 1.16.2 -> 1.17 mappings...
+[18:50:30] [Via-Mappingloader-4/INFO]: [ViaVersion] Loading 1.17 -> 1.18 mappings...
+[18:50:30] [Via-Mappingloader-3/INFO]: [ViaVersion] Loading 1.18 -> 1.19 mappings...
+[18:50:30] [Server thread/INFO]: [HyriBedWars] Loading HyriBedWars v1.0.0
+[18:50:30] [Server thread/INFO]: [HyriBasics] Loading HyriBasics v1.0.0-xxxxxxx-X
+[18:50:30] [Server thread/INFO]: [HyriAPI] Enabling HyriAPI v1.5.2-SNAPSHOT-xxxxxxx-X
+[18:50:30] [Server thread/INFO]: [HyriAPI]   _  _          _   _   ___ ___ 
+[18:50:30] [Server thread/INFO]: [HyriAPI]  | || |_  _ _ _(_) /_\ | _ \_ _|
+[18:50:30] [Server thread/INFO]: [HyriAPI]  | __ | || | '_| |/ _ \|  _/| | 
+[18:50:30] [Server thread/INFO]: [HyriAPI]  |_||_|\_, |_| |_/_/ \_\_| |___|
+[18:50:30] [Server thread/INFO]: [HyriAPI]        |__/                     
+[18:50:30] [Server thread/INFO]: [HyriAPI] Registered fr.hyriode.api.impl.server.SHyriAPIImpl as an implementation of HyriAPI.
+[18:50:31] [Server thread/INFO]: [HyriAPI] Connection set between HyriAPI and Redis
+[18:50:31] [Server thread/INFO]: [HyriAPI] Starting MongoDB connection...
+[18:50:31] [Server thread/INFO]: [HyriAPI] Connection set between HyriAPI and Redis
+[18:50:31] [Server thread/INFO]: [HyriAPI] Starting Redis PubSub...
+[18:50:31] [Server thread/INFO]: Starting Hyreos API...
+[18:50:31] [Thread-8/INFO]: Starting Hyreos messaging...
+[18:50:31] [Server thread/INFO]: [HyriAPI] Subscribing 'HyriNetworkEventBus' on events
+[18:50:31] [Server thread/INFO]: [HyriAPI] Subscribing 'Receiver' on chat
+[18:50:31] [Server thread/INFO]: [HyriAPI] Subscribing 'JoinReceiver' on servers
+[18:50:31] [Server thread/INFO]: [HyriAPI] Subscribing 'SoundReceiver' on sounds
+[18:50:31] [Server thread/INFO]: **** Beginning UUID conversion, this may take A LONG time ****
+[18:50:31] [Server thread/INFO]: Preparing level "world"
+[18:50:31] [Server thread/INFO]: -------- World Settings For [world] --------
+[18:50:31] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[18:50:31] [Server thread/INFO]: Max TNT Explosions: 100
+[18:50:31] [Server thread/INFO]: Item Merge Radius: 2.5
+[18:50:31] [Server thread/INFO]: Item Despawn Rate: 6000
+[18:50:31] [Server thread/INFO]: View Distance: 10
+[18:50:31] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[18:50:31] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[18:50:31] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[18:50:31] [Server thread/INFO]: Chunks to Grow per Tick: 650
+[18:50:31] [Server thread/INFO]: Clear tick list: false
+[18:50:31] [Server thread/INFO]: Experience Merge Radius: 3.0
+[18:50:31] [Server thread/INFO]: Sending up to 10 chunks per packet
+[18:50:31] [Server thread/INFO]: Random Lighting Updates: false
+[18:50:31] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Cane Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Melon Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Structure Info Saving: true
+[18:50:31] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[18:50:31] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
+[18:50:31] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[18:50:31] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
+[18:50:31] [Server thread/INFO]: Mob Spawn Range: 4
+[18:50:31] [Server thread/INFO]: Anti X-Ray: true
+[18:50:31] [Server thread/INFO]: 	Engine Mode: 1
+[18:50:31] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
+[18:50:31] [Server thread/INFO]: 	Replace Blocks: [1, 5]
+[18:50:31] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
+[18:50:31] [Server thread/INFO]: Max Entity Collisions: 8
+[18:50:31] [Server thread/INFO]: -------- World Settings For [world_nether] --------
+[18:50:31] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[18:50:31] [Server thread/INFO]: Max TNT Explosions: 100
+[18:50:31] [Server thread/INFO]: Item Merge Radius: 2.5
+[18:50:31] [Server thread/INFO]: Item Despawn Rate: 6000
+[18:50:31] [Server thread/INFO]: View Distance: 10
+[18:50:31] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[18:50:31] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[18:50:31] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[18:50:31] [Server thread/INFO]: Chunks to Grow per Tick: 650
+[18:50:31] [Server thread/INFO]: Clear tick list: false
+[18:50:31] [Server thread/INFO]: Experience Merge Radius: 3.0
+[18:50:31] [Server thread/INFO]: Sending up to 10 chunks per packet
+[18:50:31] [Server thread/INFO]: Random Lighting Updates: false
+[18:50:31] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Cane Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Melon Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[18:50:31] [Server thread/INFO]: Structure Info Saving: true
+[18:50:31] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[18:50:31] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
+[18:50:31] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[18:50:31] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
+[18:50:31] [Server thread/INFO]: Mob Spawn Range: 4
+[18:50:31] [Server thread/INFO]: Anti X-Ray: true
+[18:50:31] [Server thread/INFO]: 	Engine Mode: 1
+[18:50:31] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
+[18:50:31] [Server thread/INFO]: 	Replace Blocks: [1, 5]
+[18:50:31] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
+[18:50:31] [Server thread/INFO]: Max Entity Collisions: 8
+[18:50:31] [Server thread/INFO]: -------- World Settings For [world_the_end] --------
+[18:50:31] [Server thread/INFO]: Tile Max Tick Time: 50ms Entity max Tick Time: 50ms
+[18:50:31] [Server thread/INFO]: Max TNT Explosions: 100
+[18:50:32] [Server thread/INFO]: Item Merge Radius: 2.5
+[18:50:32] [Server thread/INFO]: Item Despawn Rate: 6000
+[18:50:32] [Server thread/INFO]: View Distance: 10
+[18:50:32] [Server thread/INFO]: Arrow Despawn Rate: 1200
+[18:50:32] [Server thread/INFO]: Allow Zombie Pigmen to spawn from portal blocks: true
+[18:50:32] [Server thread/INFO]: Zombie Aggressive Towards Villager: true
+[18:50:32] [Server thread/INFO]: Chunks to Grow per Tick: 650
+[18:50:32] [Server thread/INFO]: Clear tick list: false
+[18:50:32] [Server thread/INFO]: Experience Merge Radius: 3.0
+[18:50:32] [Server thread/INFO]: Sending up to 10 chunks per packet
+[18:50:32] [Server thread/INFO]: Random Lighting Updates: false
+[18:50:32] [Server thread/INFO]: Cactus Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Cane Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Melon Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Mushroom Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Pumpkin Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Sapling Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Wheat Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: NetherWart Growth Modifier: 100%
+[18:50:32] [Server thread/INFO]: Structure Info Saving: true
+[18:50:32] [Server thread/INFO]: Nerfing mobs spawned from spawners: false
+[18:50:32] [Server thread/INFO]: Entity Activation Range: An 32 / Mo 32 / Mi 16
+[18:50:32] [Server thread/INFO]: Entity Tracking Range: Pl 48 / An 48 / Mo 48 / Mi 32 / Other 64
+[18:50:32] [Server thread/INFO]: Hopper Transfer: 8 Hopper Check: 8 Hopper Amount: 1
+[18:50:32] [Server thread/INFO]: Mob Spawn Range: 4
+[18:50:32] [Server thread/INFO]: Anti X-Ray: true
+[18:50:32] [Server thread/INFO]: 	Engine Mode: 1
+[18:50:32] [Server thread/INFO]: 	Hidden Blocks: [14, 15, 16, 21, 48, 49, 54, 56, 73, 74, 82, 129, 130]
+[18:50:32] [Server thread/INFO]: 	Replace Blocks: [1, 5]
+[18:50:32] [Server thread/INFO]: Custom Map Seeds:  Village: 10387312 Feature: 14357617
+[18:50:32] [Server thread/INFO]: Max Entity Collisions: 8
+[18:50:32] [Server thread/INFO]: Preparing start region for level 0 (Seed: -4216530450634206070)
+[18:50:32] [Server thread/INFO]: Preparing start region for level 1 (Seed: -1068113956847443781)
+[18:50:33] [Server thread/INFO]: Preparing start region for level 2 (Seed: -1068113956847443781)
+[18:50:33] [Server thread/INFO]: [Hyrame] Enabling Hyrame v1.3.9-SNAPSHOT-bceeeb20-49
+[18:50:33] [Server thread/INFO]:   _  _                         
+[18:50:33] [Server thread/INFO]:  | || |_  _ _ _ __ _ _ __  ___ 
+[18:50:33] [Server thread/INFO]:  | __ | || | '_/ _` | '  \/ -_)
+[18:50:33] [Server thread/INFO]:  |_||_|\_, |_| \__,_|_|_|_\___|
+[18:50:33] [Server thread/INFO]:        |__/                    
+[18:50:33] [Server thread/INFO]: [Hyrame] Removing default Spigot and Minecraft commands...
+[18:50:33] [Server thread/INFO]: [Hyrame] Initializing packet types...
+[18:50:33] [Server thread/INFO]: [Hyrame] Starting intercepting packets.
+[18:50:33] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.placeholder.PlaceholderImpl' as PlaceholderAPI implementation.
+[18:50:33] [Server thread/INFO]: [Hyrame] Registering default placeholders...
+[18:50:33] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.Hyrame' as an implementation of Hyrame.
+[18:50:33] [Server thread/INFO]: [HyriAPI] Loading en language from en.json...
+[18:50:33] [Server thread/INFO]: [HyriAPI] Loading fr language from fr.json...
+[18:50:34] [Server thread/INFO]: [Hyrame] Searching for items in 'fr.hyriode.hyrame' package | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:leave_game' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:spectator_teleporter' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:restart_game' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:host_settings' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:spectator_settings' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'hyrame:team_selector' item | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Searching for listeners in 'fr.hyriode.hyrame' package | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.global.PlayerListener' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.global.WorldListener' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.item.ItemHandler' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.InventoryHandler' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.chat.ChatListener' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.NPCHandler' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.LeaderboardHandler' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.listener.tools.BossBarHandler' listener | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Searching for commands in 'fr.hyriode.hyrame' package | HyrameProvider
+[18:50:34] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.hyrame.impl.host.command.HostCommand' command with name 'host' | HyrameProvider
+[18:50:34] [Server thread/INFO]: [HyriAPI] State changed to READY.
+[18:50:34] [Server thread/INFO]: [WorldEdit] Enabling WorldEdit v6.1;no_git_id
+[18:50:34] [Server thread/INFO]: WEPIF: Using the Bukkit Permissions API.
+[18:50:34] [Server thread/INFO]: [WorldEdit] Using com.sk89q.worldedit.bukkit.adapter.impl.Spigot_v1_8_R3 as the Bukkit adapter
+[18:50:34] [Server thread/INFO]: [ViaVersion] Enabling ViaVersion v4.3.1
+[18:50:34] [Server thread/INFO]: [HyriBedWars] Enabling HyriBedWars v1.0.0
+[18:50:34] [Server thread/INFO]:   _    _            _ ____           ___          __            
+[18:50:34] [Server thread/INFO]:  | |  | |          (_)  _ \         | \ \        / /            
+[18:50:34] [Server thread/INFO]:  | |__| |_   _ _ __ _| |_) | ___  __| |\ \  /\  / /_ _ _ __ ___ 
+[18:50:34] [Server thread/INFO]:  |  __  | | | | '__| |  _ < / _ \/ _` | \ \/  \/ / _` | '__/ __|
+[18:50:34] [Server thread/INFO]:  | |  | | |_| | |  | | |_) |  __/ (_| |  \  /\  / (_| | |  \__ \
+[18:50:34] [Server thread/INFO]:  |_|  |_|\__, |_|  |_|____/ \___|\__,_|   \/  \/ \__,_|_|  |___/
+[18:50:34] [Server thread/INFO]:           __/ |                                                 
+[18:50:34] [Server thread/INFO]:          |___/                                                  
+[18:50:34] [Server thread/INFO]: [BedWars] Starting BedWars...
+[18:50:34] [Server thread/INFO]: [HyriAPI] Loading en language from en.json...
+[18:50:34] [Server thread/INFO]: [HyriAPI] Loading fr language from fr.json...
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for items in 'fr.hyriode.bedwars' package | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'bedwars:gamestylemode' item | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for listeners in 'fr.hyriode.bedwars' package | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemMilkListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemSpongeListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.explosion.TNTListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.WorldListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemBridgeEggListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.tracker.ItemTrackerListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.ItemListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemDreamDefenderListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.explosion.ExplodeListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.player.InvisibilityListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemFirballListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.ChestListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.entity.EntityListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.trap.TrapListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemBedBugListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.player.RespawnListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.world.team.BedListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.listener.item.utility.ItemPopupTowerListener' listener | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for commands in 'fr.hyriode.bedwars' package | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.bedwars.game.test.TestCommand' command with name 'test' | HyriBWProvider
+[18:50:35] [Server thread/INFO]: [Hyrame] Creating waiting room...
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'bedwars' game.
+[18:50:35] [Server thread/INFO]: init values
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@3e95abd
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@6609b36f
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@2811fb6f
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@3a309f7b
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@73450632
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@58fc41fe
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@7f91130d
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@416490c3
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@1acb7a4b
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@20022b5d
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@57fc4d2b
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@327b2d9f
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@73a310b9
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@424a9553
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@776a1d24
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@1c96c183
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@775b3c70
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@61adcfc5
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@46896de9
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@6cb92662
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@422f3f39
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@4d73135e
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@4098d93c
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@65376d7b
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@5e5a4013
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@b665165
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@db1380c
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@5333c074
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@5f6548d9
+[18:50:35] [Server thread/INFO]: VALUE: fr.hyriode.hyrame.game.util.value.ValueProvider@66b1d729
+[18:50:35] [Server thread/ERROR]: Error occurred while enabling HyriBedWars v1.0.0 (Is it up to date?)
+java.lang.NullPointerException
+	at fr.hyriode.hyrame.impl.host.HostController.getOptions(HostController.java:182) ~[?:?]
+	at fr.hyriode.hyrame.impl.host.HostController.findOption(HostController.java:155) ~[?:?]
+	at fr.hyriode.hyrame.host.option.HostOption.<init>(HostOption.java:59) ~[?:?]
+	at fr.hyriode.hyrame.host.option.IntegerOption.<init>(IntegerOption.java:22) ~[?:?]
+	at fr.hyriode.hyrame.host.option.PreciseIntegerOption.<init>(PreciseIntegerOption.java:26) ~[?:?]
+	at fr.hyriode.bedwars.host.category.map.MapHostCategory.<init>(MapHostCategory.java:15) ~[?:?]
+	at fr.hyriode.bedwars.host.category.MenuHostCategory.<init>(MenuHostCategory.java:22) ~[?:?]
+	at fr.hyriode.bedwars.host.BWHostManager.attach(BWHostManager.java:8) ~[?:?]
+	at fr.hyriode.bedwars.HyriBedWars.onEnable(HyriBedWars.java:80) ~[?:?]
+	at org.bukkit.plugin.java.JavaPlugin.setEnabled(JavaPlugin.java:321) ~[spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.plugin.java.JavaPluginLoader.enablePlugin(JavaPluginLoader.java:340) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.plugin.SimplePluginManager.enablePlugin(SimplePluginManager.java:405) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.loadPlugin(CraftServer.java:357) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at org.bukkit.craftbukkit.v1_8_R3.CraftServer.enablePlugins(CraftServer.java:317) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.s(MinecraftServer.java:414) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.k(MinecraftServer.java:378) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.a(MinecraftServer.java:333) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at net.minecraft.server.v1_8_R3.DedicatedServer.init(DedicatedServer.java:263) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at net.minecraft.server.v1_8_R3.MinecraftServer.run(MinecraftServer.java:525) [spigot-1.8.8-SNAPSHOT-latest.jar:git-Spigot-db6de12-18fbb24]
+	at java.lang.Thread.run(Thread.java:750) [?:1.8.0_342]
+[18:50:35] [Server thread/INFO]: [HyriBasics] Enabling HyriBasics v1.0.0-xxxxxxx-X
+[18:50:35] [Server thread/INFO]: [HyriBasics]   _  _          _ ___          _       
+[18:50:35] [Server thread/INFO]: [HyriBasics]  | || |_  _ _ _(_) _ ) __ _ __(_)__ ___
+[18:50:35] [Server thread/INFO]: [HyriBasics]  | __ | || | '_| | _ \/ _` (_-< / _(_-<
+[18:50:35] [Server thread/INFO]: [HyriBasics]  |_||_|\_, |_| |_|___/\__,_/__/_\__/__/
+[18:50:35] [Server thread/INFO]: [HyriBasics]        |__/                            
+[18:50:35] [Server thread/INFO]: [HyriAPI] Loading en language from en.json...
+[18:50:35] [Server thread/INFO]: [HyriAPI] Loading fr language from fr.json...
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for items in 'fr.hyriode.basics' package | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for listeners in 'fr.hyriode.basics' package | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.tab.TabListener' listener | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Searching for commands in 'fr.hyriode.basics' package | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.message.PrivateMessageCommand' command with name 'msg' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.MapCommand' command with name 'map' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.RankCommand' command with name 'rank' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.party.PartyCommand' command with name 'party' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.RejoinCommand' command with name 'rejoin' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.announcement.AnnouncementCommand' command with name 'say' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.PingCommand' command with name 'ping' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.booster.TipCommand' command with name 'tip' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.game.GameCommand' command with name 'game' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.help.HelpCommand' command with name 'help' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.network.WhitelistCommand' command with name 'hyriwhitelist' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.ChatCommand' command with name 'chat' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.party.PartyChatCommand' command with name 'partychat' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.network.MaintenanceCommand' command with name 'maintenance' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.game.GamesCommand' command with name 'games' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.nickname.NicknameCommand' command with name 'nick' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.help.DiscordCommand' command with name 'discord' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.help.WebsiteCommand' command with name 'website' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.PluginsCommand' command with name 'plugins' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.message.PrivateMessageReplyCommand' command with name 'reply' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.help.StoreCommand' command with name 'store' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.VanishCommand' command with name 'vanish' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.command.network.LobbyCommand' command with name 'lobby' | HyriBasics
+[18:50:35] [Server thread/INFO]: [Hyrame] Registered 'fr.hyriode.basics.friend.FriendCommand' command with name 'friend' | HyriBasics
+[18:50:35] [Server thread/INFO]: [HyriAPI] Subscribing 'FriendReceiver' on friends
+[18:50:35] [Server thread/INFO]: [HyriAPI] Subscribing 'PartyReceiver' on parties
+[18:50:35] [Server thread/INFO]: [HyriBasics] Loading random nicknames...
+[18:50:35] [Server thread/INFO]: [HyriBasics] Loaded random nicknames (0).
+[18:50:35] [Server thread/INFO]: [HyriBasics] Loading random skins...
+[18:50:35] [Server thread/INFO]: [HyriBasics] Loaded random skins (0).
+[18:50:35] [Server thread/INFO]: Server permissions file permissions.yml is empty, ignoring it
+[18:50:35] [Server thread/INFO]: Done (3,955s)! For help, type "help" or "?"
+[18:50:35] [Server thread/INFO]: [ViaVersion] ViaVersion detected server version: 1.8.x (47)
+[18:50:35] [Server thread/WARN]: [ViaVersion] This version of Minecraft is extremely outdated and support for it has reached its end of life. You will still be able to run Via on this Minecraft version, but we are unlikely to provide any further fixes or help with problems specific to legacy Minecraft versions. Please consider updating to give your players a better experience and to avoid issues that have long been fixed.
+[18:50:35] [Server thread/WARN]: [ViaVersion] You are running an outdated Java version, please consider updating it to at least Java 17 (your version is 1.8.0_342). At some point in the future, ViaVersion will no longer be compatible with this version of Java.
+[18:50:35] [Server thread/INFO]: [ViaVersion] Finished mapping loading, shutting down loader executor!
+[18:50:36] [Server thread/WARN]: [ViaVersion] There is a newer plugin version available: 4.6.1, you're on: 4.3.1
+[18:52:05] [User Authenticator #1/INFO]: UUID of player Krinjer is cb1a7fdb-346e-460f-b4a2-2596f7b8468d
+[18:52:06] [Server thread/INFO]: Krinjer[/127.0.0.1:50614] logged in with entity id 0 at ([world]0.5, 170.0, 0.5)
+[18:52:10] [Server thread/INFO]: Player: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:10] [Server thread/INFO]: Player: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:12] [Server thread/INFO]: Krinjer issued server command: /game start
+[18:52:12] [Server thread/INFO]: [HyriAPI] State changed to PLAYING.
+[18:52:12] [Server thread/INFO]: [Hyrame] Removing waiting room...
+[18:52:12] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@1e5fe52c, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@68a43c75}
+[18:52:12] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@590e678d, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@699224f1}
+[18:52:12] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@1e5fe52c, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@68a43c75}
+[18:52:12] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@57e0d980, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@2edaaa3d}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7d5f0628, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@3e9c0eb9}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@19a03448, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@4d115b74}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7d5f0628, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@3e9c0eb9}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@487a7ab8, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@164d5cc8}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@6ada5987, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@55cfa88a}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@3c2cfd51, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@6bd7a58b}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@6ada5987, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@55cfa88a}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@5379cf17, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7b5ab60a}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@d640f46, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@22e0a6c7}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@78bcde2b, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@60bfa3fe}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@d640f46, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@22e0a6c7}
+[18:52:13] [Server thread/INFO]: {gold=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@4d0c8e90, iron=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@6a7ddf68}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@722e23c4}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@66fc80ff}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@46e25e85}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@67763a76}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7913ce31}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@38ffb332}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@33ec3c3e}
+[18:52:13] [Server thread/INFO]: {diamond=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7a49e556}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@5a5d4f12}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@7b037b96}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@2d5c80dd}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@50708ebb}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@3c726801}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@97fab42}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@19ebe9be}
+[18:52:13] [Server thread/INFO]: {emerald=fr.hyriode.bedwars.game.generator.BWGenerator$Tier$$Lambda$501/1240989509@3c51f6be}
+[18:52:29] [Server thread/INFO]: rightClick
+[18:52:29] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:29] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:29] [Server thread/INFO]: rightClick
+[18:52:29] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:29] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:29] [Server thread/INFO]: Krinjer issued server command: /gamemode 1
+[18:52:29] [Server thread/INFO]: [Krinjer: Set own game mode to Creative Mode]
+[18:52:35] [Server thread/INFO]: rightClick
+[18:52:35] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:35] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:35] [Server thread/INFO]: rightClick
+[18:52:35] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:35] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:39] [Server thread/INFO]: rightClick
+[18:52:39] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:39] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:39] [Server thread/INFO]: rightClick
+[18:52:39] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:39] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:56] [Server thread/INFO]: rightClick
+[18:52:56] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:56] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:52:56] [Server thread/INFO]: rightClick
+[18:52:56] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:52:56] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:53:20] [Server thread/INFO]: rightClick
+[18:53:20] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:53:20] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:53:20] [Server thread/INFO]: rightClick
+[18:53:20] [Server thread/INFO]: CraftPlayer{name=Krinjer}
+[18:53:20] [Server thread/INFO]: fr.hyriode.bedwars.game.player.BWGamePlayer@1272b771
+[18:53:37] [Server thread/INFO]: Krinjer lost connection: Disconnected
+[18:53:37] [Server thread/INFO]: [HyriAPI] State changed to SHUTDOWN.
+[18:53:40] [User Authenticator #2/INFO]: Disconnecting com.mojang.authlib.GameProfile@2c63bc96[id=cb1a7fdb-346e-460f-b4a2-2596f7b8468d,name=Krinjer,properties={textures=[com.mojang.authlib.properties.Property@79f55c98]},legacy=false] (/127.0.0.1:50659): Â§cImpossible de vous envoyer vers dev-server! (Partie en cours)
+[18:53:41] [Server thread/INFO]: com.mojang.authlib.GameProfile@2c63bc96[id=cb1a7fdb-346e-460f-b4a2-2596f7b8468d,name=Krinjer,properties={textures=[com.mojang.authlib.properties.Property@79f55c98]},legacy=false] (/127.0.0.1:50659) lost connection: Â§cImpossible de vous envoyer vers dev-server! (Partie en cours)
+[20:17:49] [Thread-3/INFO]: Stopping server

@@ -1,0 +1,46 @@
+name: (Prod) Upload To Azure Blob Storage
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
+        with:
+          java-version: '8'
+          distribution: 'adopt'
+
+      - name: Download Spigot Jar
+        uses: wei/curl@v1
+        with:
+          args: https://cdn.getbukkit.org/spigot/spigot-1.8.8-R0.1-SNAPSHOT-latest.jar --create-dirs -o libs/spigot.jar
+
+      - name: Edit libraries folder permissions
+        run: sudo chmod -R 777 libs/
+
+      - name: Add SHORT_SHA env property with commit short sha
+        run: echo "SHORT_SHA=`echo ${{ github.sha }} | cut -c1-8`" >> $GITHUB_ENV
+
+      - name: Build Jar
+        run: gradle build -PbuildNumber=${{ github.run_number }} -PcommitSha=${SHORT_SHA}
+        env:
+          GITHUB_USERNAME: ${{ github.actor }}
+          GITHUB_TOKEN: ${{ secrets.TOKEN }}
+
+      - name: Rename Jar
+        run: mv build/libs/PLUGIN-*.jar build/libs/PLUGIN.jar
+
+      - name: Upload Jar
+        uses: azure/CLI@v1
+        env:
+          CONNECTION_STRING: ${{ secrets.AZURE_CONNECTION_STRING }}
+          CONTAINER_NAME: ${{ secrets.CONTAINER }}
+        with:
+          inlineScript: az storage blob upload-batch --connection-string $CONNECTION_STRING --source build/libs --destination $CONTAINER_NAME --destination-path PLUGIN --overwrite

@@ -1,9 +1,11 @@
 devEnvironment: true
+hyggdrasil: false
 redis:
   hostname: 127.0.0.1
   port: 6379
   password: 'TestPass'
-hydrion:
-  enabled: false
-  url: https://hydrion.hyriode.fr/
-  apiKey: 92109827-fdcd-4b82-9d74-2d2050f13482
+mongodb:
+  username: 
+  password: 
+  hostname: 127.0.0.1
+  port: 27017
