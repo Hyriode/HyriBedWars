@@ -1,12 +1,14 @@
 package fr.hyriode.bedwars.api.player;
 
 import fr.hyriode.api.HyriAPI;
-import fr.hyriode.api.player.HyriPlayerData;
+import fr.hyriode.api.mongodb.MongoDocument;
 import fr.hyriode.api.player.IHyriPlayer;
+import fr.hyriode.api.player.model.IHyriPlayerData;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
+import org.bson.Document;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -16,16 +18,15 @@ import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-public class HyriBWPlayer extends HyriPlayerData {
+public class BWPlayerData implements IHyriPlayerData {
 
-    private Map<Integer, HotbarCategory> hotBar;
-    private Map<Integer, String> quickBuy;
-    private HyriGameStyle gameStyle;
+    private Map<Integer, HotbarCategory> hotBar = new HashMap<>();
+    private Map<Integer, String> quickBuy = new HashMap<>();
+    private HyriGameStyle gameStyle = HyriGameStyle.HYRIODE;
 
-    public HyriBWPlayer() {
+    public BWPlayerData() {
         this.resetQuickBuy();
         this.resetHotbar();
-        this.gameStyle = HyriGameStyle.HYRIODE;
     }
 
     public Map<Integer, String> getQuickBuy() {
@@ -105,7 +106,7 @@ public class HyriBWPlayer extends HyriPlayerData {
 
     public void update(UUID uuid){
         IHyriPlayer player = HyriAPI.get().getPlayerManager().getPlayer(uuid);
-        player.addData("bedwars", this);
+        player.getData().add("bedwars", this);
         player.update();
     }
 
@@ -134,5 +135,34 @@ public class HyriBWPlayer extends HyriPlayerData {
         this.putMaterialQuickBuy(++i, "bow-punch");
         this.putMaterialQuickBuy(++i, "potion-invisibility");
         this.putMaterialQuickBuy(++i, "golden-apple");
+    }
+
+    @Override
+    public void save(MongoDocument document) {
+        final Document hotBarDoc = new Document();
+        final Document quickBuyDoc = new Document();
+
+        this.hotBar.forEach((slot, category) -> {
+            hotBarDoc.append(slot.toString(), category.name());
+        });
+        document.append("hotbar", hotBarDoc);
+
+        this.quickBuy.forEach((slot, name) -> {
+            quickBuyDoc.append(slot.toString(), name);
+        });
+        document.append("quickbuy", quickBuyDoc);
+
+        document.append("gameplay", this.gameStyle.name());
+    }
+
+    @Override
+    public void load(MongoDocument document) {
+        document.get("hotbar", Document.class).forEach((key, value) -> {
+            this.hotBar.put(Integer.parseInt(key), HotbarCategory.valueOf(value.toString()));
+        });
+        document.get("quickbuy", Document.class).forEach((key, value) -> {
+            this.quickBuy.put(Integer.parseInt(key), value.toString());
+        });
+        this.gameStyle = HyriGameStyle.valueOf(document.getString("gameplay"));
     }
 }

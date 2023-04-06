@@ -25,7 +25,7 @@ public class BWHostUtils {
         return optionDisplay(name, displayName, description, new ItemStack(icon));
     }
 
-        public static HostDisplay optionDisplay(String name, String displayName, Material icon) {
+    public static HostDisplay optionDisplay(String name, String displayName, Material icon) {
         return optionDisplay(name, displayName, new ItemStack(icon));
     }
 

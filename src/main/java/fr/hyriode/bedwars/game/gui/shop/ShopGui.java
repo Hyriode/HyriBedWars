@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.gui.shop;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.gui.BWGui;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
@@ -39,7 +39,7 @@ public class ShopGui extends BWGui {
     @Override
     protected void initGui() {
         final BWGamePlayer player = this.getPlayer();
-        final HyriBWPlayer account = player.getAccount();
+        final BWPlayerData account = player.getAccount();
 
         final GuiPattern pattern = DefaultGuiPattern.valueOf(account.getGameStyle().name()).getGuiPattern(this);
         final GuiPattern.Size size = pattern.getSize();
@@ -70,12 +70,11 @@ public class ShopGui extends BWGui {
                                 return;
                             }
                             account.removeSlotQuickBuy(slot);
-                            player.update();
                             this.refresh();
                             return;
                         }
                         if(player.isFullInventory()){
-                            player.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.inventory.full").getValue(this.owner));
+                            player.getPlayer().sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.inventory.full").getValue(this.owner));
                         } else if (material.isArmor() && player.getArmor() != null
                                 && player.getArmor().getLevel() >= material.getAsArmor().getLevel()) {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.armor.lower").getValue(this.owner));
@@ -106,7 +105,6 @@ public class ShopGui extends BWGui {
 
         this.setItem(9, 5, BWGamePlayItem.getItemStack(player), event -> {
             player.getAccount().changeGamePlayStyle();
-            player.update();
             this.refresh();
         });
 

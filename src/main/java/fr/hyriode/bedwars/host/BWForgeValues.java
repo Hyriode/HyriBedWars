@@ -9,6 +9,7 @@ import fr.hyriode.api.HyriAPI;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class BWForgeValues {
 
@@ -22,39 +23,25 @@ public class BWForgeValues {
 
     public static void init() {
         System.out.println("init values");
-//        addSpawnLimit(GeneratorManager.FORGE, 0, IRON);
-//        addSpawnBetween(GeneratorManager.FORGE, 0, IRON);
-//        addSplitting(GeneratorManager.FORGE, 0, IRON);
-//        addSpawnLimit(GeneratorManager.FORGE, 0, GOLD);
-//        addSpawnBetween(GeneratorManager.FORGE, 0, GOLD);
-//        addSplitting(GeneratorManager.FORGE, 0, GOLD);
-//
-//        addSpawnLimit(GeneratorManager.FORGE, 1, IRON);
-//        addSpawnBetween(GeneratorManager.FORGE, 1, IRON);
-//        addSplitting(GeneratorManager.FORGE, 1, IRON);
-//        addSpawnLimit(GeneratorManager.FORGE, 1, GOLD);
-//        addSpawnBetween(GeneratorManager.FORGE, 1, GOLD);
-//        addSplitting(GeneratorManager.FORGE, 1, GOLD);
-//
-//        addSpawnLimit(GeneratorManager.FORGE, 2, IRON);
-//        addSpawnBetween(GeneratorManager.FORGE, 2, IRON);
-//        addSplitting(GeneratorManager.FORGE, 2, IRON);
-//        addSpawnLimit(GeneratorManager.FORGE, 2, GOLD);
-//        addSpawnBetween(GeneratorManager.FORGE, 2, GOLD);
-//        addSplitting(GeneratorManager.FORGE, 2, GOLD);
-//        addSpawnLimit(GeneratorManager.FORGE, 2, EMERALD);
-//        addSpawnBetween(GeneratorManager.FORGE, 2, EMERALD);
-//        addSplitting(GeneratorManager.FORGE, 2, EMERALD);
-//
-//        addSpawnLimit(GeneratorManager.FORGE, 3, IRON);
-//        addSpawnBetween(GeneratorManager.FORGE, 3, IRON);
-//        addSplitting(GeneratorManager.FORGE, 3, IRON);
-//        addSpawnLimit(GeneratorManager.FORGE, 3, GOLD);
-//        addSpawnBetween(GeneratorManager.FORGE, 3, GOLD);
-//        addSplitting(GeneratorManager.FORGE, 3, GOLD);
-//        addSpawnLimit(GeneratorManager.FORGE, 3, EMERALD);
-//        addSpawnBetween(GeneratorManager.FORGE, 3, EMERALD);
-//        addSplitting(GeneratorManager.FORGE, 3, EMERALD);
+        addDrop(GeneratorManager.FORGE, 0, IRON);
+        addDrop(GeneratorManager.FORGE, 0, GOLD);
+
+        addDrop(GeneratorManager.FORGE, 1, IRON);
+        addDrop(GeneratorManager.FORGE, 1, GOLD);
+
+        addDrop(GeneratorManager.FORGE, 2, IRON);
+        addDrop(GeneratorManager.FORGE, 2, GOLD);
+        addDrop(GeneratorManager.FORGE, 2, EMERALD);
+
+        addDrop(GeneratorManager.FORGE, 3, IRON);
+        addDrop(GeneratorManager.FORGE, 3, GOLD);
+        addDrop(GeneratorManager.FORGE, 3, EMERALD);
+    }
+
+    private static void addDrop(String generator, int tier, String drop) {
+        addSpawnLimit(generator, tier, drop);
+        addSpawnBetween(generator, tier, drop);
+        addSplitting(generator, tier, drop);
     }
 
     private static void addSpawnLimit(String generator, int tier, String drop) {
@@ -90,15 +77,9 @@ public class BWForgeValues {
                         && provider.getTier() == tier
                         && provider.getDrop().equals(drop))
                 .findFirst().orElse(null);
-        System.out.println("getSpawnLimit " + name + " " + tier + " " + drop + " " + generator);
-        System.out.println(SPAWN_LIMIT);
-        System.out.println(generator);
         if(generator != null) {
-            System.out.println(generator.getValue());
             try {
-                System.out.println(generator.getValue().getModifiers().get(0).getPriority());
-                System.out.println(generator.getValue().getDefaultValue());
-                return generator.getValue().get();
+//                return generator.getValue().get();
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -113,7 +94,7 @@ public class BWForgeValues {
                         && provider.getDrop().equals(drop))
                 .findFirst().orElse(null);
         if(generator != null) {
-            return generator.getValue().get();
+//            return generator.getValue().get();
         }
         return 0;
     }
@@ -125,7 +106,7 @@ public class BWForgeValues {
                         && provider.getDrop().equals(drop))
                 .findFirst().orElse(null);
         if(generator != null) {
-            return generator.getValue().get();
+//            return generator.getValue().get();
         }
         return false;
     }

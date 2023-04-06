@@ -11,7 +11,7 @@ public class MapHostCategory extends BWHostCategory {
     public MapHostCategory() {
         super(BWHostUtils.categoryDisplay("map-manager", Material.GRASS));
 
-        this.addOption(slot(4, 4), new BooleanOption(BWHostUtils.optionDisplay("break-world", Material.STONE), false));
+//        this.addOption(slot(4, 4), new BooleanOption(BWHostUtils.optionDisplay("break-world", Material.STONE), false));
         this.addOption(slot(6, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay("cooldown-fireball", Material.FIREBALL), 10, 0, 100, new int[] {1, 10, 20}));
     }
 }

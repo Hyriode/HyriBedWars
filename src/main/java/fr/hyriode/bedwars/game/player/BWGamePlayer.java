@@ -3,8 +3,7 @@ package fr.hyriode.bedwars.game.player;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.BWPlayerStatistics;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
-import fr.hyriode.bedwars.game.BWGame;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.game.player.cosmetic.npc.NPCSkin;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.player.scoreboard.BWPlayerScoreboard;
@@ -21,7 +20,6 @@ import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
 import fr.hyriode.bedwars.manager.pnj.PNJ;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
-import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
 import fr.hyriode.hyrame.game.HyriGameType;
 import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
@@ -44,7 +42,7 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     private HyriBedWars plugin;
     private BWPlayerScoreboard scoreboard;
-    private HyriBWPlayer account;
+    private BWPlayerData account;
     private NPCSkin npcSkin;
 
     private TeamTraker teamTracker;
@@ -58,17 +56,17 @@ public class BWGamePlayer extends HyriGamePlayer {
     private int deaths;
     private int bedsBroken;
 
-    public BWGamePlayer(HyriGame<?> game, Player player) {
-        super(game, player);
+    public BWGamePlayer(Player player) {
+        super(player);
         this.materialsUpgrade = new ArrayList<>();
         this.itemsPermanent = new ArrayList<>();
         this.countdowns = new ArrayList<>();
         this.npcSkin = new NPCSkin(new NPCSkin.Skin(PNJ.Type.BLAZE), new NPCSkin.Skin(PNJ.Type.VILLAGER));
 
-        this.account = this.asHyriPlayer().getData("bedwars", HyriBWPlayer.class);
+        this.account = this.asHyriPlayer().getData().read("bedwars", new BWPlayerData());
 
         if(this.account == null) {
-            this.account = new HyriBWPlayer();
+            this.account = new BWPlayerData();
         }
     }
 
@@ -84,7 +82,6 @@ public class BWGamePlayer extends HyriGamePlayer {
         statistics.addFinalKills(this.finalKills);
         statistics.addDeaths(this.deaths);
         statistics.addBedsBroken(this.bedsBroken);
-        statistics.addPlayTime(this.getPlayedTime());
         statistics.addPlayedGames(1);
         if(isWinner){
             statistics.addWins(1);
@@ -111,7 +108,7 @@ public class BWGamePlayer extends HyriGamePlayer {
             List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
 
             for (ItemPrice money : itemStacks) {
-                hitter.sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
+                hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
                 hitter.getPlayer().getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
             }
 
@@ -127,21 +124,15 @@ public class BWGamePlayer extends HyriGamePlayer {
         return !finalKill;
     }
 
-    public HyriBWPlayer getAccount() {
+    public BWPlayerData getAccount() {
         return this.account;
     }
 
-    private BWGame getGame(){
-        return (BWGame) this.game;
-    }
-
     public BWGameTeam getBWTeam(){
-        return (BWGameTeam) this.team;
+        return (BWGameTeam) this.getTeam();
     }
 
     public void respawn(boolean respawn) {
-        BWGameTeam team = this.getBWTeam();
-
         this.player.teleport(this.getBWTeam().getConfig().getRespawnLocation());
         this.player.setGameMode(GameMode.SURVIVAL);
         this.giveArmor();
@@ -366,7 +357,7 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public BWPlayerStatistics getStatistics() {
         IHyriPlayer player = this.asHyriPlayer();
-        BWPlayerStatistics playerStatistics = player.getStatistics("bedwars", BWPlayerStatistics.class);
+        BWPlayerStatistics playerStatistics = player.getStatistics().read("bedwars", new BWPlayerStatistics());
 
         if(playerStatistics == null) {
             playerStatistics = new BWPlayerStatistics();

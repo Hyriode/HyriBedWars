@@ -5,6 +5,7 @@ import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.host.BWForgeValues;
+import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class GeneratorManager {
@@ -27,9 +29,9 @@ public class GeneratorManager {
     public static final String GOLD = ItemMoney.GOLD.getName();
 
     public GeneratorManager(BWConfiguration config) {
-        boolean isHost = HyriAPI.get().getServer().isHost();
+        boolean isHost = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
 
-        this.add(FORGE, gameType -> {
+        this.add(FORGE, () -> {
             if(isHost) {
                 return Arrays.asList(
                         new BWGenerator.Tier(0, FORGE,
@@ -52,7 +54,7 @@ public class GeneratorManager {
             return config.getGeneratorsBase().stream().map(BWConfiguration.Generator::toTier).collect(Collectors.toList());
         });
 
-        this.add(DIAMOND, new ItemStack(Material.DIAMOND_BLOCK), gameType -> {
+        this.add(DIAMOND, new ItemStack(Material.DIAMOND_BLOCK), () -> {
             if(isHost) {
                 return Arrays.asList(
                         new BWGenerator.Tier(0, DIAMOND, this.getDrop(__ -> "I", DIAMOND, 0, ItemMoney.DIAMOND)),
@@ -63,7 +65,7 @@ public class GeneratorManager {
             return config.getGeneratorsDiamond().stream().map(BWConfiguration.Generator::toTier).collect(Collectors.toList());
         });
 
-        this.add(EMERALD, new ItemStack(Material.EMERALD_BLOCK), gameType -> {
+        this.add(EMERALD, new ItemStack(Material.EMERALD_BLOCK), () -> {
             if(isHost) {
                 return Arrays.asList(
                         new BWGenerator.Tier(0, EMERALD, this.getDrop(__ -> "I", EMERALD, 0, ItemMoney.EMERALD)),
@@ -75,11 +77,11 @@ public class GeneratorManager {
         });
     }
 
-    private void add(String name, ItemStack header, Function<BWGameType, List<BWGenerator.Tier>> tiers) {
+    private void add(String name, ItemStack header, Supplier<List<BWGenerator.Tier>> tiers) {
         this.generators.add(new BWGenerator(name, header, tiers));
     }
 
-    private void add(String name, Function<BWGameType, List<BWGenerator.Tier>> tiers) {
+    private void add(String name, Supplier<List<BWGenerator.Tier>> tiers) {
         this.add(name, null, tiers);
     }
 

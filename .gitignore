@@ -2,3 +2,5 @@
 build/
 .gradle/
 logs/
+build/libs/
+libs/

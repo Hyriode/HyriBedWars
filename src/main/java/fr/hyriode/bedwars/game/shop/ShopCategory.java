@@ -1,10 +1,12 @@
 package fr.hyriode.bedwars.game.shop;
 
 import fr.hyriode.api.HyriAPI;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.utils.ItemPotionBuilder;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
@@ -81,10 +83,9 @@ public enum ShopCategory {
     }
 
     public String getTitleLanguage(Player player){
-        HyriBWPlayer bwPlayer = HyriAPI.get().getPlayerManager().getPlayer(player.getUniqueId())
-                .getData("bedwars", HyriBWPlayer.class);
+        BWGamePlayer bwPlayer = IHyrame.get().getGame().getPlayer(player).cast();
         if(bwPlayer != null) {
-            return this.getTitleLanguage(bwPlayer.getGameStyle() == HyriGameStyle.HYRIODE, player);
+            return this.getTitleLanguage(bwPlayer.getAccount().getGameStyle() == HyriGameStyle.HYRIODE, player);
         }
         return this.getTitleLanguage(false, player);
     }

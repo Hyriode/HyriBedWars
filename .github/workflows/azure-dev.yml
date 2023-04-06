@@ -1,8 +1,8 @@
-name: (Prod) Upload To Azure Blob Storage
+name: (Dev) Upload To Azure Blob Storage
 on:
   push:
     branches:
-      - main
+      - develop
 
 jobs:
   upload:
@@ -36,6 +36,6 @@ jobs:
         uses: azure/CLI@v1
         env:
           CONNECTION_STRING: ${{ secrets.AZURE_CONNECTION_STRING }}
-          CONTAINER_NAME: ${{ secrets.CONTAINER }}
+          CONTAINER_NAME: ${{ secrets.DEV_CONTAINER }}
         with:
           inlineScript: az storage blob upload-batch --connection-string $CONNECTION_STRING --source build/libs --destination $CONTAINER_NAME --destination-path bedwars --overwrite

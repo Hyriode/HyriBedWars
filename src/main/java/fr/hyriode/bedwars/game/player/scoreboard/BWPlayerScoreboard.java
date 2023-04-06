@@ -1,20 +1,19 @@
 package fr.hyriode.bedwars.game.player.scoreboard;
 
+import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGame;
-import fr.hyriode.bedwars.game.BWNextEvent;
+import fr.hyriode.bedwars.game.BWEvent;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.game.scoreboard.HyriGameScoreboard;
-import fr.hyriode.hyrame.game.scoreboard.HyriScoreboardIpConsumer;
+import fr.hyriode.hyrame.game.scoreboard.IPLine;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.api.language.HyriLanguageMessage;
-import fr.hyriode.hyrame.scoreboard.HyriScoreboard;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -39,7 +38,7 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         this.setLine(i++, "§2");
         i = this.addTeamsLines(i);
 
-        this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new HyriScoreboardIpConsumer("hyriode.fr"), 2);
+        this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new IPLine("hyriode.fr"), 2);
     }
 
     private int addTeamsLines(int i) {
@@ -62,15 +61,18 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
     }
 
     private String getCurrentEvent(){
-        final BWNextEvent currentNextEvent = this.game.getCurrentEvent();
-        long timeBeforeEvent = currentNextEvent.getNextEvent() != null ? currentNextEvent.getNextEvent().getTimeBeforeEvent() : 0;
-        long timeSecond = timeBeforeEvent - this.game.getTask().getTime();
+        final BWEvent currentNextEvent = this.game.getNextEvent();
 
-        if (currentNextEvent.getNextEvent() != null)
-            return currentNextEvent.getNextEvent().get().getValue(this.player)
-                    + " " + this.getLinePrefix("in") + " " + StringUtils.formatTime(timeSecond);
-        else
+        if (currentNextEvent != null) {
+            long timeSecond = currentNextEvent.getTime() - this.game.getTask().getTime();
+            HyriLanguageMessage message = currentNextEvent.get() != null
+                    ? currentNextEvent.get() : new HyriLanguageMessage("").addValue(HyriLanguage.EN, " ");
+
+            return message.getValue(this.player) + " " + this.getLinePrefix("in") + " "
+                    + StringUtils.formatTime(timeSecond);
+        } else {
             return this.getLinePrefix("game-end");
+        }
     }
 
     private String getTeamLine(BWGameTeam team) {

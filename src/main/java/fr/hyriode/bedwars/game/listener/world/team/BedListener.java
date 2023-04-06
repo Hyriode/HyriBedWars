@@ -5,6 +5,7 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
@@ -21,18 +22,24 @@ public class BedListener extends HyriListener<HyriBedWars> {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onBedBreak(BlockBreakEvent event) {
-        BWGamePlayer player = this.plugin.getGame().getPlayer(event.getPlayer());
+        Player player = event.getPlayer();
 
         if(event.getBlock().getType() == Material.BED_BLOCK) {
+            if(player == null) {
+                event.setCancelled(true);
+                return;
+            }
+
+            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
             for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
                 if (team.getConfig().getBaseArea().isInArea(event.getBlock().getLocation())) {
-                    if(player.getBWTeam().equals(team)){
+                    if(bwPlayer.getBWTeam().equals(team)){
                         event.setCancelled(true);
                         player.sendMessage(ChatColor.RED + "Vous ne pouvez pas détruire votre lit !");
                         break;
                     }
                     event.setCancelled(false);
-                    team.breakBed(player);
+                    team.breakBed(bwPlayer);
                     break;
                 }
             }

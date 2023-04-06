@@ -2,6 +2,7 @@ package fr.hyriode.bedwars.game.listener.item.utility;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.host.BWMapValues;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.listener.HyriListener;
@@ -48,7 +49,7 @@ public class ItemFirballListener extends HyriListener<HyriBedWars> {
                 if (event.getPlayer().getGameMode() != GameMode.CREATIVE) {
                     InventoryUtils.removeInHand(event.getPlayer());
                 }
-                bwPlayer.addCountdown(BWGamePlayer.FIREBALL_COUNTDOWN, 10);
+                bwPlayer.addCountdown(BWGamePlayer.FIREBALL_COUNTDOWN, BWMapValues.COOLDOWN_FIREBALL.get());
             }
         }
     }

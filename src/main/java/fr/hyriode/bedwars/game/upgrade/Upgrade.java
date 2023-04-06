@@ -84,7 +84,7 @@ public class Upgrade {
             team.getPlayers().forEach(p -> {
                 Player pl = p.getPlayer();
                 SoundUtils.playBuy(pl);
-                p.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getValue(pl)
+                pl.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getValue(pl)
                         .replace("%item%", ChatColor.GOLD + this.getDisplayName(pl) + (tier.getDisplayName() != null ? " (" + tier.getDisplayName().getValue(pl) + ")" : ""))
                         .replace("%player%", pl.getName()));
             });

@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.waiting;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.utils.BWItemBuilder;
 import fr.hyriode.hyrame.IHyrame;
@@ -19,7 +19,7 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
     private final HyriBedWars plugin;
 
     public BWGamePlayItem(HyriBedWars plugin) {
-        super(plugin, "gamestylemode", () -> HyriLanguageMessage.get("item.gamestyle.title"), Material.REDSTONE_COMPARATOR);
+        super(plugin, "gamestylemode", () -> HyriLanguageMessage.get("item.gamestyle.title"), null, Material.REDSTONE_COMPARATOR);
         this.plugin = plugin;
     }
 
@@ -30,7 +30,7 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
 
     @Override
     public ItemStack onPreGive(IHyrame hyrame, Player player, int slot, ItemStack itemStack) {
-        HyriBWPlayer account = this.plugin.getGame().getPlayer(player).getAccount();
+        BWPlayerData account = this.plugin.getGame().getPlayer(player).getAccount();
 
         return new BWItemBuilder(itemStack)
                 .withDescription(HyriLanguageMessage.get("item.gamestyle.lore").getValue(player))
@@ -50,10 +50,10 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
     }
 
     private void action(IHyrame hyrame, Player player){
-        HyriBWPlayer account = this.plugin.getGame().getPlayer(player).getAccount();
+        System.out.println("Player: " + this.plugin.getGame().getPlayer(player));
+        BWPlayerData account = this.plugin.getGame().getPlayer(player).getAccount();
 
         account.changeGamePlayStyle();
-        account.update(player.getUniqueId());
 
         hyrame.getItemManager().giveItem(player, 4, BWGamePlayItem.class);
     }

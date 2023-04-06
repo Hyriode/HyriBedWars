@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.generator;
 
+import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.BWGame;
@@ -22,12 +23,12 @@ public class BWGenerator {
 
     private final String name;
     private final ItemStack header;
-    private final List<Tier> tiers;
+    private final Supplier<List<Tier>> tiers;
 
-    public BWGenerator(String name, ItemStack header, Function<BWGameType, List<Tier>> tiers) {
+    public BWGenerator(String name, ItemStack header, Supplier<List<Tier>> tiers) {
         this.name = name;
         this.header = header;
-        this.tiers = tiers.apply(((BWGame) HyrameLoader.getHyrame().getGameManager().getCurrentGame()).getType());
+        this.tiers = tiers;
     }
 
     public String getName() {
@@ -35,7 +36,7 @@ public class BWGenerator {
     }
 
     public List<Tier> getTiers() {
-        return tiers;
+        return tiers.get();
     }
 
     public Tier getTier(int tier) {

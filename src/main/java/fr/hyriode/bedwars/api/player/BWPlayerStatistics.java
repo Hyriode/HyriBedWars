@@ -1,19 +1,20 @@
 package fr.hyriode.bedwars.api.player;
 
-import fr.hyriode.api.player.HyriPlayerData;
+import fr.hyriode.api.mongodb.MongoDocument;
+import fr.hyriode.api.mongodb.MongoSerializable;
+import fr.hyriode.api.mongodb.MongoSerializer;
 import fr.hyriode.api.player.IHyriPlayer;
+import fr.hyriode.api.player.model.IHyriPlayerData;
+import fr.hyriode.api.player.model.IHyriStatistics;
 import fr.hyriode.bedwars.game.type.BWGameType;
+import org.bson.Document;
 
 import java.util.HashMap;
 import java.util.Map;
 
-public class BWPlayerStatistics extends HyriPlayerData {
+public class BWPlayerStatistics implements IHyriStatistics {
 
-    private final Map<BWGameType, Data> data;
-
-    public BWPlayerStatistics() {
-        this.data = new HashMap<>();
-    }
+    private final Map<BWGameType, Data> data = new HashMap<>();;
 
     public Data getData(BWGameType gameType) {
         Data data = this.data.get(gameType);
@@ -31,7 +32,7 @@ public class BWPlayerStatistics extends HyriPlayerData {
     }
 
     public void update(IHyriPlayer player){
-        player.addStatistics("bedwars", this);
+        player.getStatistics().add("bedwars", this);
         player.update();
     }
 
@@ -46,12 +47,30 @@ public class BWPlayerStatistics extends HyriPlayerData {
             data.addFinalKills(d.getFinalKills());
             data.addWins(d.getTotalWins());
             data.addPlayedGames(d.getPlayedGames());
-            data.addPlayTime(d.getPlayTime());
         });
         return data;
     }
 
-    public static class Data {
+    @Override
+    public void save(MongoDocument document) {
+        for (Map.Entry<BWGameType, Data> entry : this.data.entrySet()) {
+            document.append(entry.getKey().name(), MongoSerializer.serialize(entry.getValue()));
+        }
+    }
+
+    @Override
+    public void load(MongoDocument document) {
+        for (Map.Entry<String, Object> entry : document.entrySet()) {
+            final MongoDocument dataDocument = MongoDocument.of((Document) entry.getValue());
+            final Data data = new Data();
+
+            data.load(dataDocument);
+
+            this.data.put(BWGameType.valueOf(entry.getKey()), data);
+        }
+    }
+
+    public static class Data implements MongoSerializable {
         private long kills;
         private long deaths;
         private long finalKills;
@@ -60,7 +79,6 @@ public class BWPlayerStatistics extends HyriPlayerData {
         private long totalWins;
         private long bedsBroken;
         private long playedGames;
-        private long playTime;
 
         public Data(){
         }
@@ -87,10 +105,6 @@ public class BWPlayerStatistics extends HyriPlayerData {
 
         public long getCurrentWinStreak() {
             return currentWinStreak;
-        }
-
-        public long getPlayTime() {
-            return playTime;
         }
 
         public long getBedsBroken() {
@@ -129,10 +143,6 @@ public class BWPlayerStatistics extends HyriPlayerData {
             this.currentWinStreak = currentWinStreak;
         }
 
-        public void setPlayTime(long playTime) {
-            this.playTime = playTime;
-        }
-
         public void setBedsBroken(long bedsBroken) {
             this.bedsBroken = bedsBroken;
         }
@@ -165,10 +175,6 @@ public class BWPlayerStatistics extends HyriPlayerData {
             this.currentWinStreak += i;
         }
 
-        public void addPlayTime(long i) {
-            this.playTime += i;
-        }
-
         public void addBedsBroken(long i) {
             this.bedsBroken += i;
         }
@@ -179,6 +185,30 @@ public class BWPlayerStatistics extends HyriPlayerData {
 
         public void addWins(long i){
             this.totalWins += i;
+        }
+
+        @Override
+        public void save(MongoDocument document) {
+            document.append("kills", this.kills);
+            document.append("deaths", this.deaths);
+            document.append("finalKills", this.finalKills);
+            document.append("bestWinStreak", this.bestWinStreak);
+            document.append("currentWinStreak", this.currentWinStreak);
+            document.append("totalWins", this.totalWins);
+            document.append("bedsBroken", this.bedsBroken);
+            document.append("playedGames", this.playedGames);
+        }
+
+        @Override
+        public void load(MongoDocument document) {
+            this.kills = document.getLong("kills");
+            this.deaths = document.getLong("deaths");
+            this.finalKills = document.getLong("finalKills");
+            this.bestWinStreak = document.getLong("bestWinStreak");
+            this.currentWinStreak = document.getLong("currentWinStreak");
+            this.totalWins = document.getLong("totalWins");
+            this.bedsBroken = document.getLong("bedsBroken");
+            this.playedGames = document.getLong("playedGames");
         }
     }
 }

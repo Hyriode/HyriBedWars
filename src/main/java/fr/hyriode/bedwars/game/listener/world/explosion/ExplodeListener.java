@@ -12,6 +12,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
@@ -59,7 +60,9 @@ public class ExplodeListener extends HyriListener<HyriBedWars> {
             }
 
             for (Block block : event.blockList()) {
-                if(block.hasMetadata(MetadataReferences.PLACEBYPLAYER)){
+                BlockBreakEvent eventBlock = new BlockBreakEvent(block, null);
+                Bukkit.getPluginManager().callEvent(eventBlock);
+                if(!eventBlock.isCancelled()/*block.hasMetadata(MetadataReferences.PLACEBYPLAYER)*/){
                     block.setType(Material.AIR);
                 }
             }

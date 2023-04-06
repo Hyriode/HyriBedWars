@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game;
 
+import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.player.IHyriPlayer;
@@ -37,7 +38,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         normal.addData(new NPCData(this.getDisplayStatistics("totalDefeats"), account -> String.valueOf(this.getStatistics(account, gameType).getDefeats())));
         normal.addData(NPCData.voidData());
         normal.addData(new NPCData(this.getDisplayStatistics("games-played"), account -> String.valueOf(this.getStatistics(account, gameType).getPlayedGames())));
-        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, this.getStatistics(account, gameType).getPlayTime())));
+        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriAPI.get().getServer().getType()))));
 
         this.addNPCCategory(slot, normal);
     }
@@ -56,7 +57,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         normal.addData(new NPCData(this.getDisplayStatistics("totalDefeats"), account -> String.valueOf(this.getAllStatistics(account).getDefeats())));
         normal.addData(NPCData.voidData());
         normal.addData(new NPCData(this.getDisplayStatistics("games-played"), account -> String.valueOf(this.getAllStatistics(account).getPlayedGames())));
-        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, this.getAllStatistics(account).getPlayTime())));
+        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriAPI.get().getServer().getType()))));
 
         this.addNPCCategory(slot, normal);
     }

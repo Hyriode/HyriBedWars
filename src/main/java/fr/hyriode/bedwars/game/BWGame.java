@@ -8,10 +8,8 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.task.BWGameTask;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.BWGameTeamColor;
-import fr.hyriode.bedwars.game.test.BWGameInfo;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
-import fr.hyriode.bedwars.host.BWForgeValues;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGameState;
@@ -36,7 +34,7 @@ import java.util.stream.Collectors;
 public class BWGame extends HyriGame<BWGamePlayer> {
 
     private final HyriBedWars plugin;
-    private BWNextEvent currentEvent;
+    private BWEvent nextEvent;
 
     private final List<HyriGenerator> diamondGenerators;
     private final List<HyriGenerator> emeraldGenerators;
@@ -49,7 +47,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         super(plugin.getHyrame(),
                 plugin,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
-                        new BWGameInfo("bedwars", "BedWars")
+                        HyriAPI.get().getGameManager().createGameInfo("bedwars", "BedWars")
                         : HyriAPI.get().getGameManager().getGameInfo("bedwars"),
                 BWGamePlayer.class,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
@@ -59,7 +57,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.plugin = plugin;
         this.diamondGenerators = new ArrayList<>();
         this.emeraldGenerators = new ArrayList<>();
-        this.currentEvent = BWNextEvent.START;
+        this.nextEvent = BWEvent.DIAMOND_GENERATOR_TIER_II;
 
         this.description = HyriLanguageMessage.get("game.description");
 
@@ -69,7 +67,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     private void registerTeams() {
         for(int i = 0 ; i < ((BWGameType) this.type).getMaxTeams() ; ++i){
-            this.registerTeam(new BWGameTeam(BWGameTeamColor.values()[i], this.getType().getTeamsSize(), this.plugin, this));
+            this.registerTeam(new BWGameTeam(BWGameTeamColor.values()[i], this.getType().getTeamsSize(), this.plugin));
         }
     }
 
@@ -91,6 +89,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     @Override
     public void handleLogout(Player p) {
+        this.getPlayer(p).update();
         super.handleLogout(p);
         this.checkWin();
     }
@@ -106,14 +105,15 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 HyriLanguageMessage.get("message.game.end.3")
         );
 
+        final List<BWGamePlayer> topKillers = new ArrayList<>(this.players);
+
+        topKillers.sort((o1, o2) -> o2.getKills() - o1.getKills());
+
         this.players.forEach(gamePlayer -> {
             gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
 
             final Player player = gamePlayer.getPlayer();
             final List<String> killsLines = new ArrayList<>();
-            final List<BWGamePlayer> topKillers = new ArrayList<>(this.players);
-
-            topKillers.sort((o1, o2) -> o2.getKills() - o1.getKills());
 
             for (int i = 0; i <= 2; i++) {
                 final String line = end_kills.getValue(player)
@@ -131,8 +131,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final int kills = gamePlayer.getKills();
             final boolean isWinner = winner.contains(gamePlayer);
 
-            final long hyris = HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayedTime(), isWinner);
-            final long xp = HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayedTime(), isWinner);
+            final long hyris = HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner);
+            final double xp = HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner);
             final List<String> rewards = new ArrayList<>();
 
             IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
@@ -226,12 +226,12 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         return this.getBWTeams(team -> !team.isEliminated());
     }
 
-    public BWNextEvent getCurrentEvent() {
-        return currentEvent;
+    public BWEvent getNextEvent() {
+        return nextEvent;
     }
 
-    public void setCurrentEvent(BWNextEvent currentEvent) {
-        this.currentEvent = currentEvent;
+    public void setNextEvent(BWEvent nextEvent) {
+        this.nextEvent = nextEvent;
     }
 
     public List<HyriGenerator> getDiamondGenerators() {
@@ -256,5 +256,10 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             }
             this.win(teams.get(0));
         }
+    }
+
+    public BWEvent nextEvent() {
+        System.out.println(this.nextEvent.getId());
+        return this.nextEvent = this.nextEvent.getNextEvent();
     }
 }

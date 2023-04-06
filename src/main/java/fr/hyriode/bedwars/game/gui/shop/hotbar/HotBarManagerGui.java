@@ -1,8 +1,7 @@
 package fr.hyriode.bedwars.game.gui.shop.hotbar;
 
-import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.game.gui.BWGui;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
@@ -30,7 +29,7 @@ public class HotBarManagerGui extends BWGui {
     @Override
     protected void initGui() {
         BWGamePlayer player = this.getPlayer();
-        HyriBWPlayer bwAccount = player.getAccount();
+        BWPlayerData bwAccount = player.getAccount();
 
         this.setItem(0, this.getItemBack(),
                 event -> GuiManager.openShopGui(this.plugin, this.owner, ShopCategory.QUICK_BUY));
@@ -40,7 +39,6 @@ public class HotBarManagerGui extends BWGui {
                 .withLore(ChatColor.GRAY + HyriLanguageMessage.get("gui.reset.lore").getValue(this.owner))
                 .build(), event -> {
             bwAccount.resetHotbar();
-            player.update();
             this.refresh();
         });
 
@@ -63,7 +61,6 @@ public class HotBarManagerGui extends BWGui {
                 } else {
                     bwAccount.removeMaterialHotBar(slot);
                 }
-                player.update();
                 this.refresh();
             });
         }

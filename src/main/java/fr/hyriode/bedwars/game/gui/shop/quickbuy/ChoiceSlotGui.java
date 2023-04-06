@@ -1,7 +1,7 @@
 package fr.hyriode.bedwars.game.gui.shop.quickbuy;
 
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.game.gui.BWGui;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
@@ -30,7 +30,7 @@ public class ChoiceSlotGui extends BWGui {
     @Override
     protected void initGui() {
         BWGamePlayer player = this.getPlayer();
-        HyriBWPlayer account = player.getAccount();
+        BWPlayerData account = player.getAccount();
         Map<Integer, MaterialShop> quickBuy = account.getQuickBuyShop();
 
         this.setItem(5, 1, this.getItemSlot());
@@ -50,7 +50,6 @@ public class ChoiceSlotGui extends BWGui {
                 this.setItem(2 + x, 3 + y, itemStack != null ? itemStack : new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14).build(),
                         event -> {
                             account.putMaterialQuickBuy(slot, materialShop.getName());
-                            player.update();
                             GuiManager.openShopGui(this.plugin, this.owner, ShopCategory.QUICK_BUY);
                         });
                 i++;

@@ -10,6 +10,7 @@ import fr.hyriode.hyrame.command.HyriCommandContext;
 import fr.hyriode.hyrame.listener.HyriListener;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerInteractEvent;
 
@@ -21,8 +22,9 @@ public class ChestListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onOpenChest(PlayerInteractEvent event) {
+        Player pl = event.getPlayer();
         if(event.getClickedBlock() != null) {
-            BWGamePlayer player = this.plugin.getGame().getPlayer(event.getPlayer());
+            BWGamePlayer player = this.plugin.getGame().getPlayer(pl);
 
             switch (event.getClickedBlock().getType()){
                 case ENDER_CHEST:
@@ -36,7 +38,7 @@ public class ChestListener extends HyriListener<HyriBedWars> {
                         if (team.equals(playerTeam) || team.isEliminated()) return;
 
                         if (team.getConfig().getBaseArea().isInArea(event.getPlayer().getLocation())) {
-                            player.sendMessage(ChatColor.RED + HyriLanguageMessage.get("chest.cant-open.team").getValue(player));
+                            pl.sendMessage(ChatColor.RED + HyriLanguageMessage.get("chest.cant-open.team").getValue(player));
                             event.setCancelled(true);
                         }
                     });

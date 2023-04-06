@@ -1,8 +1,7 @@
 package fr.hyriode.bedwars.game.player.hotbar;
 
 import fr.hyriode.api.language.HyriLanguageMessage;
-import fr.hyriode.api.player.IHyriPlayer;
-import fr.hyriode.bedwars.api.player.HyriBWPlayer;
+import fr.hyriode.bedwars.api.player.BWPlayerData;
 import fr.hyriode.bedwars.api.player.style.HyriGameStyle;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
@@ -90,7 +89,7 @@ public enum HotbarCategory {
     }
 
     public ItemStack getItemStack(BWGamePlayer player, boolean placed){
-        HyriBWPlayer hyriPlayer = player.getAccount();
+        BWPlayerData hyriPlayer = player.getAccount();
         ItemStack item = hyriPlayer.getGameStyle() == HyriGameStyle.HYPIXEL ? this.hypixel.clone() : this.hyriode.clone();
         List<String> lore = new ArrayList<>();
         if(placed) {

@@ -12,6 +12,8 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftPlayer;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class PNJ {
@@ -58,7 +60,7 @@ public class PNJ {
         return players;
     }
 
-    public PNJ spawn(){
+    public PNJ spawn(Player player){
         try {
             this.entity = this.classEntity.getConstructor(World.class).newInstance(((CraftWorld) IHyrame.WORLD.get()).getHandle());
         } catch (Exception e) {
@@ -77,23 +79,28 @@ public class PNJ {
         packets.add(new PacketPlayOutSpawnEntityLiving(this.entity));
         packets.add(new PacketPlayOutEntityHeadRotation(this.entity, (byte) (this.location.getYaw() * 256.0F / 360.0F)));
 
+        for (Packet<?> packet : packets) {
+            PacketUtil.sendPacket(player, packet);
+        }
+        this.hologram.addReceiver(player);
+
+        return this;
+    }
+
+    public List<Packet<?>> getDestroyPacket() {
+        return Collections.singletonList(new PacketPlayOutEntityDestroy(this.getId()));
+    }
+
+    public void spawn() {
         if(!visibleAll) {
             for (Player player : players) {
-                for (Packet<?> packet : packets) {
-                    PacketUtil.sendPacket(player, packet);
-                }
-                this.hologram.addReceiver(player);
+                spawn(player);
             }
         } else {
             for (Player player : Bukkit.getOnlinePlayers()) {
-                for (Packet<?> packet : packets) {
-                    PacketUtil.sendPacket(player, packet);
-                }
-                this.hologram.addReceiver(player);
+                spawn(player);
             }
         }
-
-        return this;
     }
 
     public EntityCreature getEntity() {
@@ -102,6 +109,10 @@ public class PNJ {
 
     public NPCInteractCallback getInteractCallback() {
         return this.callback;
+    }
+
+    public Hologram getHologram() {
+        return this.hologram;
     }
 
     public int getId() {

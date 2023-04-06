@@ -22,6 +22,7 @@ import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.npc.NPCManager;
+import fr.hyriode.hyrame.utils.BroadcastUtil;
 import fr.hyriode.hyrame.utils.block.Cuboid;
 import org.bukkit.*;
 import org.bukkit.entity.EnderDragon;
@@ -51,8 +52,8 @@ public class BWGameTeam extends HyriGameTeam {
     private final UpgradeTeam upgradeTeam;
     private final TrapTeam trapTeam;
 
-    public BWGameTeam(BWGameTeamColor team, int teamSize, HyriBedWars plugin, BWGame game) {
-        super(game, team.getName(), team.getDisplayName(), team.getColor(), teamSize);
+    public BWGameTeam(BWGameTeamColor team, int teamSize, HyriBedWars plugin) {
+        super(team.getName(), team.getDisplayName(), team.getColor(), teamSize);
         this.plugin = plugin;
         this.hasBed = true;
         this.config = this.plugin.getConfiguration().getTeam(this.getName());
@@ -120,16 +121,18 @@ public class BWGameTeam extends HyriGameTeam {
                         .setShowingToAll(false)
                         .addPlayer(pl)
                         .setInteractCallback((rightClick, p) -> {
-                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
-                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+                                GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
                         }));
             } else {
                 EntityInteractManager.createEntity(this.getConfig().getShopNPCLocation(), skinShop.getClassEntity(), BWNPCType.SHOP.getLore(pl))
                         .setVisibleAll(false)
                         .addPlayer(pl)
                         .setInteractCallback((rightClick, p) -> {
-                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
-                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+                                GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
                         }).spawn();
             }
             if(skinUpgrade == PNJ.Type.NPC){
@@ -139,15 +142,19 @@ public class BWGameTeam extends HyriGameTeam {
                         .setShowingToAll(false)
                         .addPlayer(pl)
                         .setInteractCallback((rightClick, p) -> {
-                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
-                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
+                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+                                GuiManager.openUpgradeGui(this.plugin, p);
                         }));
-            }else {
+            } else {
                 EntityInteractManager.createEntity(this.getConfig().getUpgradeNPCLocation(), skinUpgrade.getClassEntity(), BWNPCType.UPGRADE.getLore(pl))
                         .setVisibleAll(false)
                         .addPlayer(pl)
                         .setInteractCallback((rightClick, p) -> {
-                            BWGamePlayer bwPlayer = (BWGamePlayer) this.getPlayer(p.getUniqueId());
+                            System.out.println("rightClick");
+                            System.out.println(p);
+                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                            System.out.println(bwPlayer);
                             if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
                         }).spawn();
             }
@@ -166,7 +173,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public List<BWGamePlayer> getBWPlayers(){
-        return this.players.stream().map(player -> (BWGamePlayer) player).collect(Collectors.toList());
+        return this.players.values().stream().map(player -> (BWGamePlayer) player).collect(Collectors.toList());
     }
 
     public UpgradeTeam getUpgradeTeam() {
@@ -247,7 +254,7 @@ public class BWGameTeam extends HyriGameTeam {
                         .replace("%enemy%", enemy.apply(p))
                         : HyriLanguageMessage.get("bed.broken.subtitle").getValue(p)),
                 10, 40, 10);
-        this.plugin.getGame().sendMessageToAll(p -> breaker != null
+        BroadcastUtil.broadcast(p -> breaker != null
                 ? HyriLanguageMessage.get("bed.broken.message.player").getValue(p)
                 .replace("%team%", team.apply(p))
                 .replace("%enemy%", enemy.apply(p))
