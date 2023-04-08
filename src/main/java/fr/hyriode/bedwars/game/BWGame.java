@@ -100,8 +100,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void win(HyriGameTeam winner) {
         super.win(winner);
-        HyriLanguageMessage end_kills = HyriLanguageMessage.get("message.game.end.kills");
-        HyriLanguageMessage nobody = HyriLanguageMessage.get("message.game.end.nobody");
         List<HyriLanguageMessage> positions = Arrays.asList(
                 HyriLanguageMessage.get("message.game.end.1"),
                 HyriLanguageMessage.get("message.game.end.2"),
@@ -116,16 +114,19 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final List<String> killersLine = new ArrayList<>();
 
             for (int i = 0; i <= 2; i++) {
-                final String line = end_kills.getValue(player)
+                final String killerLine = HyriLanguageMessage.get("message.game.end.kills").getValue(player)
                         .replace("%position%", positions.get(i).getValue(player));
-                if(topKillers.size() > i){
-                    final BWGamePlayer endPlayer = topKillers.get(i);
-                    killersLine.add(line.replace("%player%", endPlayer.asHyriPlayer().getNameWithRank())
-                            .replace("%kills%", String.valueOf(endPlayer.getKills())));
+
+                if (topKillers.size() > i){
+                    final BWGamePlayer topKiller = topKillers.get(i);
+
+                    killersLine.add(killerLine.replace("%player%", topKiller.formatNameWithTeam())
+                            .replace("%kills%", String.valueOf(topKiller.getKills())));
                     continue;
                 }
-                killersLine.add(line.replace("%player%", nobody.getValue(player))
-                        .replace("%kills%", "0"));
+
+                killersLine.add(killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody")
+                        .getValue(player)).replace("%kills%", "0"));
             }
 
             return killersLine;
