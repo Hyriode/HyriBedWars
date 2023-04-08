@@ -229,5 +229,5 @@
   "gui.reset": "Reset",
   "gui.reset.lore": "Réinitialiser",
 
-  "message.game.end.kills": "%position% Killer §7- %player% §7- %kills%"
+  "message.game.end.kills": "%position% §7- %player% §7- %kills%"
 }
