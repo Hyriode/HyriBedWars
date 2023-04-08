@@ -84,6 +84,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void handleLogin(Player p) {
         super.handleLogin(p);
+        if(p.getName().toLowerCase().startsWith("krin")) {
+            p.sendMessage("Oui mec");
+        }
 
         this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
