@@ -92,8 +92,15 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     @Override
     public void handleLogout(Player p) {
-        this.getPlayer(p).update();
+        BWGamePlayer player = this.getPlayer(p);
+        player.update();
         super.handleLogout(p);
+
+        if(this.getState() == HyriGameState.PLAYING
+                && player.getBWTeam().hasBed() && player.getBWTeam().getOnlinePlayers().size() <= 1) {
+            player.getBWTeam().breakBedWithBlock();
+        }
+
         this.checkWin();
     }
 
