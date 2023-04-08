@@ -123,12 +123,12 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 if (topKillers.size() > i){
                     final BWGamePlayer topKiller = topKillers.get(i);
 
-                    killersLine.add(killerLine.replace("%player%", topKiller.formatNameWithTeam())
+                    killersLine.add("Tes: " + killerLine.replace("%player%", topKiller.formatNameWithTeam())
                             .replace("%kills%", String.valueOf(topKiller.getKills())));
                     continue;
                 }
 
-                killersLine.add(killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody")
+                killersLine.add("Test: " + killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody")
                         .getValue(player)).replace("%kills%", "0"));
             }
 
