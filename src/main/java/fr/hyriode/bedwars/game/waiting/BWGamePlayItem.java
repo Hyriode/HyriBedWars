@@ -50,7 +50,6 @@ public class BWGamePlayItem extends HyriItem<HyriBedWars> {
     }
 
     private void action(IHyrame hyrame, Player player){
-        System.out.println("Player: " + this.plugin.getGame().getPlayer(player));
         BWPlayerData account = this.plugin.getGame().getPlayer(player).getAccount();
 
         account.changeGamePlayStyle();

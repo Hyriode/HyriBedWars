@@ -88,8 +88,6 @@ public class BWGenerator {
         public Map<String, HyriGenerator> getGenerators(HyriBedWars plugin, Location loc) {
             Map<String, HyriGenerator> generators = new HashMap<>();
             BWGenerator originGenerator = this.generator.get();
-            System.out.println(this.drops);
-            System.out.println(originGenerator.getTier(this.getTier()).getDrops());
             this.drops.forEach((name, drop) -> {
                 Drop originDrop = drop.get();
                 HyriGenerator.Builder generator = new HyriGenerator.Builder(plugin, loc, originDrop.getTier())

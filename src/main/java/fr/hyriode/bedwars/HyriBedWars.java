@@ -67,7 +67,6 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration.getPoseidonTrio();
-            System.out.println(HyriAPI.GSON.toJson(this.configuration));
         } else {
             this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
@@ -77,8 +76,8 @@ public class HyriBedWars extends JavaPlugin {
         this.hyrame.getGameManager().registerGame(() -> this.game);
         this.initManager();
 
-        this.hostManager = new BWHostManager();
-        this.hostManager.attach();
+//        this.hostManager = new BWHostManager();
+//        this.hostManager.attach();
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
         System.out.println("Bedwars Ready");

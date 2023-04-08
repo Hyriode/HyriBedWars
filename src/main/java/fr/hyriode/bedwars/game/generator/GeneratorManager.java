@@ -86,7 +86,6 @@ public class GeneratorManager {
     }
 
     public BWGenerator.Tier.Drop getDrop(String generatorName, int tier, ItemMoney drop) {
-        System.out.println("Tah les fou " + generatorName + " " + tier + " " + drop);
         String dropName = drop.getName();
         return new BWGenerator.Tier.Drop(BWForgeValues.getSpawnLimit(generatorName, tier, dropName), BWForgeValues.getSpawnBetween(generatorName, tier, dropName), BWForgeValues.getSplitting(generatorName, tier, dropName), drop);
     }

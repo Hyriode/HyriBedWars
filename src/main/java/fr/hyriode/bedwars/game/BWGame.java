@@ -260,7 +260,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     public BWEvent nextEvent() {
-        System.out.println(this.nextEvent.getId());
         return this.nextEvent = this.nextEvent.getNextEvent();
     }
 }

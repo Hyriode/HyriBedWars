@@ -22,7 +22,6 @@ public class BWForgeValues {
     private static final List<GeneratorModifier<Boolean>> SPLITTING = new ArrayList<>();
 
     public static void init() {
-        System.out.println("init values");
         addDrop(GeneratorManager.FORGE, 0, IRON);
         addDrop(GeneratorManager.FORGE, 0, GOLD);
 
@@ -169,7 +168,6 @@ public class BWForgeValues {
             this.generator = generator;
             this.tier = tier;
             this.drop = drop;
-            System.out.println("VALUE: " + value);
             this.value = value;
         }
 
