@@ -84,8 +84,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void handleLogin(Player p) {
         super.handleLogin(p);
-        if(p.getName().toLowerCase().startsWith("krin")) {
-            p.sendMessage("Oui mec 1");
+        if(p.getName().toLowerCase().startsWith("krinjer")) {
+            p.sendMessage("Oui mec 2");
         }
 
         this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
@@ -123,12 +123,12 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 if (topKillers.size() > i){
                     final BWGamePlayer topKiller = topKillers.get(i);
 
-                    killersLine.add("Tes: " + killerLine.replace("%player%", topKiller.formatNameWithTeam())
+                    killersLine.add(killerLine.replace("%player%", topKiller.formatNameWithTeam())
                             .replace("%kills%", String.valueOf(topKiller.getKills())));
                     continue;
                 }
 
-                killersLine.add("Test: " + killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody")
+                killersLine.add(killerLine.replace("%player%", HyriLanguageMessage.get("message.game.end.nobody")
                         .getValue(player)).replace("%kills%", "0"));
             }
 
