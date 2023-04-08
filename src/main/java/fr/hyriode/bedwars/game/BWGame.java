@@ -96,6 +96,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         player.update();
         super.handleLogout(p);
 
+        System.out.println("Team bw: " + player.getBWTeam().getOnlinePlayers().size());
+
         if(this.getState() == HyriGameState.PLAYING
                 && player.getBWTeam().hasBed() && player.getBWTeam().getOnlinePlayers().size() <= 1) {
             player.getBWTeam().breakBedWithBlock();
