@@ -28,6 +28,8 @@ import org.bukkit.entity.Player;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
+import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
@@ -110,25 +112,37 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         topKillers.sort((o1, o2) -> o2.getKills() - o1.getKills());
 
-        this.players.forEach(gamePlayer -> {
-            gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
-
-            final Player player = gamePlayer.getPlayer();
-            final List<String> killsLines = new ArrayList<>();
+        final Function<Player, List<String>> killersLineProvider = player -> {
+            final List<String> killersLine = new ArrayList<>();
 
             for (int i = 0; i <= 2; i++) {
                 final String line = end_kills.getValue(player)
                         .replace("%position%", positions.get(i).getValue(player));
                 if(topKillers.size() > i){
                     final BWGamePlayer endPlayer = topKillers.get(i);
-                    killsLines.add(line.replace("%player%", endPlayer.asHyriPlayer().getNameWithRank())
+                    killersLine.add(line.replace("%player%", endPlayer.asHyriPlayer().getNameWithRank())
                             .replace("%kills%", String.valueOf(endPlayer.getKills())));
                     continue;
                 }
-                killsLines.add(line.replace("%player%", nobody.getValue(player))
+                killersLine.add(line.replace("%player%", nobody.getValue(player))
                         .replace("%kills%", "0"));
             }
 
+            return killersLine;
+        };
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            final BWGamePlayer gamePlayer = this.getPlayer(player);
+
+            if (gamePlayer == null) {
+                player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killersLineProvider.apply(player), null));
+            }
+        }
+
+        this.players.forEach(gamePlayer -> {
+            gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
+
+            final UUID playerId = gamePlayer.getUniqueId();
             final int kills = gamePlayer.getKills();
             final boolean isWinner = winner.contains(gamePlayer);
 
@@ -144,7 +158,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
             hyriPlayer.update();
 
-            player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killsLines, rewards.toString()));
+            if (gamePlayer.isOnline()) {
+                final Player player = gamePlayer.getPlayer();
+
+                player.spigot().sendMessage(HyriGameMessages.createWinMessage(this, player, winner, killersLineProvider.apply(player), rewards.toString()));
+            } else if (HyriAPI.get().getPlayerManager().isOnline(playerId)) {
+                HyriAPI.get().getPlayerManager().sendMessage(playerId, HyriGameMessages.createOfflineWinMessage(this, hyriPlayer, rewards.toString()));
+            }
         });
 
     }

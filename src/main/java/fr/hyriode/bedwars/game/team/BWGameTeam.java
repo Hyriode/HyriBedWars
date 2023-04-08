@@ -245,7 +245,9 @@ public class BWGameTeam extends HyriGameTeam {
         this.setHasBed(false);
 
         this.plugin.getGame().getPlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
-            p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
+            if(p != null) {
+                p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
+            }
         });
 
         this.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("bed.broken.title").getValue(p),
