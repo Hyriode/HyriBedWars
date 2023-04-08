@@ -60,6 +60,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.nextEvent = BWEvent.DIAMOND_GENERATOR_TIER_II;
 
         this.description = HyriLanguageMessage.get("game.description");
+        this.reconnectionTime = 120;
 
         this.waitingRoom = new BWWaitingRoom(this, this.plugin);
         this.waitingRoom.setup();

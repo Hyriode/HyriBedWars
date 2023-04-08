@@ -86,7 +86,7 @@ public class BWGameTeam extends HyriGameTeam {
 
     private void createScoreboard(BWGamePlayer player){
         Player p = player.getPlayer();
-        BWPlayerScoreboard scoreboard = new BWPlayerScoreboard(this.plugin, this.plugin.getGame(), p);
+        BWPlayerScoreboard scoreboard = new BWPlayerScoreboard(this.plugin, p);
 
         player.setScoreboard(scoreboard);
         scoreboard.show();
