@@ -87,7 +87,11 @@ public class GeneratorManager {
 
     public BWGenerator.Tier.Drop getDrop(String generatorName, int tier, ItemMoney drop) {
         String dropName = drop.getName();
-        return new BWGenerator.Tier.Drop(BWForgeValues.getSpawnLimit(generatorName, tier, dropName), BWForgeValues.getSpawnBetween(generatorName, tier, dropName), BWForgeValues.getSplitting(generatorName, tier, dropName), drop);
+        return new BWGenerator.Tier.Drop(
+                BWForgeValues.getSpawnLimit(generatorName, tier, dropName),
+                BWForgeValues.getSpawnBetween(generatorName, tier, dropName),
+                BWForgeValues.getSplitting(generatorName, tier, dropName),
+                drop);
     }
 
     public BWGenerator.Tier.Drop getDrop(Function<Player, String> name, String generatorName, int tier, ItemMoney drop) {

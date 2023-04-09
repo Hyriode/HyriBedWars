@@ -14,6 +14,7 @@ import java.util.function.Consumer;
 public enum BWEvent {
 
     DIAMOND_GENERATOR_TIER_II(0, "diamond.II", 360, plugin -> {
+        System.out.println("UPGRADE DIAMOND GENERATOR TIER II");
         plugin.getGame().getDiamondGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(1).getTierGenerator().get(0)));

@@ -78,7 +78,7 @@ public class BWForgeValues {
                 .findFirst().orElse(null);
         if(generator != null) {
             try {
-//                return generator.getValue().get();
+                return generator.getValue().get();
             }catch (Exception e) {
                 e.printStackTrace();
             }

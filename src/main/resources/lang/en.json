@@ -110,8 +110,8 @@
   "scoreboard.you.display": "&7(YOU)",
   "scoreboard.kills.display": "Kills:",
   "scoreboard.finalkills.display": "Final Kills:",
-  "scoreboard.bedsbroken.display": "Beds Broken:",
-  "scoreboard.in.display": "dans",
+  "scoreboard.bedsbroken.display": "Beds Destroyed:",
+  "scoreboard.in.display": "in",
   "scoreboard.game-end.display": "Game end",
 
   "npc.shop.name": "ITEM SHOP",
@@ -291,8 +291,8 @@
 
   "no-trap.title": "Trap #%number%:",
   "no-trap.word": "No trap!",
-  "no-trap.lore": "Le %word% ennemi qui vient\ndans votre base déclenchera ce\npiège!",
-  "no-trap.sub-lore": "Acheter un piège le stockera\nici. Son coût sera proportionnel\nau nombre de pièges stockés.",
+  "no-trap.lore": "The %word% ennemy who will\ncome to your base will\ntrigger the trap!",
+  "no-trap.sub-lore": "Buy a trap will store it\nthere. Its cost will be proportional\nto the number of stored traps.",
 
   "trap.title": "TRAP TRIGGERED!",
   "trap.subtitle": "Your %trap% has been triggered!",
@@ -301,13 +301,15 @@
 
   "trap.timer.magic-milk": "Magic Milk",
 
-  "first.word": "premier",
-  "second.word": "seconde",
-  "third.word": "troisième",
+  "first.word": "first",
+  "second.word": "second",
+  "third.word": "third",
 
-  "bed.broken.title": "Bed Broken!",
-  "bed.broken.subtitle": "Your bed is broken!",
-  "bed.broken.subtitle.player": "Your bed is broken by %enemy%!",
+  "bed.broken.title": "Bed Destroyed!",
+  "bed.broken.subtitle": "Your bed is destroyed!",
+  "bed.broken.subtitle.player": "Your bed was destroyed by %enemy%!",
+  "bed.broken.message": "\n§lBED DESTROYED >§7 The bed of %team% has been destroyed\n ",
+  "bed.broken.message.player": "\n§lBED DESTROYED >§7 The bed of %team% has been destroyed by %enemy%\n ",
   "chest.cant-open.team": "You can't open chests while the team is not eliminated!",
 
   "generator.diamond": "DIAMOND",
@@ -322,7 +324,7 @@
   "gui.reset": "Reset",
   "gui.reset.lore": "Reset",
 
-  "inventory.shop.quick-buy.choice-slot.title": "Choice Slot truc",
+  "inventory.shop.quick-buy.choice-slot.title": "Choice Slot",
 
   "message.game.end.kills": "%position% §7- %player% §7- %kills%",
   "message.game.end.1": "§e1st",

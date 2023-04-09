@@ -179,6 +179,7 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public void applySharpness(){
+        System.out.println("apply sharpness " + this.plugin);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
 

@@ -85,9 +85,11 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     public void handleLogin(Player p) {
         super.handleLogin(p);
 
-        this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
+        if(this.getState() == HyriGameState.WAITING) {
+            this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
-        this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
+            this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
+        }
     }
 
     @Override

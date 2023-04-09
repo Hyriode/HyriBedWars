@@ -19,6 +19,14 @@ public class TestCommand extends HyriCommand<HyriBedWars> {
     @Override
     public void handle(HyriCommandContext ctx) {
 
+        this.handleArgument(ctx, "currentevent", output -> {
+            ctx.getSender().sendMessage("currentevent: " + this.plugin.getGame().getNextEvent().name());
+        });
+
+        this.handleArgument(ctx, "currentstate", output -> {
+            ctx.getSender().sendMessage("currentstate: " + this.plugin.getGame().getState().name());
+        });
+
         this.handleArgument(ctx, "spawnBetween " + HyriCommandCheck.INPUT, output -> {
             String[] args = output.get(String.class).split("-");
             String name = args[0];
