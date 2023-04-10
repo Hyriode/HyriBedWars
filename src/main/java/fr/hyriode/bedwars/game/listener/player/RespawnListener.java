@@ -25,6 +25,10 @@ public class RespawnListener extends HyriListener<HyriBedWars> {
         if(!(event.getDamager() instanceof Player)) return;
         BWGamePlayer victim = this.plugin.getGame().getPlayer((Player) event.getEntity());
         BWGamePlayer attacker = this.plugin.getGame().getPlayer((Player) event.getDamager());
+        if(attacker == null || victim == null) {
+            event.setCancelled(true);
+            return;
+        }
 
         if(attacker.hasCountdown(BWGamePlayer.RESPAWN_COUNTDOWN)){
             attacker.removeCountdown(BWGamePlayer.RESPAWN_COUNTDOWN);
@@ -40,7 +44,7 @@ public class RespawnListener extends HyriListener<HyriBedWars> {
         if(!(event.getEntity() instanceof Player)) return;
         BWGamePlayer player = this.plugin.getGame().getPlayer((Player) event.getEntity());
 
-        if(player.hasCountdown(BWGamePlayer.RESPAWN_COUNTDOWN)) {
+        if(player != null && player.hasCountdown(BWGamePlayer.RESPAWN_COUNTDOWN)) {
             event.setCancelled(true);
         }
     }
@@ -49,7 +53,7 @@ public class RespawnListener extends HyriListener<HyriBedWars> {
     public void onDeath(HyriGameDeathEvent event){
         BWGamePlayer player = (BWGamePlayer) event.getGamePlayer();
 
-        if(!player.getBWTeam().hasBed()){
+        if(player != null && !player.getBWTeam().hasBed()){
             event.addMessage(HyriLanguageMessage.get("death.final"));
         }
     }

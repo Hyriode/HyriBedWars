@@ -51,7 +51,7 @@ public class BWGameListener extends HyriListener<HyriBedWars> {
         final Player player = spectator.getPlayer();
 
         if (!(spectator instanceof HyriGamePlayer)) { // Player is an outside spectator
-            player.teleport(game.getWaitingRoom().getConfig().getSpawn().asBukkit());
+            player.teleport(this.plugin.getConfiguration().getWaitingRoom().getSpawn().asBukkit());
 
             new BWPlayerScoreboard(this.plugin, player).show();
         }

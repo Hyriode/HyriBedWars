@@ -25,10 +25,8 @@ import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Collectors;
@@ -53,7 +51,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                         : HyriAPI.get().getGameManager().getGameInfo("bedwars"),
                 BWGamePlayer.class,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
-                        BWGameType.TRIO
+                        BWGameType.DOUBLES
                         : HyriGameType.getFromData(BWGameType.values())
         );
         this.plugin = plugin;
@@ -85,11 +83,14 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     public void handleLogin(Player p) {
         super.handleLogin(p);
 
-        if(this.getState() == HyriGameState.WAITING) {
+        if(this.getState() == HyriGameState.WAITING || this.getState() == HyriGameState.READY) {
             this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
             this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
+            return;
         }
+
+        //TODO
     }
 
     @Override
@@ -234,7 +235,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private HyriDeathProtocol.Screen createDeathScreen() {
         return new HyriDeathProtocol.Screen(5, victim -> {
             final BWGamePlayer gamePlayer = this.getPlayer(victim);
-
+            System.out.println("gamePlayer = " + gamePlayer);
+            if(gamePlayer == null || gamePlayer.isSpectator())
+                return;
             victim.setGameMode(GameMode.SURVIVAL);
             victim.teleport(this.getPlayer(victim).getBWTeam().getConfig().getRespawnLocation());
             victim.playSound(victim.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
@@ -281,13 +284,26 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     public void checkWin() {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
         List<BWGameTeam> teams = this.getBWTeams().stream().filter(team -> !team.isEliminated()).collect(Collectors.toList());
-        if(teams.size() <= 1){
+
+        if(teams.size() <= 1 || this.nextEvent == null){
             if(teams.isEmpty()){
                 this.end();
                 return;
             }
+            if(this.nextEvent == null) {
+                BWGameTeam team = this.getTeamMostKills();
+                if(team == null) {
+                    team = teams.get(ThreadLocalRandom.current().nextInt(Math.max(teams.size() - 1, 0)));
+                }
+                this.win(team);
+                return;
+            }
             this.win(teams.get(0));
         }
+    }
+
+    private BWGameTeam getTeamMostKills(){
+        return this.getBWTeams().stream().max(Comparator.comparingInt(BWGameTeam::getTotalKills)).orElse(null);
     }
 
     public BWEvent nextEvent() {

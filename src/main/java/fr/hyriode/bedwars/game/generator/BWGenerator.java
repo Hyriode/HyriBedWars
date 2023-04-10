@@ -93,7 +93,7 @@ public class BWGenerator {
                 HyriGenerator.Builder generator = new HyriGenerator.Builder(plugin, loc, originDrop.getTier())
                         .withItem(originDrop.getDrop().getAsItemStack());
                 if(originGenerator.getHeader() != null) {
-                    generator.withDefaultHeader(originGenerator.getHeader(), (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriLanguageMessage.get("generator.diamond").getValue(player))
+                    generator.withDefaultHeader(originGenerator.getHeader(), (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriLanguageMessage.get("generator." + originGenerator.getName()).getValue(player))
                             .withDefaultAnimation();
                 }
                 generators.put(originDrop.getName(), generator.build());

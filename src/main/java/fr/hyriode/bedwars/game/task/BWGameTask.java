@@ -28,17 +28,16 @@ public class BWGameTask extends BukkitRunnable {
             return;
         }
 
-        BWEvent currentEvent = game.getNextEvent();
+        BWEvent currentNextEvent = game.getNextEvent();
 
-        if (currentEvent.getTime() < this.time) {
+        if (currentNextEvent.getTime() < this.time) {
             BWEvent nextEvent = game.nextEvent();
 
+            this.time = 0;
+            currentNextEvent.action(this.plugin);
             if(nextEvent == null) {
                 this.cancel();
-                return;
             }
-            this.time = 0;
-            nextEvent.action(this.plugin);
         }
     }
 

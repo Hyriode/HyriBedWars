@@ -76,7 +76,8 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
     }
 
     private String getTeamLine(BWGameTeam team) {
-        return team.getColor().getChatColor() + team.getDisplayName().getValue(player) + ChatColor.RESET + " » " + this.getStateAsSymbol(team) + (this.game.getPlayer(player.getUniqueId()).isInTeam(team) ? " " + this.getLinePrefix("you") : "");
+        BWGamePlayer bwPlayer = this.game.getPlayer(player.getUniqueId());
+        return team.getColor().getChatColor() + team.getDisplayName().getValue(player) + ChatColor.RESET + " » " + this.getStateAsSymbol(team) + (bwPlayer != null && bwPlayer.isInTeam(team) ? " " + this.getLinePrefix("you") : "");
     }
 
     public String getStateAsSymbol(BWGameTeam team) {

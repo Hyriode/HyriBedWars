@@ -126,7 +126,9 @@ public class HyriBedWars extends JavaPlugin {
     }
 
     public BWConfiguration getConfiguration() {
-        return configuration;
+        return HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST
+                ? HyriAPI.get().getServer().getConfig(BWConfiguration.class)
+                : configuration;
     }
 
     public static void log(Level level, String message) {

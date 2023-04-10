@@ -25,8 +25,8 @@ public class InvisibilityListener extends HyriListener<HyriBedWars> {
         if(from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()) return;
         Player player = event.getPlayer();
         BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
-        if(this.plugin.getGame().getState() != HyriGameState.PLAYING ||
-                bwPlayer != null && (bwPlayer.isSpectator() || bwPlayer.isDead() || !player.hasPotionEffect(PotionEffectType.INVISIBILITY))) return;
+        if(bwPlayer == null || this.plugin.getGame().getState() != HyriGameState.PLAYING ||
+                (bwPlayer.isSpectator() || bwPlayer.isDead() || !player.hasPotionEffect(PotionEffectType.INVISIBILITY))) return;
         if(!bwPlayer.hasCountdown("invisibility")) {
             bwPlayer.addCountdown("invisibility", 10);
             IHyrame.WORLD.get().playEffect(player.getLocation().add(0, 0.05, 0), Effect.FOOTSTEP, 2);

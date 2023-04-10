@@ -49,6 +49,8 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         Item itemPickup = event.getItem();
         ItemStack itemStackPickup = itemPickup.getItemStack().clone();
 
+        if(bwPlayer == null) return;
+
         //TODO ignore condition for host
 
         if(itemStackPickup.getType() == Material.WOOD_SWORD) {
@@ -109,6 +111,7 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
         Player player = (Player) event.getWhoClicked();
         BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
+        if(bwPlayer == null) return;
         ItemStack itemSword = bwPlayer.getSword();
         if(bwPlayer.isSpectator() || bwPlayer.isDead()) return;
 
@@ -148,7 +151,7 @@ public class ItemListener extends HyriListener<HyriBedWars> {
     public void onDrag(InventoryDragEvent event) {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
         BWGamePlayer bwPlayer = this.getGamePlayer((Player) event.getWhoClicked());
-        if(bwPlayer.isSpectator() || bwPlayer.isDead()) return;
+        if(bwPlayer == null || bwPlayer.isSpectator() || bwPlayer.isDead()) return;
         int slot = InventoryUtils.getFirstElementOfInt(event.getRawSlots());
 
         if(event.getInventory().getType() == InventoryType.CRAFTING) {
@@ -168,7 +171,7 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
         Player player = (Player) event.getPlayer();
         BWGamePlayer bwPlayer = this.getGamePlayer(player);
-        if(bwPlayer.isSpectator() || bwPlayer.isDead()) return;
+        if(bwPlayer == null || bwPlayer.isSpectator() || bwPlayer.isDead()) return;
 
         if(!containSword(player)){
             bwPlayer.giveSword();
@@ -189,6 +192,7 @@ public class ItemListener extends HyriListener<HyriBedWars> {
             if (itemMeta instanceof PotionMeta && ((PotionMeta) itemMeta).getCustomEffects().get(0).getType().getName().equals(PotionEffectType.INVISIBILITY.getName())) {
                 ITabListManager tabManager = plugin.getHyrame().getTabListManager();
                 BWGamePlayer bwPlayer = this.getGamePlayer(player);
+                if(bwPlayer == null) return;
                 tabManager.hideNameTag(player);
                 new BukkitRunnable(){
                     @Override

@@ -3,7 +3,6 @@ package fr.hyriode.bedwars.game.team;
 import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.config.BWConfiguration;
-import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.generator.BWGenerator;
 import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
@@ -14,7 +13,6 @@ import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
 import fr.hyriode.bedwars.manager.pnj.BWNPCType;
-import fr.hyriode.bedwars.manager.pnj.EntityInteractManager;
 import fr.hyriode.bedwars.manager.pnj.PNJ;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGamePlayer;
@@ -280,5 +278,13 @@ public class BWGameTeam extends HyriGameTeam {
     public void spawnEnderDragon() {
         EnderDragon enderDragon = IHyrame.WORLD.get().spawn(this.getConfig().getRespawnLocation(), EnderDragon.class);
         enderDragon.setCustomName(this.getColor().getChatColor() + this.getDisplayName().getValue(HyriLanguage.EN));
+    }
+
+    public int getTotalKills() {
+        int totalKills = 0;
+        for (BWGamePlayer team : this.getBWPlayers()) {
+            totalKills += team.getKills();
+        }
+        return totalKills;
     }
 }
