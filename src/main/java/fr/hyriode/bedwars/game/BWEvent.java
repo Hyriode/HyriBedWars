@@ -13,33 +13,33 @@ import java.util.function.Consumer;
 
 public enum BWEvent {
 
-    DIAMOND_GENERATOR_TIER_II(0, "diamond.II", 8/*360*/, plugin -> {
+    DIAMOND_GENERATOR_TIER_II(0, "diamond.II", 360, plugin -> {
         System.out.println("UPGRADE DIAMOND GENERATOR TIER II");
         plugin.getGame().getDiamondGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(1).getTierGenerator().get(0)));
     }),
-    DIAMOND_GENERATOR_TIER_III(1, "diamond.III", 8/*360*/, plugin -> {
+    DIAMOND_GENERATOR_TIER_III(1, "diamond.III", 360, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(2).getTierGenerator().get(0)));
     }),
-    EMERALD_GENERATOR_TIER_II(2, "emerald.II", 8/*360*/, plugin -> {
+    EMERALD_GENERATOR_TIER_II(2, "emerald.II", 360, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> {
                     generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                             .getTier(1).getTierGenerator().get(0));
                 });
     }),
-    EMERALD_GENERATOR_TIER_III(3, "emerald.III", 8/*360*/, plugin -> {
+    EMERALD_GENERATOR_TIER_III(3, "emerald.III", 360, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                         .getTier(2).getTierGenerator().get(0)));
     }),
-    BEDS_DESTROY(4, "beds-destroy", 8/*360*/, plugin -> {
+    BEDS_DESTROY(4, "beds-destroy", 360, plugin -> {
         plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBedWithBlock);
     }),
-    ENDER_DRAGON(5, "dragons-spawn", 8/*600*/, plugin -> {
+    ENDER_DRAGON(5, "dragons-spawn", 600, plugin -> {
         plugin.getGame().getBWTeams(team -> !team.isEliminated()).forEach(team -> {
             team.spawnEnderDragon();
             if(team.getUpgradeTeam().hasUpgrade(UpgradeManager.DRAGON_BUFF)){
@@ -47,7 +47,7 @@ public enum BWEvent {
             }
         });
     }),
-    GAME_END(6, "game-end", 8/*600*/, plugin -> plugin.getGame().checkWin()),
+    GAME_END(6, "game-end", 600, plugin -> plugin.getGame().checkWin()),
     ;
 
     private final int id;

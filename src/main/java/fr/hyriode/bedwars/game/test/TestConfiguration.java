@@ -23,7 +23,6 @@ public class TestConfiguration {
                 new AreaWrapper(
                         new LocationWrapper(-89, 145, 89),
                         new LocationWrapper(89, 43, -89)),
-
                 new ArrayList<>(), // Protect Areas
                 Arrays.asList(
                         new BWConfiguration.Generator("diamond", 0, new BWConfiguration.Generator.Drop("I", 8, 30*20, false, ItemMoney.DIAMOND.name())),
