@@ -11,6 +11,7 @@ import fr.hyriode.bedwars.game.team.BWGameTeamColor;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
 import fr.hyriode.bedwars.utils.MetadataReferences;
+import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.game.HyriGame;
 import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.HyriGameType;
@@ -151,14 +152,17 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         }
 
         this.players.forEach(gamePlayer -> {
-            gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
-
+            final boolean host = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
             final UUID playerId = gamePlayer.getUniqueId();
             final int kills = gamePlayer.getKills();
             final boolean isWinner = winner.contains(gamePlayer);
 
-            final long hyris = HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner);
-            final double xp = HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner);
+            if (!host){
+                gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
+            }
+
+            final long hyris = host ? 0 : HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner);
+            final double xp = host ? 0 : HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner);
             final StringBuilder rewards = new StringBuilder();
 
             IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();

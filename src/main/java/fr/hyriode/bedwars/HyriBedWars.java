@@ -3,7 +3,6 @@ package fr.hyriode.bedwars;
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.host.HostData;
 import fr.hyriode.api.host.HostType;
-import fr.hyriode.api.server.IHyriServer;
 import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.entity.EntityManager;
@@ -11,9 +10,8 @@ import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.shop.ShopManager;
 import fr.hyriode.bedwars.game.test.TestConfiguration;
 import fr.hyriode.bedwars.game.trap.TrapManager;
-import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
-import fr.hyriode.bedwars.host.BWHostManager;
+import fr.hyriode.bedwars.host.category.MenuHostCategory;
 import fr.hyriode.bedwars.manager.pnj.EntityInteractManager;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.HyrameLoader;
@@ -43,7 +41,6 @@ public class HyriBedWars extends JavaPlugin {
     private static EntityManager entityManager;
     private static TrapManager trapManager;
     private static GeneratorManager generatorManager;
-    private BWHostManager hostManager;
 
     @Override
     public void onEnable() {
@@ -67,7 +64,7 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration.getPoseidonTrio();
-            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"), "HostCool"));
+            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
         } else {
             this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
@@ -76,8 +73,9 @@ public class HyriBedWars extends JavaPlugin {
         this.hyrame.getGameManager().registerGame(() -> this.game);
         this.initManager();
 
-        this.hostManager = new BWHostManager();
-        this.hostManager.attach();
+        if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {
+            HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuHostCategory());
+        }
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
         System.out.println("Bedwars Ready");
