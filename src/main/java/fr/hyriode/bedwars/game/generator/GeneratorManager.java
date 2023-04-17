@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.generator;
 
 import fr.hyriode.api.HyriAPI;
+import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.type.BWGameType;
@@ -21,15 +22,16 @@ import java.util.stream.Collectors;
 public class GeneratorManager {
 
     private final List<BWGenerator> generators = new ArrayList<>();
+    private final BWGameType gameType;
 
     public static final String FORGE = "forge";
     public static final String DIAMOND = "diamond";
     public static final String EMERALD = "emerald";
-    public static final String IRON = ItemMoney.IRON.getName();
-    public static final String GOLD = ItemMoney.GOLD.getName();
 
-    public GeneratorManager(BWConfiguration config) {
+    public GeneratorManager(HyriBedWars plugin) {
+        BWConfiguration config = plugin.getConfiguration();
         boolean isHost = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
+        this.gameType = plugin.getGame().getType();
 
         this.add(FORGE, () -> {
             if(isHost) {
@@ -51,30 +53,41 @@ public class GeneratorManager {
                         )
                 );
             }
-            return config.getGeneratorsBase().stream().map(BWConfiguration.Generator::toTier).collect(Collectors.toList());
+            return config.getGeneratorsBase().stream().map(generator -> this.getDrop(StandardGenerator.FORGE, generator)).collect(Collectors.toList());
         });
 
         this.add(DIAMOND, new ItemStack(Material.DIAMOND_BLOCK), () -> {
             if(isHost) {
                 return Arrays.asList(
                         new BWGenerator.Tier(0, DIAMOND, this.getDrop(__ -> "I", DIAMOND, 0, ItemMoney.DIAMOND)),
-                        new BWGenerator.Tier(1, DIAMOND, this.getDrop(__ -> "I", DIAMOND, 1, ItemMoney.DIAMOND)),
-                        new BWGenerator.Tier(2, DIAMOND, this.getDrop(__ -> "I", DIAMOND, 2, ItemMoney.DIAMOND))
+                        new BWGenerator.Tier(1, DIAMOND, this.getDrop(__ -> "II", DIAMOND, 1, ItemMoney.DIAMOND)),
+                        new BWGenerator.Tier(2, DIAMOND, this.getDrop(__ -> "III", DIAMOND, 2, ItemMoney.DIAMOND))
                 );
             }
-            return config.getGeneratorsDiamond().stream().map(BWConfiguration.Generator::toTier).collect(Collectors.toList());
+            return config.getGeneratorsDiamond().stream().map(generator -> this.getDrop(StandardGenerator.DIAMOND, generator)).collect(Collectors.toList());
         });
 
         this.add(EMERALD, new ItemStack(Material.EMERALD_BLOCK), () -> {
             if(isHost) {
                 return Arrays.asList(
                         new BWGenerator.Tier(0, EMERALD, this.getDrop(__ -> "I", EMERALD, 0, ItemMoney.EMERALD)),
-                        new BWGenerator.Tier(1, EMERALD, this.getDrop(__ -> "I", EMERALD, 1, ItemMoney.EMERALD)),
-                        new BWGenerator.Tier(2, EMERALD, this.getDrop(__ -> "I", EMERALD, 2, ItemMoney.EMERALD))
+                        new BWGenerator.Tier(1, EMERALD, this.getDrop(__ -> "II", EMERALD, 1, ItemMoney.EMERALD)),
+                        new BWGenerator.Tier(2, EMERALD, this.getDrop(__ -> "III", EMERALD, 2, ItemMoney.EMERALD))
                 );
             }
-            return config.getGeneratorsEmerald().stream().map(BWConfiguration.Generator::toTier).collect(Collectors.toList());
+            return config.getGeneratorsEmerald().stream().map(generator -> this.getDrop(StandardGenerator.EMERALD, generator)).collect(Collectors.toList());
         });
+    }
+
+    private BWGenerator.Tier getDrop(StandardGenerator standard, BWConfiguration.Generator generator) {
+        BWGenerator.Tier tier = standard.getTiers(this.gameType).get(generator.getTier());
+        System.out.println("TAH" + tier.getDrops().values().stream().map(Supplier::get).collect(Collectors.toList()));
+        return new BWGenerator.Tier(tier.getTier(), tier.getName(), generator.getDrops().stream().map(
+                d -> {
+                    BWGenerator.Tier.Drop drop = tier.getDrops().get(d.getItemName().toLowerCase()).get();
+                    return new BWGenerator.Tier.Drop(drop.getName(), drop.getSpawnLimit(), d.getSpawnBetween(), drop.isSplitting(), drop.getDrop());
+                }
+        ).collect(Collectors.toList()));
     }
 
     private void add(String name, ItemStack header, Supplier<List<BWGenerator.Tier>> tiers) {

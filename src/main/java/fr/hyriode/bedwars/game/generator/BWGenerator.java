@@ -1,12 +1,8 @@
 package fr.hyriode.bedwars.game.generator;
 
-import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
-import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
-import fr.hyriode.bedwars.game.type.BWGameType;
-import fr.hyriode.hyrame.HyrameLoader;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.ChatColor;
@@ -61,7 +57,7 @@ public class BWGenerator {
         public Tier(int tier, String name, List<Drop> drops) {
             this.tier = tier;
             this.name = name;
-            drops.forEach(drop -> this.drops.put(drop.getName(), () -> drop));
+            drops.forEach(drop -> this.drops.put(drop.getDropName(), () -> drop));
             this.generator = () -> HyriBedWars.getGeneratorManager().getGeneratorByName(this.name);
         }
 
@@ -96,13 +92,23 @@ public class BWGenerator {
                     generator.withDefaultHeader(originGenerator.getHeader(), (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriLanguageMessage.get("generator." + originGenerator.getName()).getValue(player))
                             .withDefaultAnimation();
                 }
-                generators.put(originDrop.getName(), generator.build());
+                generators.put(originDrop.getDropName(), generator.build());
             });
             return generators;
         }
 
         public void removeDrop(String name) {
             this.drops.remove(name);
+        }
+
+        @Override
+        public String toString() {
+            return "Tier{" +
+                    "tier=" + tier +
+                    ", name='" + name + '\'' +
+                    ", generator=" + generator.get() +
+                    ", drops=" + drops +
+                    '}';
         }
 
         public static class Drop {
@@ -114,7 +120,7 @@ public class BWGenerator {
             private final ItemMoney drop;
 
             public Drop(int spawnLimit, long timeBetweenSpawns, boolean splitting, ItemMoney drop) {
-                this(null, spawnLimit, timeBetweenSpawns, splitting, drop);
+                this((__) -> "", spawnLimit, timeBetweenSpawns, splitting, drop);
             }
 
             public Drop(Function<Player, String> name, int spawnLimit, long timeBetweenSpawns, boolean splitting, ItemMoney drop) {
@@ -149,6 +155,10 @@ public class BWGenerator {
                 return splitting;
             }
 
+            public Function<Player, String> getName() {
+                return name;
+            }
+
             public IHyriGeneratorTier getTier() {
                 IHyriGeneratorTier.Builder builder = new IHyriGeneratorTier.Builder();
                 if(this.splitting) {
@@ -164,8 +174,19 @@ public class BWGenerator {
                 return this.drop;
             }
 
-            public String getName() {
+            public String getDropName() {
                 return this.drop.getName();
+            }
+
+            @Override
+            public String toString() {
+                return "Drop{" +
+                        "name=" + getDropName() +
+                        ", spawnLimit=" + spawnLimit +
+                        ", timeBetweenSpawns=" + timeBetweenSpawns +
+                        ", splitting=" + splitting +
+                        ", drop=" + drop +
+                        '}';
             }
         }
 

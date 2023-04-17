@@ -75,9 +75,9 @@ public class GeneratorHostCategory extends HostCategory {
         }
 
         private void initGui() {
-            this.addOption(InventoryUtils.getSlotByXY(4, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay(BWForgeValues.formatSpawnLimit(this.tier.getName(), this.tier.getTier(), this.drop.getName()), "spawn-limit-generator", Material.MONSTER_EGG), this.drop.getSpawnLimit(), 0, 64, new int[] {1, 5}));
-            this.addOption(InventoryUtils.getSlotByXY(5, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay(BWForgeValues.formatSpawnBetween(this.tier.getName(), this.tier.getTier(), this.drop.getName()), "spawn-between-generator", Material.GHAST_TEAR), (int) this.drop.getTimeBetweenSpawns(), 0, 36_000, new int[] {1, 5}));
-            this.addOption(InventoryUtils.getSlotByXY(6, 4), new BooleanOption(BWHostUtils.optionDisplay(BWForgeValues.formatSplitting(this.tier.getName(), this.tier.getTier(), this.drop.getName()), "splitting-generator", Material.DROPPER), this.drop.isSplitting()));
+            this.addOption(InventoryUtils.getSlotByXY(4, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay(BWForgeValues.formatSpawnLimit(this.tier.getName(), this.tier.getTier(), this.drop.getDropName()), "spawn-limit-generator", Material.MONSTER_EGG), this.drop.getSpawnLimit(), 0, 64, new int[] {1, 5}));
+            this.addOption(InventoryUtils.getSlotByXY(5, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay(BWForgeValues.formatSpawnBetween(this.tier.getName(), this.tier.getTier(), this.drop.getDropName()), "spawn-between-generator", Material.GHAST_TEAR), (int) this.drop.getTimeBetweenSpawns(), 0, 36_000, new int[] {1, 5}));
+            this.addOption(InventoryUtils.getSlotByXY(6, 4), new BooleanOption(BWHostUtils.optionDisplay(BWForgeValues.formatSplitting(this.tier.getName(), this.tier.getTier(), this.drop.getDropName()), "splitting-generator", Material.DROPPER), this.drop.isSplitting()));
         }
     }
 }

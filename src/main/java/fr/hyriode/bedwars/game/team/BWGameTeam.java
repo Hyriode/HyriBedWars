@@ -20,6 +20,7 @@ import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.npc.NPCManager;
+import fr.hyriode.hyrame.utils.Area;
 import fr.hyriode.hyrame.utils.BroadcastUtil;
 import fr.hyriode.hyrame.utils.block.Cuboid;
 import org.bukkit.*;
@@ -67,7 +68,7 @@ public class BWGameTeam extends HyriGameTeam {
     public void start() {
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
         BWGenerator.Tier tier = gm.getGeneratorByName(GeneratorManager.FORGE).getTier(0);
-        tier.getDrops().forEach((name, drop) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.config.getGeneratorLocation()).get(name)));
+        tier.getDrops().forEach((name, __) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.config.getGeneratorLocation()).get(name)));
 
         if(this.isEliminated()) {
             this.breakBedWithBlock();
@@ -216,7 +217,8 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public Cuboid getBase(){
-        return new Cuboid(this.config.getBaseAreaPos1(), this.config.getBaseAreaPos2());
+        Area area = this.config.getBaseArea();
+        return new Cuboid(area.getMin(), area.getMax());
     }
 
     public void breakBedWithBlock(){
@@ -270,7 +272,15 @@ public class BWGameTeam extends HyriGameTeam {
 
         this.forgeGenerator.forEach((name, generator) -> {
             BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
+//            BWGenerator.Tier newTier = bwGenerator.getTier(2);
+//            Function<Player, String> nameDrop = newTier.getDrops().get("emerald").get().getName();
+//            switch (tier + 1) {
+//                case 2:
+//                    this.forgeGenerator.put(nameDrop, bwGenerator.getTier(2).getGenerators(plugin, this.config.getGeneratorLocation()).get(nameDrop));
+//            }
+
             generator.upgrade(bwGenerator.getTier(tier + 1).getDrops().get(name).get().getTier());
+
             //TODO CA PETE LE CRANE CETTE CHOSE CAR JE SAIS PAS COMMENT FAIRE CREATE LE GENERATOR D'EMERALD
         });
     }

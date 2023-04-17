@@ -94,7 +94,7 @@ public class HyriBedWars extends JavaPlugin {
         entityManager = new EntityManager();
         trapManager = new TrapManager();
         BWForgeValues.init();
-        generatorManager = new GeneratorManager(this.configuration);
+        generatorManager = new GeneratorManager(this);
     }
 
     public IHyrame getHyrame() {

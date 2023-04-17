@@ -39,7 +39,7 @@ public class WorldListener extends HyriListener<HyriBedWars> {
             generators.addAll(config.getEmeraldGeneratorLocations());
 
             for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
-                if (team.getConfig().getBaseProtectArea().isInArea(loc)) {
+                if (team.getConfig().getBaseAreaProtection().isInArea(loc)) {
                     event.setCancelled(true);
                     break;
                 }
@@ -72,7 +72,7 @@ public class WorldListener extends HyriListener<HyriBedWars> {
         BWConfiguration config = this.plugin.getConfiguration();
 
         for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
-            if(team.getConfig().getBaseProtectArea().isInArea(loc)){
+            if(team.getConfig().getBaseAreaProtection().isInArea(loc)){
                 event.setCancelled(true);
                 return;
             }

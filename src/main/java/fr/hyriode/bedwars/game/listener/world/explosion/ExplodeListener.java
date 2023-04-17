@@ -71,7 +71,7 @@ public class ExplodeListener extends HyriListener<HyriBedWars> {
 
         BWConfiguration config = this.plugin.getConfiguration();
         List<Area> protectArea = new ArrayList<>();
-        protectArea.addAll(config.getTeams().stream().map(BWConfiguration.Team::getBaseProtectArea).collect(Collectors.toList()));
+        protectArea.addAll(config.getTeams().stream().map(BWConfiguration.Team::getBaseAreaProtection).collect(Collectors.toList()));
         protectArea.addAll(config.getProtectionArea());
 
         for (Block block : event.blockList()) {
