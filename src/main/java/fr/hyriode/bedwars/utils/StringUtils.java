@@ -2,6 +2,7 @@ package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -37,13 +38,13 @@ public class StringUtils {
         return min + ":" + (String.valueOf(sec).length() < 2 ? "0" + sec : sec);
     }
 
-    public static String getDisplayCostPrice(Player player, ItemPrice price) {
+    public static String getDisplayCostPrice(BWGameType gameType, Player player, ItemPrice price) {
         return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getValue(player)
-                + getDisplayPrice(player, price);
+                + getDisplayPrice(gameType, player, price);
     }
 
-    public static String getDisplayPrice(Player player, ItemPrice price) {
-        return price.getColor() + "" + price.getAmount() + " " + price.getName(player);
+    public static String getDisplayPrice(BWGameType gameType, Player player, ItemPrice price) {
+        return price.getColor() + "" + price.getAmount().apply(gameType) + " " + price.getName(player);
     }
 
     public static HyriLanguageMessage getWordNumber(int i) {

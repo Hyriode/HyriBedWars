@@ -67,17 +67,17 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration.getPoseidonTrio();
+            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"), "HostCool"));
         } else {
             this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
-//        Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
 
         this.game = new BWGame(this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
         this.initManager();
 
-//        this.hostManager = new BWHostManager();
-//        this.hostManager.attach();
+        this.hostManager = new BWHostManager();
+        this.hostManager.attach();
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
         System.out.println("Bedwars Ready");

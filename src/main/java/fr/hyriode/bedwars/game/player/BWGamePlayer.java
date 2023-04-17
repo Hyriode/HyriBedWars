@@ -110,7 +110,7 @@ public class BWGamePlayer extends HyriGamePlayer {
 
             for (ItemPrice money : itemStacks) {
                 hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount() + " " + money.getName(hitter));
-                hitter.getPlayer().getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
+                hitter.getPlayer().getInventory().addItem(money.getItemStacks(this.plugin.getGame().getType()).toArray(new ItemStack[0]));
             }
 
             hitter.addKills(1);

@@ -69,12 +69,12 @@ public enum StandardGenerator {
                     new BWGenerator.Tier(2, "forge", Arrays.asList(
                             new BWGenerator.Tier.Drop(48, 18, true, ItemMoney.IRON),
                             new BWGenerator.Tier.Drop(16, 40, true, ItemMoney.GOLD),
-                            new BWGenerator.Tier.Drop(8, 30, true, ItemMoney.EMERALD)
+                            new BWGenerator.Tier.Drop(8, 70*20, true, ItemMoney.EMERALD)
                     )),
                     new BWGenerator.Tier(3, "forge", Arrays.asList(
                             new BWGenerator.Tier.Drop(48, 15, true, ItemMoney.IRON),
                             new BWGenerator.Tier.Drop(16, 30, true, ItemMoney.GOLD),
-                            new BWGenerator.Tier.Drop(8, 30, true, ItemMoney.EMERALD)
+                            new BWGenerator.Tier.Drop(8, 60*20, true, ItemMoney.EMERALD)
                     ))
             ),
             Arrays.asList(
@@ -89,12 +89,12 @@ public enum StandardGenerator {
                     new BWGenerator.Tier(2, "forge", Arrays.asList(
                             new BWGenerator.Tier.Drop(48, 18, true, ItemMoney.IRON),
                             new BWGenerator.Tier.Drop(16, 40, true, ItemMoney.GOLD),
-                            new BWGenerator.Tier.Drop(8, 30, true, ItemMoney.EMERALD)
+                            new BWGenerator.Tier.Drop(8, 70*20, true, ItemMoney.EMERALD)
                     )),
                     new BWGenerator.Tier(3, "forge", Arrays.asList(
                             new BWGenerator.Tier.Drop(48, 15, true, ItemMoney.IRON),
                             new BWGenerator.Tier.Drop(16, 30, true, ItemMoney.GOLD),
-                            new BWGenerator.Tier.Drop(8, 30, true, ItemMoney.EMERALD)
+                            new BWGenerator.Tier.Drop(8, 60*20, true, ItemMoney.EMERALD)
                     ))
             )
     );

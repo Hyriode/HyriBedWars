@@ -3,6 +3,7 @@ package fr.hyriode.bedwars.game.shop;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.StringUtils;
@@ -104,12 +105,12 @@ public class ItemShop {
         return this.price.get();
     }
 
-    public ItemStack getForShop(BWGamePlayer bwPlayer, ShopCategory category){
+    public ItemStack getForShop(BWGameType gameType, BWGamePlayer bwPlayer, ShopCategory category){
         if(this.item == null || this.item.build().getType() == Material.AIR)
             return null;
         Player player = bwPlayer.getPlayer();
         MaterialShop material = this.getMaterialShop();
-        final long missingPrice = InventoryUtils.getHasPrice(player, this.getPrice());
+        final long missingPrice = InventoryUtils.getHasPrice(gameType, player, this.getPrice());
         final boolean canBuy = missingPrice <= 0;
         final HyriLanguageMessage description = this.getDescription();
         final boolean unlocked = bwPlayer.containsItemPermanent(material);
@@ -125,7 +126,7 @@ public class ItemShop {
             }
             lore.add(ChatColor.GRAY + "Tier: " + ChatColor.AQUA + StringUtils.getLevelLang(tier+ 1));
         }
-        lore.add(this.getDisplayPrice(player));
+        lore.add(this.getDisplayPrice(gameType, player));
         lore.add(" ");
 
         if(description != null) {
@@ -160,16 +161,15 @@ public class ItemShop {
         return HyriBedWars.getShopManager().getMaterialByItemShop(this);
     }
 
-    public boolean hasPrice(Player player) {
+    public boolean hasPrice(BWGameType gameType, Player player) {
         if(this.getPrice() == null){
             return false;
         }
-        return InventoryUtils.hasPrice(player, this.getPrice());
+        return InventoryUtils.hasPrice(gameType, player, this.getPrice());
     }
 
-
-    protected String getDisplayPrice(Player player){
-        return StringUtils.getDisplayCostPrice(player, this.getPrice());
+    protected String getDisplayPrice(BWGameType gameType, Player player){
+        return StringUtils.getDisplayCostPrice(gameType, player, this.getPrice());
     }
 
     public boolean isColorable() {

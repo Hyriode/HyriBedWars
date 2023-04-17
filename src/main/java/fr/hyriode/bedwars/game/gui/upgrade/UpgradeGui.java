@@ -8,6 +8,7 @@ import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
 import fr.hyriode.bedwars.game.trap.Trap;
 import fr.hyriode.bedwars.game.team.trap.TrapTeam;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.SoundUtils;
@@ -33,6 +34,7 @@ public class UpgradeGui extends BWGui {
     protected void initGui() {
         List<Upgrade> upgrades = HyriBedWars.getUpgradeManager().getUpgrades();
         BWGamePlayer player = this.getPlayer();
+        BWGameType gameType = this.plugin.getGame().getType();
 
         this.setHorizontalLine(0, 8, this.getItemDeco());
         this.setHorizontalLine(45, 53, this.getItemDeco());
@@ -48,20 +50,20 @@ public class UpgradeGui extends BWGui {
                             ? upgrade.getTier(currentTier)
                             : upgrade.getTier(Math.min(currentTier + 1, upgrade.getMaxTier()));
                     boolean unlocked = upgradeTeam.hasUpgrade(upgrade.getName()) && currentTier >= upgrade.getMaxTier();
-                    this.setItem(2 + x, 3 + y, upgrade.getIconForUpgrade(player.getPlayer(), upgradeTeam), event -> {
+                    this.setItem(2 + x, 3 + y, upgrade.getIconForUpgrade(gameType, player.getPlayer(), upgradeTeam), event -> {
                         if(!unlocked) {
                             ItemPrice price = nextTier.getPrice();
 
-                            if (price.hasPrice(this.owner)) {
+                            if (price.hasPrice(gameType, this.owner)) {
                                 upgrade.upgrade(player, nextTier);
-                                InventoryUtils.removeMoney(this.owner, price);
+                                InventoryUtils.removeMoney(gameType, this.owner, price);
                                 this.refresh();
                                 return;
                             }
 
                             SoundUtils.playCantBuy(player.getPlayer());
                             this.owner.sendMessage(net.md_5.bungee.api.ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
-                                    .replace("%name%", price.getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, price) + ""));
+                                    .replace("%name%", price.getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(gameType, this.owner, price) + ""));
                         }
                     });
                 }
@@ -75,10 +77,10 @@ public class UpgradeGui extends BWGui {
             for (int x = 0; x < 3; ++x) {
                 if (traps.size() > j) {
                     Trap trap = traps.get(j++);
-                    this.setItem(6 + x, 3 + y, trap.getIconForUpgrade(player.getPlayer(), trapTeam), event -> {
+                    this.setItem(6 + x, 3 + y, trap.getIconForUpgrade(gameType, player.getPlayer(), trapTeam), event -> {
                         ItemPrice price = trapTeam.getPrice();
-                        if(!trapTeam.isFull() && price.hasPrice(this.owner)) {
-                            InventoryUtils.removeMoney(this.owner, price);
+                        if(!trapTeam.isFull() && price.hasPrice(gameType, this.owner)) {
+                            InventoryUtils.removeMoney(gameType, this.owner, price);
                             trapTeam.addTrap(trap.getName());
                             this.refresh();
                         }
@@ -93,15 +95,15 @@ public class UpgradeGui extends BWGui {
         for (int x = 0; x < 3; ++x) {
             if (trapsTeam.size() > k) {
                 Trap trap = trapsTeam.get(k++);
-                this.setItem(4 + x, 6, this.getItemTrap(x, trap));
+                this.setItem(4 + x, 6, this.getItemTrap(gameType, x, trap));
                 continue;
             }
-            this.setItem(4 + x, 6, this.getItemTrap(x, null));
+            this.setItem(4 + x, 6, this.getItemTrap(gameType, x, null));
         }
 
     }
 
-    private ItemStack getItemTrap(int trapNumber, Trap trap){
+    private ItemStack getItemTrap(BWGameType gameType, int trapNumber, Trap trap){
         ItemBuilder itemBuilder;
         List<String> lore = new ArrayList<>(StringUtils.loreToList(HyriLanguageMessage.get("no-trap.lore").getValue(this.owner).replace("%word%", StringUtils.getWordNumber(trapNumber + 1).getValue(this.owner))));
         if(trap == null){
@@ -112,7 +114,7 @@ public class UpgradeGui extends BWGui {
             itemBuilder = new ItemBuilder(trap.getIcon());
         }
         lore.add(" ");
-        lore.add(ChatColor.GRAY + "Next Trap: " + this.getTrapTeam().getPrice().getDisplayPrice(this.owner));
+        lore.add(ChatColor.GRAY + "Next Trap: " + this.getTrapTeam().getPrice().getDisplayPrice(gameType, this.owner));
 
         return itemBuilder.withName(ChatColor.RED +
                         HyriLanguageMessage.get("no-trap.title").getValue(this.owner).replace("%number%", String.valueOf(trapNumber + 1))

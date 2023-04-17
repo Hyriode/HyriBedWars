@@ -1,6 +1,5 @@
 package fr.hyriode.bedwars.utils;
 
-import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.host.HostDisplay;
 import fr.hyriode.hyrame.item.ItemBuilder;

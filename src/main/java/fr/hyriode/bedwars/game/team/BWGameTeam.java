@@ -93,7 +93,6 @@ public class BWGameTeam extends HyriGameTeam {
         this.showHeart(p);
     }
 
-
     private void showHeart(Player player){
         Scoreboard s = player.getScoreboard();
         Objective h = s.getObjective("showheatlth") != null
@@ -165,7 +164,6 @@ public class BWGameTeam extends HyriGameTeam {
             generator.create();
         });
     }
-
 
     public BWConfiguration.Team getConfig() {
         return config;
@@ -270,20 +268,17 @@ public class BWGameTeam extends HyriGameTeam {
     public void upgradeGenerator(int tier) {
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
 
-        System.out.println("Tier : " + tier);
         BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
 
-        switch (tier) {
-            case 2:
-                HyriGenerator newGenerator = bwGenerator.getTier(2)
-                        .getGenerators(this.plugin, this.config.getGeneratorLocation()).get("emerald");
-                this.forgeGenerator.put("emerald", newGenerator);
-                newGenerator.create();
-                return;
+        if (tier == 2) {
+            HyriGenerator newGenerator = bwGenerator.getTier(2)
+                    .getGenerators(this.plugin, this.config.getGeneratorLocation()).get("emerald");
+            this.forgeGenerator.put("emerald", newGenerator);
+            newGenerator.create();
+            return;
         }
 
         this.forgeGenerator.forEach((name, generator) -> {
-            System.out.println("Name : " + name);
             generator.upgrade(bwGenerator.getTier(tier).getDrops().get(name).get().getTier());
         });
     }

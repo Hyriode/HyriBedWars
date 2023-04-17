@@ -53,4 +53,8 @@ public enum BWGameType implements HyriGameType {
     public int getTeamsSize() {
         return teamsSize;
     }
+
+    public boolean isForTrioSquad() {
+        return this == TRIO || this == SQUAD;
+    }
 }

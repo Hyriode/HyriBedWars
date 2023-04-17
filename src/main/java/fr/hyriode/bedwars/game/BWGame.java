@@ -51,7 +51,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                         : HyriAPI.get().getGameManager().getGameInfo("bedwars"),
                 BWGamePlayer.class,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
-                        BWGameType.DOUBLES
+                        BWGameType.TRIO
                         : HyriGameType.getFromData(BWGameType.values())
         );
         this.plugin = plugin;

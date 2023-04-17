@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.shop;
 
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import org.bukkit.ChatColor;
@@ -14,26 +15,31 @@ import java.util.function.Function;
 public class ItemPrice {
 
     private ItemMoney itemMoney;
-    private long amount;
+    private Function<BWGameType, Long> amount;
 
-    public ItemPrice(ItemMoney itemMoney, long amount){
+    public ItemPrice(ItemMoney itemMoney, Function<BWGameType, Long> amount){
         this.itemMoney = itemMoney;
         this.amount = amount;
     }
 
+    public ItemPrice(ItemMoney itemMoney, long amount){
+        this(itemMoney, (__) -> amount);
+    }
+
     public ItemPrice(ItemMoney itemMoney){
-        this(itemMoney, 1);
+        this(itemMoney, (__) -> 1L);
     }
 
     public ItemStack getItemStack() {
         return this.itemMoney.getAsItemStack();
     }
 
-    public List<ItemStack> getItemStacks() {
+    public List<ItemStack> getItemStacks(BWGameType gameType) {
+        long amount = this.amount.apply(gameType);
         List<ItemStack> itemStacks = new ArrayList<>();
         int maxStack = this.itemMoney.getAsItemStack().getMaxStackSize();
-        int quotient = (int) (this.amount / maxStack);
-        int rest = (int) (this.amount % maxStack);
+        int quotient = (int) (amount / maxStack);
+        int rest = (int) (amount % maxStack);
         for(int i = 0; i < quotient; i++){
             itemStacks.add(this.itemMoney.getAsItemStack(maxStack));
         }
@@ -55,11 +61,11 @@ public class ItemPrice {
         return this.itemMoney.getDisplayName().getValue(player);
     }
 
-    public long getAmount() {
+    public Function<BWGameType, Long> getAmount() {
         return amount;
     }
 
-    public void setAmount(long amount) {
+    public void setAmount(Function<BWGameType, Long> amount) {
         this.amount = amount;
     }
 
@@ -67,16 +73,12 @@ public class ItemPrice {
         return this.itemMoney.getColor();
     }
 
-    public long getHasPrice(Player player){
-        return InventoryUtils.getHasPrice(player, this);
+    public String getDisplayCostPrice(BWGameType gameType, Player player){
+        return StringUtils.getDisplayCostPrice(gameType, player, this);
     }
 
-    public String getDisplayCostPrice(Player player){
-        return StringUtils.getDisplayCostPrice(player, this);
-    }
-
-    public String getDisplayPrice(Player player){
-        return StringUtils.getDisplayPrice(player, this);
+    public String getDisplayPrice(BWGameType gameType, Player player){
+        return StringUtils.getDisplayPrice(gameType, player, this);
     }
 
     @Override
@@ -84,7 +86,7 @@ public class ItemPrice {
         return this.amount + " " + this.itemMoney.getAsItemStack();
     }
 
-    public boolean hasPrice(Player owner) {
-        return InventoryUtils.hasPrice(owner, this);
+    public boolean hasPrice(BWGameType gameType, Player owner) {
+        return InventoryUtils.hasPrice(gameType, owner, this);
     }
 }

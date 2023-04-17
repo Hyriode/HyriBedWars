@@ -3,6 +3,7 @@ package fr.hyriode.bedwars.game.trap;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.trap.TrapTeam;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import fr.hyriode.hyrame.item.ItemBuilder;
@@ -58,14 +59,14 @@ public class Trap {
         this.action.accept(enemy, team, this);
     }
 
-    public ItemStack getIconForUpgrade(Player player, TrapTeam trapTeam) {
+    public ItemStack getIconForUpgrade(BWGameType gameType, Player player, TrapTeam trapTeam) {
         List<String> lore = new ArrayList<>(StringUtils.loreToList(this.getDisplayLore().getValue(player)));
 
         lore.add(" ");
-        lore.add(StringUtils.getDisplayCostPrice(player, trapTeam.getPrice()));
+        lore.add(StringUtils.getDisplayCostPrice(gameType, player, trapTeam.getPrice()));
 
         return new ItemBuilder(this.icon.clone())
-                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player)) + this.getDisplayName().getValue(player))
+                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(gameType, player)) + this.getDisplayName().getValue(player))
                 .withLore(lore)
                 .build();
     }

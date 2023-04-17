@@ -10,6 +10,7 @@ import fr.hyriode.bedwars.game.player.traker.TeamTraker;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
@@ -31,6 +32,7 @@ public class TrackerGui extends BWGui {
     @Override
     protected void initGui() {
         BWGame game = this.plugin.getGame();
+        BWGameType gameType = game.getType();
         List<BWGameTeam> teams = game.getBWTeams(team -> !team.isEliminated()
                 && !team.equals(this.getPlayer().getBWTeam()));
         ItemPrice price = TrackerUtil.getPrice();
@@ -71,8 +73,8 @@ public class TrackerGui extends BWGui {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("tracker.already.have.team").getValue(this.owner));
                         } else if(hasBed){
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("tracker.team.have.bed").getValue(this.owner));
-                        } else if(InventoryUtils.hasPrice(this.owner, price)) {
-                            InventoryUtils.removeMoney(this.owner, price);
+                        } else if(InventoryUtils.hasPrice(gameType, this.owner, price)) {
+                            InventoryUtils.removeMoney(gameType, this.owner, price);
                             tracker.setTrackedTeam(team);
                             tracker.start();
                             SoundUtils.playBuy(this.owner);
@@ -82,7 +84,7 @@ public class TrackerGui extends BWGui {
                         }else {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
                                     .replace("%name%", price.getName(this.owner))
-                                    .replace("%amount%", InventoryUtils.getHasPrice(this.owner, price) + ""));
+                                    .replace("%amount%", InventoryUtils.getHasPrice(gameType, this.owner, price) + ""));
                         }
                         SoundUtils.playCantBuy(this.owner);
                     });

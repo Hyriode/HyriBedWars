@@ -4,6 +4,7 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
+import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.item.ItemBuilder;
@@ -102,11 +103,11 @@ public class Upgrade {
         return this.tiers.size() - 1;
     }
 
-    public ItemStack getIconForUpgrade(Player player, UpgradeTeam upgradeTeam){
+    public ItemStack getIconForUpgrade(BWGameType gameType, Player player, UpgradeTeam upgradeTeam){
         Tier nextTier = this.getTier(upgradeTeam.getNextTier(this.name));
         Tier currentTier = this.getTier(upgradeTeam.getTier(this.name));
         ItemPrice itemPrice = nextTier.getPrice();
-        boolean hasPrice = itemPrice.hasPrice(player);
+        boolean hasPrice = itemPrice.hasPrice(gameType, player);
         boolean unlocked = upgradeTeam.hasUpgrade(this.name) && upgradeTeam.getTier(this.name) >= this.getMaxTier();
 
         ItemBuilder itemBuilder = new ItemBuilder(nextTier.getIcon());
@@ -115,12 +116,12 @@ public class Upgrade {
         lore.add(" ");
 
         if(this.getMaxTier() == 0) {
-            lore.add(itemPrice.getDisplayCostPrice(player));
+            lore.add(itemPrice.getDisplayCostPrice(gameType, player));
         } else {
             this.tiers.forEach(tier -> {
                 boolean hasTier = upgradeTeam.hasUpgrade(this.name) && currentTier.getTier() >= tier.getTier();
                 lore.add((hasTier ? ChatColor.GREEN : ChatColor.GRAY) + "Tier " + (tier.getTier() + 1) + ": " +
-                        tier.getDisplayName().getValue(player) + ", " + tier.getPrice().getDisplayPrice(player));
+                        tier.getDisplayName().getValue(player) + ", " + tier.getPrice().getDisplayPrice(gameType, player));
             });
         }
         if(unlocked) {
