@@ -270,18 +270,21 @@ public class BWGameTeam extends HyriGameTeam {
     public void upgradeGenerator(int tier) {
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
 
+        System.out.println("Tier : " + tier);
+        BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
+
+        switch (tier) {
+            case 2:
+                HyriGenerator newGenerator = bwGenerator.getTier(2)
+                        .getGenerators(this.plugin, this.config.getGeneratorLocation()).get("emerald");
+                this.forgeGenerator.put("emerald", newGenerator);
+                newGenerator.create();
+                return;
+        }
+
         this.forgeGenerator.forEach((name, generator) -> {
-            BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
-//            BWGenerator.Tier newTier = bwGenerator.getTier(2);
-//            Function<Player, String> nameDrop = newTier.getDrops().get("emerald").get().getName();
-//            switch (tier + 1) {
-//                case 2:
-//                    this.forgeGenerator.put(nameDrop, bwGenerator.getTier(2).getGenerators(plugin, this.config.getGeneratorLocation()).get(nameDrop));
-//            }
-
-            generator.upgrade(bwGenerator.getTier(tier + 1).getDrops().get(name).get().getTier());
-
-            //TODO CA PETE LE CRANE CETTE CHOSE CAR JE SAIS PAS COMMENT FAIRE CREATE LE GENERATOR D'EMERALD
+            System.out.println("Name : " + name);
+            generator.upgrade(bwGenerator.getTier(tier).getDrops().get(name).get().getTier());
         });
     }
 

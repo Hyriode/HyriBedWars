@@ -218,7 +218,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.plugin.getConfiguration().getDiamondGeneratorLocations().forEach(loc -> {
             Map<String, HyriGenerator> i = gm.getGeneratorByName(GeneratorManager.DIAMOND).getTier(0)
                     .getGenerators(this.plugin, loc);
-            System.out.println(i);
             for (HyriGenerator generator : i.values()) {
                 generator.create();
                 this.diamondGenerators.add(generator);
@@ -237,7 +236,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private HyriDeathProtocol.Screen createDeathScreen() {
         return new HyriDeathProtocol.Screen(5, victim -> {
             final BWGamePlayer gamePlayer = this.getPlayer(victim);
-            System.out.println("gamePlayer = " + gamePlayer);
             if(gamePlayer == null || gamePlayer.isSpectator())
                 return;
             victim.setGameMode(GameMode.SURVIVAL);

@@ -81,7 +81,6 @@ public class GeneratorManager {
 
     private BWGenerator.Tier getDrop(StandardGenerator standard, BWConfiguration.Generator generator) {
         BWGenerator.Tier tier = standard.getTiers(this.gameType).get(generator.getTier());
-        System.out.println("TAH" + tier.getDrops().values().stream().map(Supplier::get).collect(Collectors.toList()));
         return new BWGenerator.Tier(tier.getTier(), tier.getName(), generator.getDrops().stream().map(
                 d -> {
                     BWGenerator.Tier.Drop drop = tier.getDrops().get(d.getItemName().toLowerCase()).get();

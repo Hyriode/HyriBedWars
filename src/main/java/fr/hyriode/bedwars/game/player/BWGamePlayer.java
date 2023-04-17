@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.player;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.BWPlayerStatistics;
@@ -179,7 +180,6 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public void applySharpness(){
-        System.out.println("apply sharpness " + this.plugin);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
 
@@ -202,7 +202,7 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public ItemStack getItemTracker(){
         return new ItemBuilder(Material.COMPASS)
-                .withName(ChatColor.GREEN + "Tracker")
+                .withName(ChatColor.GREEN + HyriLanguageMessage.get("tracker.inv.item.name").getValue(this))
                 .nbt()
                 .setBoolean(MetadataReferences.COMPASS, true)
                 .setBoolean(MetadataReferences.ISPERMANENT, true)

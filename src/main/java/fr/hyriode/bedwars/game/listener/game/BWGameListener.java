@@ -42,6 +42,7 @@ public class BWGameListener extends HyriListener<HyriBedWars> {
 
         this.plugin.getGame().getProtocolManager().getProtocol(HyriDeathProtocol.class)
                 .runDeath(HyriGameDeathEvent.Reason.VOID, player.getPlayer());
+        player.getScoreboard().show();
     }
 
     @HyriEventHandler

@@ -53,7 +53,9 @@ public class UpgradeManager {
             Player p = player.getPlayer();
             p.removePotionEffect(PotionEffectType.FAST_DIGGING);
             p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 999999, tier));
-        }, new Upgrade.Tier(0, new ItemBuilder(Material.DIAMOND_PICKAXE).withAllItemFlags().build(), new ItemPrice(ItemMoney.DIAMOND, 2)),
+                    System.out.println("Tier miner : " + tier);
+        },
+                new Upgrade.Tier(0, new ItemBuilder(Material.DIAMOND_PICKAXE).withAllItemFlags().build(), new ItemPrice(ItemMoney.DIAMOND, 2)),
                 new Upgrade.Tier(1, new ItemBuilder(Material.DIAMOND_PICKAXE, 2).withAllItemFlags().build(), new ItemPrice(ItemMoney.DIAMOND, 4)));
         this.add(FORGE, false, (player, tier) -> player.getBWTeam().upgradeGenerator(tier),
                 new Upgrade.Tier(0, new ItemBuilder(Material.FURNACE).build(), new ItemPrice(ItemMoney.DIAMOND, 2)),

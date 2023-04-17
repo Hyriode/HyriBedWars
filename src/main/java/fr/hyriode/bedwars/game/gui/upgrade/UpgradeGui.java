@@ -53,8 +53,8 @@ public class UpgradeGui extends BWGui {
                             ItemPrice price = nextTier.getPrice();
 
                             if (price.hasPrice(this.owner)) {
-                                InventoryUtils.removeMoney(this.owner, price);
                                 upgrade.upgrade(player, nextTier);
+                                InventoryUtils.removeMoney(this.owner, price);
                                 this.refresh();
                                 return;
                             }
