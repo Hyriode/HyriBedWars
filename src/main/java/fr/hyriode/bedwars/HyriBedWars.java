@@ -71,7 +71,6 @@ public class HyriBedWars extends JavaPlugin {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
 
-
         this.game = new BWGame(this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
         this.initManager();

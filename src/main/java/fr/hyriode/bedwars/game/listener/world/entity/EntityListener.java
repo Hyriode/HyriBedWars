@@ -14,7 +14,7 @@ public class EntityListener extends HyriListener<HyriBedWars> {
 
     @EventHandler(priority = EventPriority.HIGH)
     public void onSpawnCreature(CreatureSpawnEvent event){
-        if(event.getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
+        if(event.getSpawnReason() == CreatureSpawnEvent.SpawnReason.CUSTOM) {
             event.setCancelled(false);
         }
     }

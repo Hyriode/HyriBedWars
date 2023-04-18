@@ -1,6 +1,7 @@
 package fr.hyriode.bedwars.game.listener.player;
 
 import fr.hyriode.bedwars.HyriBedWars;
+import fr.hyriode.bedwars.game.BWGame;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.game.HyriGameState;
@@ -24,8 +25,10 @@ public class InvisibilityListener extends HyriListener<HyriBedWars> {
         Location to = event.getTo();
         if(from.getX() == to.getX() && from.getY() == to.getY() && from.getZ() == to.getZ()) return;
         Player player = event.getPlayer();
-        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
-        if(bwPlayer == null || this.plugin.getGame().getState() != HyriGameState.PLAYING ||
+        BWGame game = this.plugin.getGame();
+        if(game == null) return;
+        BWGamePlayer bwPlayer = game.getPlayer(player);
+        if(bwPlayer == null || game.getState() != HyriGameState.PLAYING ||
                 (bwPlayer.isSpectator() || bwPlayer.isDead() || !player.hasPotionEffect(PotionEffectType.INVISIBILITY))) return;
         if(!bwPlayer.hasCountdown("invisibility")) {
             bwPlayer.addCountdown("invisibility", 10);
