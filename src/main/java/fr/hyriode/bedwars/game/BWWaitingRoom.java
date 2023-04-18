@@ -19,7 +19,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
     public BWWaitingRoom(BWGame game, BWConfiguration configuration) {
         super(game,
                 Material.BED,
-                configuration.getWaitingRoom());
+                configuration::getWaitingRoom);
         int i = 0;
         for (BWGameType gameType : BWGameType.values()) {
             this.addStatistics(21 + i++, gameType);
