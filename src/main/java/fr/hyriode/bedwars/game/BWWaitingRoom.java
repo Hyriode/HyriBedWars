@@ -6,6 +6,7 @@ import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.BWPlayerStatistics;
+import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
@@ -15,8 +16,10 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
 public class BWWaitingRoom extends HyriWaitingRoom {
-    public BWWaitingRoom(BWGame game, HyriBedWars plugin) {
-        super(game, Material.BED, plugin.getConfiguration().getWaitingRoom());
+    public BWWaitingRoom(BWGame game, BWConfiguration configuration) {
+        super(game,
+                Material.BED,
+                configuration.getWaitingRoom());
         int i = 0;
         for (BWGameType gameType : BWGameType.values()) {
             this.addStatistics(21 + i++, gameType);
