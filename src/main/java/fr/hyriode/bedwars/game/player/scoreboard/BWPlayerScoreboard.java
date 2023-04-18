@@ -64,7 +64,8 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         final BWEvent currentNextEvent = this.game.getNextEvent();
 
         if (currentNextEvent != null) {
-            long timeSecond = currentNextEvent.getTime() - this.game.getTask().getTime();
+            int newTimeSecond = currentNextEvent.getTime().get();
+            long timeSecond = newTimeSecond - this.game.getTask().getTime();
             HyriLanguageMessage message = currentNextEvent.get() != null
                     ? currentNextEvent.get() : new HyriLanguageMessage("").addValue(HyriLanguage.EN, " ");
 

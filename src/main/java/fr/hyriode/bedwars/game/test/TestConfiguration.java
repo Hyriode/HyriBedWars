@@ -55,18 +55,24 @@ public class TestConfiguration {
                         ),
                         new BWConfiguration.Generator(1,
                                 Arrays.asList(
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 30),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 100)
+                                )
+                        ),
+                        new BWConfiguration.Generator(2,
+                                Arrays.asList(
                                         new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 23),
                                         new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 60)
                                 )
                         ),
-                        new BWConfiguration.Generator(2,
+                        new BWConfiguration.Generator(3,
                                 Arrays.asList(
                                         new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 18),
                                         new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 40),
                                         new BWConfiguration.Generator.Drop(ItemMoney.EMERALD.name(), 70*20)
                                 )
                         ),
-                        new BWConfiguration.Generator(3,
+                        new BWConfiguration.Generator(4,
                                 Arrays.asList(
                                         new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 15),
                                         new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 30),

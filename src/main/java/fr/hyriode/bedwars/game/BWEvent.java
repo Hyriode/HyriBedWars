@@ -5,40 +5,43 @@ import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
+import fr.hyriode.bedwars.host.BWEventValues;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import org.bukkit.Bukkit;
 
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 public enum BWEvent {
 
-    DIAMOND_GENERATOR_TIER_II(0, "diamond.II", 360, plugin -> {
+    DIAMOND_GENERATOR_TIER_II(0, "diamond.II", () -> BWEventValues.EVENT_TIME_DIAMOND_II, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(1).getTierGenerator().get(0)));
     }),
-    DIAMOND_GENERATOR_TIER_III(1, "diamond.III", 360, plugin -> {
+    DIAMOND_GENERATOR_TIER_III(1, "diamond.III", () -> BWEventValues.EVENT_TIME_DIAMOND_III, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(2).getTierGenerator().get(0)));
     }),
-    EMERALD_GENERATOR_TIER_II(2, "emerald.II", 360, plugin -> {
+    EMERALD_GENERATOR_TIER_II(2, "emerald.II", () -> BWEventValues.EVENT_TIME_EMERALD_II, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> {
                     generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                             .getTier(1).getTierGenerator().get(0));
                 });
     }),
-    EMERALD_GENERATOR_TIER_III(3, "emerald.III", 360, plugin -> {
+    EMERALD_GENERATOR_TIER_III(3, "emerald.III", () -> BWEventValues.EVENT_TIME_EMERALD_III, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                         .getTier(2).getTierGenerator().get(0)));
     }),
-    BEDS_DESTROY(4, "beds-destroy", 360, plugin -> {
+    BEDS_DESTROY(4, "beds-destroy", () -> BWEventValues.EVENT_TIME_BEDS_DESTROY, plugin -> {
         plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBedWithBlock);
     }),
-    ENDER_DRAGON(5, "dragons-spawn", 600, plugin -> {
+    ENDER_DRAGON(5, "dragons-spawn", () -> BWEventValues.EVENT_TIME_ENDER_DRAGON, plugin -> {
         plugin.getGame().getBWTeams(team -> !team.isEliminated()).forEach(team -> {
             team.spawnEnderDragon();
             if(team.getUpgradeTeam().hasUpgrade(UpgradeManager.DRAGON_BUFF)){
@@ -46,15 +49,15 @@ public enum BWEvent {
             }
         });
     }),
-    GAME_END(6, "game-end", 600, plugin -> plugin.getGame().checkWin()),
+    GAME_END(6, "game-end", () -> BWEventValues.EVENT_TIME_GAME_END, plugin -> plugin.getGame().checkWin()),
     ;
 
     private final int id;
     private final String key;
-    private final int timeBeforeEvent; //Time in Seconds
+    private final Supplier<ValueProvider<Integer>> timeBeforeEvent; //Time in Seconds
     private final Consumer<HyriBedWars> action;
 
-    BWEvent(int id, String key, int timeBeforeEvent, Consumer<HyriBedWars> action) {
+    BWEvent(int id, String key, Supplier<ValueProvider<Integer>> timeBeforeEvent, Consumer<HyriBedWars> action) {
         this.id = id;
         this.key = key;
         this.timeBeforeEvent = timeBeforeEvent;
@@ -65,16 +68,16 @@ public enum BWEvent {
         return id;
     }
 
-    public int getTime() {
-        return timeBeforeEvent;
+    public ValueProvider<Integer> getTime() {
+        return this.timeBeforeEvent.get();
     }
 
     public String getKey() {
-        return "game.next-event." + key;
+        return key;
     }
 
     public HyriLanguageMessage get() {
-        return HyriLanguageMessage.get(this.getKey());
+        return HyriLanguageMessage.get("game.next-event." + this.getKey());
     }
 
     public void action(HyriBedWars plugin){

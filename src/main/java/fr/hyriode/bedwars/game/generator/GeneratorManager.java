@@ -39,17 +39,21 @@ public class GeneratorManager {
                         new BWGenerator.Tier(0, FORGE,
                                 this.getDrop(FORGE, 0, ItemMoney.IRON),
                                 this.getDrop(FORGE, 0, ItemMoney.GOLD)
-                        ), new BWGenerator.Tier(1, FORGE,
+                        ),
+                        new BWGenerator.Tier(1, FORGE,
                                 this.getDrop(FORGE, 1, ItemMoney.IRON),
                                 this.getDrop(FORGE, 1, ItemMoney.GOLD)
                         ), new BWGenerator.Tier(2, FORGE,
                                 this.getDrop(FORGE, 2, ItemMoney.IRON),
-                                this.getDrop(FORGE, 2, ItemMoney.GOLD),
-                                this.getDrop(FORGE, 2, ItemMoney.EMERALD)
+                                this.getDrop(FORGE, 2, ItemMoney.GOLD)
                         ), new BWGenerator.Tier(3, FORGE,
                                 this.getDrop(FORGE, 3, ItemMoney.IRON),
                                 this.getDrop(FORGE, 3, ItemMoney.GOLD),
                                 this.getDrop(FORGE, 3, ItemMoney.EMERALD)
+                        ), new BWGenerator.Tier(4, FORGE,
+                                this.getDrop(FORGE, 4, ItemMoney.IRON),
+                                this.getDrop(FORGE, 4, ItemMoney.GOLD),
+                                this.getDrop(FORGE, 4, ItemMoney.EMERALD)
                         )
                 );
             }

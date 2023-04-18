@@ -7,5 +7,6 @@ import org.bukkit.Material;
 public class BaseHostCategory extends BWHostCategory {
     public BaseHostCategory() {
         super(BWHostUtils.categoryDisplay("base", Material.WOOL));
+
     }
 }

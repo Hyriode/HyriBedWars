@@ -22,15 +22,15 @@
   "team.white.display": "White",
   "team.gray.display": "Gray",
 
-  "host.category.bedwars.name": "§cBedwars",
+  "host.category.bedwars.name": "§bBedwars",
   "host.category.bedwars.description": "§7Config the Bedwars.",
 
-  "host.category.map-manager.name": "§aMap Manager",
+  "host.category.map-manager.name": "§bMap Manager",
   "host.category.map-manager.description": "§7Bedwars host category",
   "host.category.base.name": "§2Base Manager",
   "host.category.base.description": "§7Bedwars host category",
 
-  "host.category.shop.name": "§eShop Manager",
+  "host.category.shop.name": "§bShop Manager",
   "host.category.shop.description": "§7Bedwars host category",
   "host.category.upgrade.name": "§bUpgrade Manager",
   "host.category.upgrade.description": "§7Bedwars host category",
@@ -86,7 +86,7 @@
   "host.category.generator.tier.2.emerald.name": "§aEmerald Tier III",
   "host.category.generator.tier.2.emerald.description": "§7Emerald Tier III",
 
-  "host.gui.bedwars.title": "Bedwars",
+  "host.gui.bedwars.title": "BedWars",
   "host.gui.map-manager.title": "Map Manager",
   "host.gui.base.title": "Base Manager",
   "host.gui.shop.title": "Shop Manager",

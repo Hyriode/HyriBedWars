@@ -38,12 +38,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class BWGameTeam extends HyriGameTeam {
 
     private final HyriBedWars plugin;
-    private final BWConfiguration.Team config;
+    private final Supplier<BWConfiguration.Team> config;
 
     private boolean hasBed;
 
@@ -55,7 +56,7 @@ public class BWGameTeam extends HyriGameTeam {
         super(team.getName(), team.getDisplayName(), team.getColor(), teamSize);
         this.plugin = plugin;
         this.hasBed = true;
-        this.config = this.plugin.getConfiguration().getTeam(this.getName());
+        this.config = () -> this.plugin.getConfiguration().getTeam(this.getName());
 
         this.upgradeTeam = new UpgradeTeam();
         this.trapTeam = new TrapTeam(this);
@@ -68,7 +69,7 @@ public class BWGameTeam extends HyriGameTeam {
     public void start() {
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
         BWGenerator.Tier tier = gm.getGeneratorByName(GeneratorManager.FORGE).getTier(0);
-        tier.getDrops().forEach((name, __) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.config.getGeneratorLocation()).get(name)));
+        tier.getDrops().forEach((name, __) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name)));
 
         if(this.isEliminated()) {
             this.breakBedWithBlock();
@@ -104,7 +105,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     private void teleportPlayers() {
-        this.teleport(this.config.getRespawnLocation());
+        this.teleport(this.getConfig().getRespawnLocation());
     }
 
     private void spawnNPC(){
@@ -166,7 +167,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public BWConfiguration.Team getConfig() {
-        return config;
+        return config.get();
     }
 
     public List<BWGamePlayer> getBWPlayers(){
@@ -215,7 +216,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public Cuboid getBase(){
-        Area area = this.config.getBaseArea();
+        Area area = this.getConfig().getBaseArea();
         return new Cuboid(area.getMin(), area.getMax());
     }
 
@@ -270,16 +271,17 @@ public class BWGameTeam extends HyriGameTeam {
 
         BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
 
-        if (tier == 2) {
-            HyriGenerator newGenerator = bwGenerator.getTier(2)
-                    .getGenerators(this.plugin, this.config.getGeneratorLocation()).get("emerald");
+        System.out.println(tier);
+        if (tier + 1 == 3) {
+            HyriGenerator newGenerator = bwGenerator.getTier(3)
+                    .getGenerators(this.plugin, this.getConfig().getGeneratorLocation()).get("emerald");
             this.forgeGenerator.put("emerald", newGenerator);
             newGenerator.create();
             return;
         }
 
         this.forgeGenerator.forEach((name, generator) -> {
-            generator.upgrade(bwGenerator.getTier(tier).getDrops().get(name).get().getTier());
+            generator.upgrade(bwGenerator.getTier(tier + 1).getDrops().get(name).get().getTier());
         });
     }
 

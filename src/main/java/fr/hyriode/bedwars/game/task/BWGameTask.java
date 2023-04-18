@@ -29,8 +29,9 @@ public class BWGameTask extends BukkitRunnable {
         }
 
         BWEvent currentNextEvent = game.getNextEvent();
+        int timeSecond = currentNextEvent.getTime().get();
 
-        if (currentNextEvent.getTime() < this.time) {
+        if (timeSecond < this.time) {
             BWEvent nextEvent = game.nextEvent();
 
             this.time = 0;

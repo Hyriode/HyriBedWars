@@ -8,7 +8,9 @@ import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import fr.hyriode.api.HyriAPI;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class BWForgeValues {
@@ -17,9 +19,9 @@ public class BWForgeValues {
     private static final String GOLD = ItemMoney.GOLD.getName();
     private static final String EMERALD = ItemMoney.EMERALD.getName();
 
-    private static final List<GeneratorModifier<Integer>> SPAWN_LIMIT = new ArrayList<>();
-    private static final List<GeneratorModifier<Integer>> SPAWN_BETWEEN = new ArrayList<>();
-    private static final List<GeneratorModifier<Boolean>> SPLITTING = new ArrayList<>();
+    private static final Map<String, ValueProvider<Integer>> SPAWN_LIMIT = new HashMap<>();
+    private static final Map<String, ValueProvider<Integer>> SPAWN_BETWEEN = new HashMap<>();
+    private static final Map<String, ValueProvider<Boolean>> SPLITTING = new HashMap<>();
 
     public static void init() {
         addDrop(GeneratorManager.FORGE, 0, IRON);
@@ -44,41 +46,40 @@ public class BWForgeValues {
     }
 
     private static void addSpawnLimit(String generator, int tier, String drop) {
-        SPAWN_LIMIT.add(new GeneratorModifier<>(generator, tier, drop, new ValueProvider<>(0)
-                .addModifiers(new HostValueModifier<>(1, Integer.class, formatSpawnLimit(generator, tier, drop)))));
+        String optionName = formatSpawnLimit(generator, tier, drop);
+        SPAWN_LIMIT.put(optionName, new ValueProvider<>(20)
+                .addModifiers(new HostValueModifier<>(1, Integer.class, optionName)));
     }
 
     private static void addSpawnBetween(String generator, int tier, String drop) {
-        SPAWN_BETWEEN.add(new GeneratorModifier<>(generator, tier, drop, new ValueProvider<>(0)
-                .addModifiers(new HostValueModifier<>(1, Integer.class, formatSpawnBetween(generator, tier, drop)))));
+        String optionName = formatSpawnBetween(generator, tier, drop);
+        SPAWN_BETWEEN.put(optionName, new ValueProvider<>(20)
+                .addModifiers(new HostValueModifier<>(1, Integer.class, formatSpawnBetween(generator, tier, drop))));
     }
 
     private static void addSplitting(String generator, int tier, String drop) {
-        SPLITTING.add(new GeneratorModifier<>(generator, tier, drop, new ValueProvider<>(false)
-                .addModifiers(new HostValueModifier<>(1, Boolean.class, formatSpawnBetween(generator, tier, drop)))));
+        String optionName = formatSplitting(generator, tier, drop);
+        SPLITTING.put(optionName, new ValueProvider<>(false)
+                .addModifiers(new HostValueModifier<>(1, Boolean.class, optionName)));
     }
 
-    public static List<GeneratorModifier<Integer>> getSpawnLimit() {
-        return SPAWN_LIMIT;
-    }
-
-    public static List<GeneratorModifier<Integer>> getSpawnBetween() {
-        return SPAWN_BETWEEN;
-    }
-
-    public static List<GeneratorModifier<Boolean>> getSplitting() {
+    public static Map<String, ValueProvider<Boolean>> getSplitting() {
         return SPLITTING;
     }
 
+    public static Map<String, ValueProvider<Integer>> getSpawnBetween() {
+        return SPAWN_BETWEEN;
+    }
+
+    public static Map<String, ValueProvider<Integer>> getSpawnLimit() {
+        return SPAWN_LIMIT;
+    }
+
     public static int getSpawnLimit(String name, int tier, String drop) {
-        GeneratorModifier<Integer> generator = SPAWN_LIMIT.stream()
-                .filter(provider -> provider.getGenerator().equals(name)
-                        && provider.getTier() == tier
-                        && provider.getDrop().equals(drop))
-                .findFirst().orElse(null);
+        ValueProvider<Integer> generator = SPAWN_LIMIT.get(formatSpawnLimit(name, tier, drop));
         if(generator != null) {
             try {
-                return generator.getValue().get();
+                return generator.get();
             }catch (Exception e) {
                 e.printStackTrace();
             }
@@ -87,25 +88,25 @@ public class BWForgeValues {
     }
 
     public static Integer getSpawnBetween(String name, int tier, String drop) {
-        GeneratorModifier<Integer> generator = SPAWN_BETWEEN.stream()
-                .filter(provider -> provider.getGenerator().equals(name)
-                        && provider.getTier() == tier
-                        && provider.getDrop().equals(drop))
-                .findFirst().orElse(null);
+        ValueProvider<Integer> generator = SPAWN_BETWEEN.get(formatSpawnBetween(name, tier, drop));
         if(generator != null) {
-//            return generator.getValue().get();
+            try {
+                return generator.get();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return 0;
     }
 
     public static Boolean getSplitting(String name, int tier, String drop) {
-        GeneratorModifier<Boolean> generator = SPLITTING.stream()
-                .filter(provider -> provider.getGenerator().equals(name)
-                        && provider.getTier() == tier
-                        && provider.getDrop().equals(drop))
-                .findFirst().orElse(null);
+        ValueProvider<Boolean> generator = SPLITTING.get(formatSplitting(name, tier, drop));
         if(generator != null) {
-//            return generator.getValue().get();
+            try {
+                return generator.get();
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
         }
         return false;
     }

@@ -54,7 +54,6 @@ public class UpgradeManager {
             Player p = player.getPlayer();
             p.removePotionEffect(PotionEffectType.FAST_DIGGING);
             p.addPotionEffect(new PotionEffect(PotionEffectType.FAST_DIGGING, 999999, tier));
-                    System.out.println("Tier miner : " + tier);
         },
                 new Upgrade.Tier(0, new ItemBuilder(Material.DIAMOND_PICKAXE).withAllItemFlags().build(), new ItemPrice(ItemMoney.DIAMOND, (gameType) -> gameType.isForTrioSquad() ? 4L : 2)),
                 new Upgrade.Tier(1, new ItemBuilder(Material.DIAMOND_PICKAXE, 2).withAllItemFlags().build(), new ItemPrice(ItemMoney.DIAMOND, (gameType) -> gameType.isForTrioSquad() ? 6L : 4)));

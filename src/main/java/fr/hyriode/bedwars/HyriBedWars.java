@@ -26,6 +26,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.lang.reflect.Field;
 import java.util.UUID;
+import java.util.function.Supplier;
 import java.util.logging.Level;
 
 public class HyriBedWars extends JavaPlugin {
@@ -34,7 +35,7 @@ public class HyriBedWars extends JavaPlugin {
 
     private IHyrame hyrame;
     private BWGame game;
-    private BWConfiguration configuration;
+    private Supplier<BWConfiguration> configuration;
 
     private static ShopManager shopManager;
     private static UpgradeManager upgradeManager;
@@ -63,11 +64,13 @@ public class HyriBedWars extends JavaPlugin {
         this.hyrame = HyrameLoader.load(new HyriBWProvider(this));
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
-            this.configuration = TestConfiguration.getPoseidonTrio();
+            this.configuration = TestConfiguration::getPoseidonTrio;
+            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
             Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
         } else {
-            this.configuration = HyriAPI.get().getServer().getConfig(BWConfiguration.class);
+            this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
+
 
         this.game = new BWGame(this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
@@ -76,6 +79,8 @@ public class HyriBedWars extends JavaPlugin {
         if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {
             HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuHostCategory());
         }
+
+        BWForgeValues.init();
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
         System.out.println("Bedwars Ready");
@@ -91,7 +96,6 @@ public class HyriBedWars extends JavaPlugin {
         upgradeManager = new UpgradeManager();
         entityManager = new EntityManager();
         trapManager = new TrapManager();
-        BWForgeValues.init();
         generatorManager = new GeneratorManager(this);
     }
 
@@ -124,9 +128,7 @@ public class HyriBedWars extends JavaPlugin {
     }
 
     public BWConfiguration getConfiguration() {
-        return HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST
-                ? HyriAPI.get().getServer().getConfig(BWConfiguration.class)
-                : configuration;
+        return this.configuration.get();
     }
 
     public static void log(Level level, String message) {

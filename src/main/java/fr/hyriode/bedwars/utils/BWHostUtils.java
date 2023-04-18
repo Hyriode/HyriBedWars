@@ -41,12 +41,11 @@ public class BWHostUtils {
     }
 
     public static HostDisplay categoryDisplay(String name, ItemStack icon) {
-        HostDisplay hostDisplay = new HostDisplay.Builder().withName(name)
+        return new HostDisplay.Builder().withName(name)
                 .withDisplayName(HyriLanguageMessage.get("host.category." + name + ".name"))
                 .withDescription(HyriLanguageMessage.get("host.category." + name + ".description"))
                 .withIcon(icon)
                 .build();
-        return hostDisplay;
     }
 
     public static HostDisplay categoryDisplay(String name, Material icon) {
