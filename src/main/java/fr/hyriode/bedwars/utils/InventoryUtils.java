@@ -5,6 +5,7 @@ import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.game.type.BWGameType;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,6 +15,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.BiFunction;
+import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 public class InventoryUtils {
@@ -93,7 +96,7 @@ public class InventoryUtils {
     public static long getHasPrice(BWGameType gameType, Player player, ItemPrice price) {
         PlayerInventory inventory = player.getInventory();
 
-        long money = price.getAmount().apply(gameType);
+        int money = price.getAmount().apply(gameType).get();
         for (ItemStack item : inventory) {
             if(item != null && item.isSimilar(price.getItemStack())){
                 money -= item.getAmount();
@@ -106,7 +109,7 @@ public class InventoryUtils {
     public static void removeMoney(BWGameType gameType, Player player, ItemPrice price) {
         PlayerInventory inventory = player.getInventory();
 
-        long amount = price.getAmount().apply(gameType);
+        int amount = price.getAmount().apply(gameType).get();
         for(int slot = 0;slot < inventory.getSize();++slot){
             ItemStack itemStack = inventory.getItem(slot);
             if(itemStack != null && itemStack.isSimilar(price.getItemStack())){
@@ -291,10 +294,10 @@ public class InventoryUtils {
                 amount += itemStack.getAmount();
             }
         }
-        return amount >= price.getAmount().apply(gameType);
+        return amount >= price.getAmount().apply(gameType).get();
     }
 
-    public static List<ItemPrice> getMoney(PlayerInventory inventory) {
+    public static List<ItemPrice> getMoney(BWGameType gameType, PlayerInventory inventory) {
         List<ItemPrice> money = new ArrayList<>();
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
@@ -306,8 +309,9 @@ public class InventoryUtils {
                 }else {
                     money.stream().filter(price -> price.getItemStack().getType() == itemStack.getType()).findFirst()
                             .ifPresent(price -> {
-                        price.setAmount((gameType) -> price.getAmount().apply(gameType) + itemStack.getAmount());
-                    });
+                                int amount = price.getAmount().apply(gameType).get() + itemStack.getAmount();
+                                price.setAmount((__) -> new ValueProvider<>(amount));
+                            });
                 }
             }
         }

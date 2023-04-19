@@ -62,7 +62,7 @@ public class BedBugEntity extends EntitySilverfish {
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2D);
-        customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(7.0D);
+        customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(0.5D);
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
         customEnt.setCustomName("");
         customEnt.setCustomNameVisible(true);

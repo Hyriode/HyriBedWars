@@ -15,7 +15,7 @@ public class EventTimeHostCategory extends BWHostCategory {
 
         int i = 2;
         for (BWEvent value : BWEvent.values()) {
-            this.addOption(slot(i++, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay("event-time-" + value.getKey(), Material.PAPER), value.getTime().getDefaultValue(), 0, 5000, new int[] {1, 20}));
+            this.addOption(slot(i++, 4), new PreciseIntegerOption(BWHostUtils.optionDisplay("event-time-" + value.getKey(), value.getIcon()), value.getTime().getDefaultValue(), 0, 5000, new int[] {1, 20}));
         }
     }
 

@@ -4,6 +4,7 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -15,19 +16,19 @@ import java.util.function.Function;
 public class ItemPrice {
 
     private ItemMoney itemMoney;
-    private Function<BWGameType, Long> amount;
+    private Function<BWGameType, ValueProvider<Integer>> amount;
 
-    public ItemPrice(ItemMoney itemMoney, Function<BWGameType, Long> amount){
+    public ItemPrice(ItemMoney itemMoney, Function<BWGameType, ValueProvider<Integer>> amount){
         this.itemMoney = itemMoney;
         this.amount = amount;
     }
 
-    public ItemPrice(ItemMoney itemMoney, long amount){
-        this(itemMoney, (__) -> amount);
+    public ItemPrice(ItemMoney itemMoney, int amount){
+        this(itemMoney, (__) -> new ValueProvider<>(amount));
     }
 
     public ItemPrice(ItemMoney itemMoney){
-        this(itemMoney, (__) -> 1L);
+        this(itemMoney, (__) -> new ValueProvider<>(1));
     }
 
     public ItemStack getItemStack() {
@@ -35,7 +36,7 @@ public class ItemPrice {
     }
 
     public List<ItemStack> getItemStacks(BWGameType gameType) {
-        long amount = this.amount.apply(gameType);
+        long amount = this.amount.apply(gameType).get();
         List<ItemStack> itemStacks = new ArrayList<>();
         int maxStack = this.itemMoney.getAsItemStack().getMaxStackSize();
         int quotient = (int) (amount / maxStack);
@@ -61,11 +62,11 @@ public class ItemPrice {
         return this.itemMoney.getDisplayName().getValue(player);
     }
 
-    public Function<BWGameType, Long> getAmount() {
+    public Function<BWGameType, ValueProvider<Integer>> getAmount() {
         return amount;
     }
 
-    public void setAmount(Function<BWGameType, Long> amount) {
+    public void setAmount(Function<BWGameType, ValueProvider<Integer>> amount) {
         this.amount = amount;
     }
 

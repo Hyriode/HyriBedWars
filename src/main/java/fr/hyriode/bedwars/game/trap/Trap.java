@@ -63,7 +63,10 @@ public class Trap {
         List<String> lore = new ArrayList<>(StringUtils.loreToList(this.getDisplayLore().getValue(player)));
 
         lore.add(" ");
-        lore.add(StringUtils.getDisplayCostPrice(gameType, player, trapTeam.getPrice()));
+        if(trapTeam.isFull())
+            lore.add(ChatColor.RED + "Full");
+        else
+            lore.add(StringUtils.getDisplayCostPrice(gameType, player, trapTeam.getPrice()));
 
         return new ItemBuilder(this.icon.clone())
                 .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(gameType, player)) + this.getDisplayName().getValue(player))

@@ -108,7 +108,7 @@ public class ExplodeListener extends HyriListener<HyriBedWars> {
 
                 }
             }
+            event.setDamage(6.0F);
         }
-        event.setDamage(6.0F);
     }
 }

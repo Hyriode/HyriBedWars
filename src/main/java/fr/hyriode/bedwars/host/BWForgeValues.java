@@ -54,7 +54,7 @@ public class BWForgeValues {
     private static void addSpawnBetween(String generator, int tier, String drop) {
         String optionName = formatSpawnBetween(generator, tier, drop);
         SPAWN_BETWEEN.put(optionName, new ValueProvider<>(20)
-                .addModifiers(new HostValueModifier<>(1, Integer.class, formatSpawnBetween(generator, tier, drop))));
+                .addModifiers(new HostValueModifier<>(1, Integer.class, optionName)));
     }
 
     private static void addSplitting(String generator, int tier, String drop) {

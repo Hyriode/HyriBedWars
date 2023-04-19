@@ -13,6 +13,7 @@ import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
+import fr.hyriode.hyrame.HyrameLoader;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
@@ -32,12 +33,13 @@ public class UpgradeGui extends BWGui {
 
     @Override
     protected void initGui() {
-        List<Upgrade> upgrades = HyriBedWars.getUpgradeManager().getUpgrades();
         BWGamePlayer player = this.getPlayer();
         BWGameType gameType = this.plugin.getGame().getType();
 
         this.setHorizontalLine(0, 8, this.getItemDeco());
         this.setHorizontalLine(45, 53, this.getItemDeco());
+
+        List<Upgrade> upgrades = HyriBedWars.getUpgradeManager().getUpgrades().stream().filter(Upgrade::isEnabled).collect(Collectors.toList());
 
         int i = 0;
         for(int y = 0; y < 2; ++y) {
@@ -62,7 +64,7 @@ public class UpgradeGui extends BWGui {
                             }
 
                             SoundUtils.playCantBuy(player.getPlayer());
-                            this.owner.sendMessage(net.md_5.bungee.api.ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
                                     .replace("%name%", price.getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(gameType, this.owner, price) + ""));
                         }
                     });
@@ -110,11 +112,14 @@ public class UpgradeGui extends BWGui {
             itemBuilder = new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 7);
             lore.add(" ");
             lore.addAll(StringUtils.loreToList(HyriLanguageMessage.get("no-trap.sub-lore").getValue(this.owner)));
-        }else {
+        } else {
             itemBuilder = new ItemBuilder(trap.getIcon());
         }
         lore.add(" ");
-        lore.add(ChatColor.GRAY + "Next Trap: " + this.getTrapTeam().getPrice().getDisplayPrice(gameType, this.owner));
+        if(this.getTrapTeam().isFull())
+            lore.add(ChatColor.RED + HyriLanguageMessage.get("upgrade.gui.trap.full").getValue(this.owner));
+        else
+            lore.add(ChatColor.GRAY + HyriLanguageMessage.get("trap.next-trap").getValue(this.owner).replace("%trap%", this.getTrapTeam().getPrice().getDisplayPrice(gameType, this.owner)));
 
         return itemBuilder.withName(ChatColor.RED +
                         HyriLanguageMessage.get("no-trap.title").getValue(this.owner).replace("%number%", String.valueOf(trapNumber + 1))

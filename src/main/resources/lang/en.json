@@ -279,9 +279,9 @@
   "upgrade.heal-pool.lore": "Creates a Regeneration field\naround your base!",
   "upgrade.heal-pool.tier-1.name": "Heal Pool",
 
-  "upgrade.dragon.name": "Dragon Buff",
-  "upgrade.dragon.lore": "Your team will have 2 dragons\ninstead of 1 during deathmatch!",
-  "upgrade.dragon.tier-1.name": "Dragon Buff",
+  "upgrade.dragon-buff.name": "Dragon Buff",
+  "upgrade.dragon-buff.lore": "Your team will have 2 dragons\ninstead of 1 during deathmatch!",
+  "upgrade.dragon-buff.tier-1.name": "Dragon Buff",
 
   "trap.blindness.name": "It's a trap!",
   "trap.blindness.lore": "Inflicts Blindness and Slowness\nfor 8 seconds",

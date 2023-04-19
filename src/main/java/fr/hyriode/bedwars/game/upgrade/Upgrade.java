@@ -7,6 +7,7 @@ import fr.hyriode.bedwars.game.team.upgrade.UpgradeTeam;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
@@ -16,15 +17,19 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class Upgrade {
 
+    private Supplier<ValueProvider<Boolean>> enabled;
     private final String name;
     private final boolean player;
     private final BiConsumer<BWGamePlayer, Integer> action;
     private final List<Tier> tiers;
 
-    public Upgrade(String name, boolean player, BiConsumer<BWGamePlayer, Integer> action, List<Tier> tiers) {
+    public Upgrade(Supplier<ValueProvider<Boolean>> enabled, String name, boolean player, BiConsumer<BWGamePlayer, Integer> action, List<Tier> tiers) {
+        this.enabled = enabled;
         this.name = name;
         this.player = player;
         this.action = action;
@@ -45,6 +50,19 @@ public class Upgrade {
 
     public String getDisplayName(Player player) {
        return HyriLanguageMessage.get("upgrade." + this.name + ".name").getValue(player);
+    }
+
+    public boolean isEnabled() {
+        return enabled.get().get();
+    }
+
+    public Supplier<ValueProvider<Boolean>> getEnabled() {
+        return enabled;
+    }
+
+    public Upgrade setEnabled(Supplier<ValueProvider<Boolean>> enabled) {
+        this.enabled = enabled;
+        return this;
     }
 
     public List<Tier> getTiers() {

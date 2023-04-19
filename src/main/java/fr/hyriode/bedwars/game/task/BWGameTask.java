@@ -10,7 +10,6 @@ public class BWGameTask extends BukkitRunnable {
 
     private final HyriBedWars plugin;
     private long time;
-    private long timeToNextEvent;
 
     public BWGameTask(HyriBedWars plugin) {
         this.plugin = plugin;

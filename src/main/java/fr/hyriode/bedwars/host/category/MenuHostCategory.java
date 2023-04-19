@@ -24,8 +24,8 @@ public class MenuHostCategory extends HostCategory {
 
         this.addSubCategory(slot(5, 3), new ShopHostCategory(ShopCategory.BLOCKS));
         this.addSubCategory(slot(6, 3), new UpgradeHostCategory());
-        this.addSubCategory(slot(7, 3), new TrapHostCategory());
-        this.addSubCategory(slot(6, 4), new BaseHostCategory());
+//        this.addSubCategory(slot(7, 3), new TrapHostCategory());
+        this.addSubCategory(slot(7, 3), new BaseHostCategory());
     }
 
     private int slot(int x, int y) {

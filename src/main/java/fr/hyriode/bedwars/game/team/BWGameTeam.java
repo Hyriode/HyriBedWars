@@ -271,7 +271,6 @@ public class BWGameTeam extends HyriGameTeam {
 
         BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
 
-        System.out.println(tier);
         if (tier + 1 == 3) {
             HyriGenerator newGenerator = bwGenerator.getTier(3)
                     .getGenerators(this.plugin, this.getConfig().getGeneratorLocation()).get("emerald");

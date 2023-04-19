@@ -44,7 +44,7 @@ public class StringUtils {
     }
 
     public static String getDisplayPrice(BWGameType gameType, Player player, ItemPrice price) {
-        return price.getColor() + "" + price.getAmount().apply(gameType) + " " + price.getName(player);
+        return price.getColor() + "" + price.getAmount().apply(gameType).get() + " " + price.getName(player);
     }
 
     public static HyriLanguageMessage getWordNumber(int i) {
