@@ -69,8 +69,7 @@ public class HyriBedWars extends JavaPlugin {
             this.configuration = TestConfiguration::getPoseidonTrio;
             System.out.println(HyriAPI.GSON.toJson(this.configuration.get()));
             Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
-            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
-
+            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
         } else {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
@@ -79,7 +78,7 @@ public class HyriBedWars extends JavaPlugin {
         this.hyrame.getGameManager().registerGame(() -> this.game);
 
         BWUpgradeValues.init(this.game.getType());
-        BWForgeValues.init();
+        BWForgeValues.init(this.configuration, this.game.getType());
         this.initManager();
 
         if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {

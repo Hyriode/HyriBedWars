@@ -107,4 +107,33 @@ public enum StandardGenerator {
     public List<BWGenerator.Tier> getTiers(BWGameType gameType) {
         return gameType == BWGameType.SOLO || gameType == BWGameType.DOUBLES ? this.tiersSolo : this.tiersTrio;
     }
+
+    public static Integer getSpawnLimit(BWGameType gameType, String generator, int tier, String nameDrop) {
+        System.out.println("generator: " + generator.toUpperCase() + " tier: " + tier + " nameDrop: " + nameDrop + "");
+        Supplier<BWGenerator.Tier.Drop> drop = StandardGenerator.valueOf(generator.toUpperCase()).getTiers(gameType).get(tier).getDrops().stream().filter(dropSupplier -> dropSupplier.get().getDropName().equals(nameDrop)).findFirst().orElse(null);
+        if(drop != null) {
+            return drop.get().getSpawnLimit();
+        }
+        return null;
+    }
+
+    public static Integer getSpawnBetween(BWGameType gameType, String generator, int tier, String nameDrop) {
+        Supplier<BWGenerator.Tier.Drop> drop = StandardGenerator.valueOf(generator.toUpperCase()).getTiers(gameType)
+                .get(tier).getDrops().stream()
+                .filter(dropSupplier -> dropSupplier.get().getDropName().equals(nameDrop)).findFirst().orElse(null);
+        if(drop != null) {
+            return (int) drop.get().getTimeBetweenSpawns();
+        }
+        return null;
+    }
+
+    public static Boolean getSplitting(BWGameType gameType, String generator, int tier, String nameDrop) {
+        Supplier<BWGenerator.Tier.Drop> drop = StandardGenerator.valueOf(generator.toUpperCase()).getTiers(gameType)
+                .get(tier).getDrops().stream()
+                .filter(dropSupplier -> dropSupplier.get().getDropName().equals(nameDrop)).findFirst().orElse(null);
+        if(drop != null) {
+            return drop.get().isSplitting();
+        }
+        return null;
+    }
 }
