@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game;
 
+import com.avaje.ebean.SqlRow;
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.leaderboard.IHyriLeaderboardProvider;
 import fr.hyriode.api.leveling.NetworkLeveling;
@@ -25,6 +26,9 @@ import fr.hyriode.hyrame.game.util.HyriRewardAlgorithm;
 import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.hyrame.npc.NPC;
+import fr.hyriode.hyrame.npc.NPCManager;
+import net.minecraft.server.v1_8_R3.Entity;
 import org.bukkit.*;
 import org.bukkit.entity.Player;
 
@@ -45,6 +49,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private final HyriWaitingRoom waitingRoom;
 
     private BWGameTask task;
+    private Map<UUID/*player id*/, List<UUID/*npc id*/>> npcs = new HashMap<>();
 
     public BWGame(HyriBedWars plugin) {
         super(plugin.getHyrame(),
@@ -91,6 +96,22 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
             this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
+            return;
+        }
+
+        checkNpc(p);
+    }
+
+    public void checkNpc(Player player) {
+        System.out.println(this.npcs.get(player.getUniqueId()));
+        for (UUID npcId : this.npcs.get(player.getUniqueId())) {
+            NPCManager.getNPCs().stream().filter(npc -> npc.getUniqueID().equals(npcId)).forEach(npc -> {
+                System.out.println("NPC");
+                if(npc.getPlayers().isEmpty()) {
+                    System.out.println("ADD");
+                    npc.addPlayer(player);
+                }
+            });
         }
     }
 
@@ -215,7 +236,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         this.teleportTeams();
         this.createGenerators();
-
     }
 
     private void teleportTeams(){
@@ -316,5 +336,15 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     public BWEvent nextEvent() {
         return this.nextEvent = this.nextEvent.getNextEvent();
+    }
+
+    public void addNPC(Player pl, NPC... npc) {
+        List<UUID> npcs = this.npcs.containsKey(pl.getUniqueId()) ? this.npcs.get(pl.getUniqueId()) : new ArrayList<>();
+        npcs.addAll(Arrays.stream(npc).map(Entity::getUniqueID).collect(Collectors.toList()));
+        this.npcs.put(pl.getUniqueId(), npcs);
+    }
+
+    public Map<UUID, List<UUID>> getNPCs() {
+        return npcs;
     }
 }
