@@ -9,6 +9,6 @@ public class EffectPermanentHostCategory extends BWHostCategory {
     public EffectPermanentHostCategory() {
         super(BWHostUtils.optionDisplay("effect-permanent", Material.POTION));
 
-
+//        this.addOption(new PreciseIntegerOption("effect-permanent", 0, 0, 10));
     }
 }

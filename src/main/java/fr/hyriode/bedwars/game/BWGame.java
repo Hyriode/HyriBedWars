@@ -1,6 +1,8 @@
 package fr.hyriode.bedwars.game;
 
 import fr.hyriode.api.HyriAPI;
+import fr.hyriode.api.leaderboard.IHyriLeaderboardProvider;
+import fr.hyriode.api.leveling.NetworkLeveling;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.generator.GeneratorManager;
@@ -89,10 +91,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             this.getPlayer(p.getUniqueId()).handleLogin(this.plugin);
 
             this.hyrame.getItemManager().giveItem(p, 4, BWGamePlayItem.class);
-            return;
         }
-
-        //TODO
     }
 
     @Override
@@ -103,7 +102,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
         if(this.getState() == HyriGameState.PLAYING
                 && player.getBWTeam().hasBed() && player.getBWTeam().getOnlinePlayers().isEmpty()) {
-            player.getBWTeam().breakBedWithBlock();
+            player.getBWTeam().breakBedWithBlock(true);
         }
 
         this.checkWin();
@@ -153,6 +152,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         }
 
         this.players.forEach(gamePlayer -> {
+            IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
             final boolean host = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
             final UUID playerId = gamePlayer.getUniqueId();
             final int kills = gamePlayer.getKills();
@@ -162,15 +162,19 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
             }
 
-            final long hyris = host ? 0 : HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner);
-            final double xp = host ? 0 : HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner);
-            final StringBuilder rewards = new StringBuilder();
+            final long hyris = host ? 0 : hyriPlayer.getHyris().add(HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner)).withMessage(false).exec();
+            final double xp = host ? 0 : hyriPlayer.getNetworkLeveling().addExperience(HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner));
+            final String rewards = ChatColor.LIGHT_PURPLE + String.valueOf(hyris) + " Hyris " + ChatColor.GREEN + xp + " XP";
 
-            IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
+            final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
 
-            rewards.append(ChatColor.LIGHT_PURPLE + String.valueOf(hyriPlayer.getHyris().add(hyris).withMessage(false).exec()) + " Hyris");
-            rewards.append(" ");
-            rewards.append(ChatColor.GREEN + String.valueOf(hyriPlayer.getNetworkLeveling().addExperience(xp)) + " XP");
+            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "rotating-game-experience").incrementScore(playerId, xp);
+            provider.getLeaderboard(HyriBedWars.ID, "kills").incrementScore(playerId, kills);
+            provider.getLeaderboard(HyriBedWars.ID, "beds-destroyed").incrementScore(playerId, gamePlayer.getBedsBroken());
+
+            if (isWinner) {
+                provider.getLeaderboard(HyriBedWars.ID, "victories").incrementScore(playerId, 1);
+            }
 
             hyriPlayer.update();
 
@@ -221,9 +225,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private void createGenerators(){
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
         this.plugin.getConfiguration().getDiamondGeneratorLocations().forEach(loc -> {
-            Map<String, HyriGenerator> i = gm.getGeneratorByName(GeneratorManager.DIAMOND).getTier(0)
-                    .getGenerators(this.plugin, loc);
-            for (HyriGenerator generator : i.values()) {
+            for (HyriGenerator generator : gm.getGeneratorByName(GeneratorManager.DIAMOND).getTier(0)
+                    .getGenerators(this.plugin, loc).values()) {
                 generator.create();
                 this.diamondGenerators.add(generator);
             }

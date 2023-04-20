@@ -69,10 +69,13 @@ public class BWGameTeam extends HyriGameTeam {
     public void start() {
         GeneratorManager gm = HyriBedWars.getGeneratorManager();
         BWGenerator.Tier tier = gm.getGeneratorByName(GeneratorManager.FORGE).getTier(0);
-        tier.getDrops().forEach((name, __) -> this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name)));
+        tier.getDrops().forEach(drop -> {
+            String name = drop.get().getDropName();
+            this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name));
+        });
 
         if(this.isEliminated()) {
-            this.breakBedWithBlock();
+            this.breakBedWithBlock(false);
         }
         this.createForgeGenerator();
         this.spawnNPC();
@@ -220,13 +223,13 @@ public class BWGameTeam extends HyriGameTeam {
         return new Cuboid(area.getMin(), area.getMax());
     }
 
-    public void breakBedWithBlock(){
+    public void breakBedWithBlock(boolean withMessage){
         this.getBase().forEach(block -> {
             if(block.getType() == Material.BED_BLOCK){
                 block.setType(Material.AIR);
             }
         });
-        if(!hasBed || this.isEliminated()) return;
+        if(!hasBed || !withMessage) return;
         this.breakBed();
     }
 
@@ -238,15 +241,15 @@ public class BWGameTeam extends HyriGameTeam {
         Function<Player, String> enemy = __ -> breaker.getTeam().getColor().getChatColor() + breaker.getPlayer().getName() + ChatColor.GRAY;
         Function<Player, String> team = p -> this.getColor().getChatColor() + this.getDisplayName().getValue(p) + ChatColor.GRAY;
 
-        if(breaker != null && this.hasBed){
-            breaker.addBedsBroken(1);
+        if(this.hasBed) {
+            if(breaker != null){
+                breaker.addBedsBroken(1);
+            }
         }
         this.setHasBed(false);
 
-        this.plugin.getGame().getPlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
-            if(p.isOnline()) {
-                p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
-            }
+        this.plugin.getGame().getOnlinePlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
+            p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         });
 
         this.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("bed.broken.title").getValue(p),
@@ -255,6 +258,7 @@ public class BWGameTeam extends HyriGameTeam {
                         .replace("%enemy%", enemy.apply(p))
                         : HyriLanguageMessage.get("bed.broken.subtitle").getValue(p)),
                 10, 40, 10);
+        System.out.println("Broad");
         BroadcastUtil.broadcast(p -> breaker != null
                 ? HyriLanguageMessage.get("bed.broken.message.player").getValue(p)
                 .replace("%team%", team.apply(p))
@@ -280,7 +284,7 @@ public class BWGameTeam extends HyriGameTeam {
         }
 
         this.forgeGenerator.forEach((name, generator) -> {
-            generator.upgrade(bwGenerator.getTier(tier + 1).getDrops().get(name).get().getTier());
+            generator.upgrade(bwGenerator.getTier(tier + 1).getDrop(name).get().getTier());
         });
     }
 

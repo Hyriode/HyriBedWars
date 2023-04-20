@@ -33,6 +33,7 @@ import java.util.logging.Level;
 public class HyriBedWars extends JavaPlugin {
 
     public static final String NAME = "BedWars";
+    public static final String ID = "bedwars";
 
     private IHyrame hyrame;
     private BWGame game;
@@ -66,23 +67,24 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration::getPoseidonTrio;
+            System.out.println(HyriAPI.GSON.toJson(this.configuration.get()));
             Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
             Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("cb1a7fdb-346e-460f-b4a2-2596f7b8468d"), "HostCool"));
+
         } else {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
 
         this.game = new BWGame(this);
         this.hyrame.getGameManager().registerGame(() -> this.game);
-        this.initManager();
 
         BWUpgradeValues.init(this.game.getType());
+        BWForgeValues.init();
+        this.initManager();
 
         if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {
             HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuHostCategory());
         }
-
-        BWForgeValues.init();
 
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);

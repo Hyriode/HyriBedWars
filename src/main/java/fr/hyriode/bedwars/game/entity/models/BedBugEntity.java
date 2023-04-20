@@ -2,10 +2,13 @@ package fr.hyriode.bedwars.game.entity.models;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.entity.Despawnable;
+import fr.hyriode.bedwars.game.entity.EntityCustom;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.host.BWEntityValues;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
 import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
@@ -60,7 +63,7 @@ public class BedBugEntity extends EntitySilverfish {
         BedBugEntity customEnt = new BedBugEntity(mcWorld, plugin, team);
 
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
-        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(10.0D);
+        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(BWEntityValues.BED_BUG_MAX_HEALTH.get());
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2D);
         customEnt.getAttributeInstance(GenericAttributes.ATTACK_DAMAGE).setValue(0.5D);
         ((CraftLivingEntity)customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
@@ -68,8 +71,22 @@ public class BedBugEntity extends EntitySilverfish {
         customEnt.setCustomNameVisible(true);
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
 
-        new Despawnable((LivingEntity) customEnt.getBukkitEntity(), plugin, team, 15).startTime();
+        new Despawnable((LivingEntity) customEnt.getBukkitEntity(), plugin, team, BWEntityValues.BED_BUG_TIME_ALIVE.get()).startTime();
         HyriBedWars.getEntityManager().addEntity(customEnt);
+    }
+
+    public static EntityCustom getEntityCustom() {
+        return new EntityCustom() {
+            @Override
+            public Material getIcon() {
+                return Material.SNOW_BALL;
+            }
+
+            @Override
+            public String getEntityName() {
+                return "bed-bug";
+            }
+        };
     }
 
     public BWGameTeam getTeam() {

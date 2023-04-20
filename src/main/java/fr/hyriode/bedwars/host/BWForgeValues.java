@@ -59,7 +59,7 @@ public class BWForgeValues {
 
     private static void addSplitting(String generator, int tier, String drop) {
         String optionName = formatSplitting(generator, tier, drop);
-        SPLITTING.put(optionName, new ValueProvider<>(false)
+        SPLITTING.put(optionName, new ValueProvider<>(true)
                 .addModifiers(new HostValueModifier<>(1, Boolean.class, optionName)));
     }
 
@@ -75,40 +75,20 @@ public class BWForgeValues {
         return SPAWN_LIMIT;
     }
 
-    public static int getSpawnLimit(String name, int tier, String drop) {
-        ValueProvider<Integer> generator = SPAWN_LIMIT.get(formatSpawnLimit(name, tier, drop));
-        if(generator != null) {
-            try {
-                return generator.get();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
+    public static ValueProvider<Integer> getSpawnLimit(String name, int tier, String drop) {
+        String optionName = formatSpawnLimit(name, tier, drop);
+        ValueProvider<Integer> generator = SPAWN_LIMIT.get(optionName);
+        return generator != null ? generator : new ValueProvider<>(0);
     }
 
-    public static Integer getSpawnBetween(String name, int tier, String drop) {
+    public static ValueProvider<Integer> getSpawnBetween(String name, int tier, String drop) {
         ValueProvider<Integer> generator = SPAWN_BETWEEN.get(formatSpawnBetween(name, tier, drop));
-        if(generator != null) {
-            try {
-                return generator.get();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return 0;
+        return generator != null ? generator : new ValueProvider<>(0);
     }
 
-    public static Boolean getSplitting(String name, int tier, String drop) {
+    public static ValueProvider<Boolean> getSplitting(String name, int tier, String drop) {
         ValueProvider<Boolean> generator = SPLITTING.get(formatSplitting(name, tier, drop));
-        if(generator != null) {
-            try {
-                return generator.get();
-            }catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
+        return generator != null ? generator : new ValueProvider<>(false);
     }
 
 //    public static final ValueProvider<Integer> FORGE_TIER_0_IRON_SPAWN_LIMIT = new ValueProvider<>(0).addModifiers(new HostValueModifier<>(1, Integer.class, formatSpawnLimit(GeneratorManager.FORGE, 0, IRON)));

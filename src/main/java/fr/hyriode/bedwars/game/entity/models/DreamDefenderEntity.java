@@ -2,8 +2,10 @@ package fr.hyriode.bedwars.game.entity.models;
 
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.entity.Despawnable;
+import fr.hyriode.bedwars.game.entity.EntityCustom;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.host.BWEntityValues;
 import net.minecraft.server.v1_8_R3.*;
 import org.bukkit.Location;
 import org.bukkit.craftbukkit.v1_8_R3.CraftWorld;
@@ -11,6 +13,7 @@ import org.bukkit.craftbukkit.v1_8_R3.entity.CraftLivingEntity;
 import org.bukkit.craftbukkit.v1_8_R3.util.UnsafeList;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.Material;
 
 import java.lang.reflect.Field;
 
@@ -61,7 +64,7 @@ public class DreamDefenderEntity extends EntityIronGolem {
         WorldServer mcWorld = ((CraftWorld) loc.getWorld()).getHandle();
         DreamDefenderEntity customEnt = new DreamDefenderEntity(team, plugin, mcWorld);
 
-        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(120);
+        customEnt.getAttributeInstance(GenericAttributes.maxHealth).setValue(BWEntityValues.DREAM_DEFENDER_MAX_HEALTH.get());
         customEnt.getAttributeInstance(GenericAttributes.MOVEMENT_SPEED).setValue(0.2D);
         customEnt.setLocation(loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
         ((CraftLivingEntity) customEnt.getBukkitEntity()).setRemoveWhenFarAway(false);
@@ -70,8 +73,22 @@ public class DreamDefenderEntity extends EntityIronGolem {
         customEnt.setCustomName(customEnt.getHealth() + " PV");
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         new Despawnable((LivingEntity) customEnt.getBukkitEntity(),
-                plugin, team, 240).startTime();
+                plugin, team, BWEntityValues.DREAM_DEFENDER_TIME_ALIVE.get()).startTime();
         HyriBedWars.getEntityManager().addEntity(customEnt);
+    }
+
+    public static EntityCustom getEntityCustom() {
+        return new EntityCustom() {
+            @Override
+            public Material getIcon() {
+                return Material.PUMPKIN;
+            }
+
+            @Override
+            public String getEntityName() {
+                return "dream-defender";
+            }
+        };
     }
 
     @Override
@@ -92,5 +109,4 @@ public class DreamDefenderEntity extends EntityIronGolem {
     public BWGameTeam getTeam() {
         return team;
     }
-
 }

@@ -43,7 +43,7 @@ public class GeneratorHostCategory extends HostCategory {
         }
 
         private void initGui() {
-            List<Supplier<BWGenerator.Tier.Drop>> drops = new ArrayList<>(this.tier.getDrops().values());
+            List<Supplier<BWGenerator.Tier.Drop>> drops = new ArrayList<>(this.tier.getDrops());
             int i = 0;
             for(int y = 0; y < 2; ++y) {
                 for (int x = 0; x < 7; ++x) {

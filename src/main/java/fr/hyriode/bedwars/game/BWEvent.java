@@ -42,7 +42,11 @@ public enum BWEvent {
                         .getTier(2).getTierGenerator().get(0)));
     }, new ItemBuilder(Material.EMERALD, 3).build()),
     BEDS_DESTROY(4, "beds-destroy", () -> BWEventValues.EVENT_TIME_BEDS_DESTROY, plugin -> {
-        plugin.getGame().getBWTeams().forEach(BWGameTeam::breakBedWithBlock);
+        plugin.getGame().getBWTeams().forEach(team -> {
+            if(!team.isEliminated()) {
+                team.breakBedWithBlock(true);
+            }
+        });
     }, new ItemBuilder(Material.BED).build()),
     ENDER_DRAGON(5, "dragons-spawn", () -> BWEventValues.EVENT_TIME_ENDER_DRAGON, plugin -> {
         plugin.getGame().getBWTeams(team -> !team.isEliminated()).forEach(team -> {

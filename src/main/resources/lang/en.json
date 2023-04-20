@@ -9,6 +9,7 @@
   "statistics.currentWinStreak.name": "Current win-streak",
   "statistics.totalWins.name": "Totals wins",
   "statistics.totalDefeats.name": "Totals defeats",
+  "statistics.finalKillsDeathRatio.name": "Ratio Final K/D",
   "statistics.bedsBroken.name": "Beds broken",
   "statistics.games-played.name": "Games played",
   "statistics.played-time.name": "Played time",
@@ -21,6 +22,11 @@
   "team.pink.display": "Pink",
   "team.white.display": "White",
   "team.gray.display": "Gray",
+
+  "leaderboard.experience.display": "&3Experience &8┃ &7Leaderboard",
+  "leaderboard.kills.display": "&3Kills &8┃ &7Leaderboard",
+  "leaderboard.victories.display": "&3Victories &8┃ &7Leaderboard",
+  "leaderboard.beds-destroyed.display": "&3Beds destroyed &8┃ &7Leaderboard",
 
   "host.category.bedwars.name": "§bBedwars",
   "host.category.bedwars.description": "§7Config the Bedwars.",

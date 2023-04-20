@@ -48,16 +48,17 @@ public class BWGenerator {
         private final int tier;
         private final String name;
         private final Supplier<BWGenerator> generator;
-        private final Map<String, Supplier<Drop>> drops = new HashMap<>();
+        private final List<Supplier<Drop>> drops = new ArrayList<>();
 
-        public Tier(int tier, String name, Drop... drops) {
+        @SafeVarargs
+        public Tier(int tier, String name, Supplier<Drop>... drops) {
             this(tier, name, Arrays.asList(drops));
         }
 
-        public Tier(int tier, String name, List<Drop> drops) {
+        public Tier(int tier, String name, List<Supplier<Drop>> drops) {
             this.tier = tier;
             this.name = name;
-            drops.forEach(drop -> this.drops.put(drop.getDropName(), () -> drop));
+            this.drops.addAll(drops);
             this.generator = () -> HyriBedWars.getGeneratorManager().getGeneratorByName(this.name);
         }
 
@@ -74,17 +75,21 @@ public class BWGenerator {
         }
 
         public List<IHyriGeneratorTier> getTierGenerator() {
-            return this.drops.values().stream().map(drop -> drop.get().getTier()).collect(Collectors.toList());
+            return this.drops.stream().map(drop -> drop.get().getTier()).collect(Collectors.toList());
         }
 
-        public Map<String, Supplier<Drop>> getDrops() {
+        public List<Supplier<Drop>> getDrops() {
             return this.drops;
+        }
+
+        public Supplier<Drop> getDrop(String dropName) {
+            return this.drops.stream().filter(dropSupplier -> dropSupplier.get().getDropName().equals(dropName)).collect(Collectors.toList()).get(0);
         }
 
         public Map<String, HyriGenerator> getGenerators(HyriBedWars plugin, Location loc) {
             Map<String, HyriGenerator> generators = new HashMap<>();
             BWGenerator originGenerator = this.generator.get();
-            this.drops.forEach((name, drop) -> {
+            this.drops.forEach(drop -> {
                 Drop originDrop = drop.get();
                 HyriGenerator.Builder generator = new HyriGenerator.Builder(plugin, loc, originDrop.getTier())
                         .withItem(originDrop.getDrop().getAsItemStack());

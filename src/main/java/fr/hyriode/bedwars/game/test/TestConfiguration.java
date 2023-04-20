@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.test;
 
+import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.team.BWGameTeamColor;
@@ -14,12 +15,17 @@ import java.util.Arrays;
 public class TestConfiguration {
 
     public static BWConfiguration getPoseidonTrio(){
+            HyriWaitingRoom.Config wr = new HyriWaitingRoom.Config(
+                    new LocationWrapper(0.5, 190, 0.5, 90, 0),
+                    new LocationWrapper(24, 250, -54),
+                    new LocationWrapper(-78, 180, 50),
+                    new LocationWrapper(-9.5D, 190, 5.5D, -117.5F, 0));
+            wr.addLeaderboard(new HyriWaitingRoom.Config.Leaderboard(HyriBedWars.ID, "bedwars-experience", new LocationWrapper(-5.5, 189, -12.5)));
+            wr.addLeaderboard(new HyriWaitingRoom.Config.Leaderboard(HyriBedWars.ID, "kills", new LocationWrapper(-1.5, 189, -6.5)));
+            wr.addLeaderboard(new HyriWaitingRoom.Config.Leaderboard(HyriBedWars.ID, "victories", new LocationWrapper(-1.5, 189, 7.5)));
+            wr.addLeaderboard(new HyriWaitingRoom.Config.Leaderboard(HyriBedWars.ID, "beds-destroyed", new LocationWrapper(-5.5, 189, 13.5)));
         return new BWConfiguration(
-                new HyriWaitingRoom.Config(
-                        new LocationWrapper(0.5, 170, 0.5, -90, 0),
-                        new LocationWrapper(22, 184, -15),
-                        new LocationWrapper(-14, 168, 16),
-                        new LocationWrapper(4.5, 170, 4.5, 130, 0)),
+                wr,
                 new AreaWrapper(
                         new LocationWrapper(-89, 145, 89),
                         new LocationWrapper(89, 43, -89)),
@@ -49,33 +55,33 @@ public class TestConfiguration {
                 Arrays.asList(
                         new BWConfiguration.Generator(0,
                                 Arrays.asList(
-                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 30),
-                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 100)
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 25),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 150)
                                 )
                         ),
                         new BWConfiguration.Generator(1,
                                 Arrays.asList(
-                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 30),
-                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 100)
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 18),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 113)
                                 )
                         ),
                         new BWConfiguration.Generator(2,
                                 Arrays.asList(
-                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 23),
-                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 60)
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 13),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 84)
                                 )
                         ),
                         new BWConfiguration.Generator(3,
                                 Arrays.asList(
-                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 18),
-                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 40),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 13),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 84),
                                         new BWConfiguration.Generator.Drop(ItemMoney.EMERALD.name(), 70*20)
                                 )
                         ),
                         new BWConfiguration.Generator(4,
                                 Arrays.asList(
-                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 15),
-                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 30),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.IRON.name(), 7),
+                                        new BWConfiguration.Generator.Drop(ItemMoney.GOLD.name(), 42),
                                         new BWConfiguration.Generator.Drop(ItemMoney.EMERALD.name(), 60*20)
                                 )
                         )

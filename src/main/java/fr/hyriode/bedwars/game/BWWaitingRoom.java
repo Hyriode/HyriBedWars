@@ -3,6 +3,8 @@ package fr.hyriode.bedwars.game;
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.language.HyriLanguage;
 import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.api.leaderboard.HyriLeaderboardScope;
+import fr.hyriode.api.leveling.NetworkLeveling;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.api.player.BWPlayerStatistics;
@@ -20,6 +22,15 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         super(game,
                 Material.BED,
                 configuration::getWaitingRoom);
+
+        this.addLeaderboard(new Leaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience",
+                player -> HyriLanguageMessage.get("leaderboard.experience.display").getValue(player))
+                .withScopes(HyriLeaderboardScope.DAILY, HyriLeaderboardScope.WEEKLY, HyriLeaderboardScope.MONTHLY));
+        this.addLeaderboard(new Leaderboard(HyriBedWars.ID, "kills", player -> HyriLanguageMessage.get("leaderboard.kills.display").getValue(player)));
+        this.addLeaderboard(new Leaderboard(HyriBedWars.ID, "victories", player -> HyriLanguageMessage.get("leaderboard.victories.display").getValue(player)));
+        this.addLeaderboard(new Leaderboard(HyriBedWars.ID, "beds-destroyed", player -> HyriLanguageMessage.get("leaderboard.beds-destroyed.display").getValue(player)));
+
+
         int i = 0;
         for (BWGameType gameType : BWGameType.values()) {
             this.addStatistics(21 + i++, gameType);
@@ -39,9 +50,11 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         normal.addData(new NPCData(this.getDisplayStatistics("currentWinStreak"), account -> String.valueOf(this.getStatistics(account, gameType).getCurrentWinStreak())));
         normal.addData(new NPCData(this.getDisplayStatistics("totalWins"), account -> String.valueOf(this.getStatistics(account, gameType).getTotalWins())));
         normal.addData(new NPCData(this.getDisplayStatistics("totalDefeats"), account -> String.valueOf(this.getStatistics(account, gameType).getDefeats())));
+        normal.addData(new NPCData(this.getDisplayStatistics("finalKillsDeathRatio"), account -> String.valueOf(this.getStatistics(account, gameType).getFinalKillDeathRatio())));
         normal.addData(NPCData.voidData());
         normal.addData(new NPCData(this.getDisplayStatistics("games-played"), account -> String.valueOf(this.getStatistics(account, gameType).getPlayedGames())));
-        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriAPI.get().getServer().getType()))));
+        normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriBedWars.ID + "#" + gameType.getName()))));
+        System.out.println("SSD : " + HyriAPI.get().getServer().getType());
 
         this.addNPCCategory(slot, normal);
     }
@@ -58,6 +71,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         normal.addData(new NPCData(this.getDisplayStatistics("currentWinStreak"), account -> String.valueOf(this.getAllStatistics(account).getCurrentWinStreak())));
         normal.addData(new NPCData(this.getDisplayStatistics("totalWins"), account -> String.valueOf(this.getAllStatistics(account).getTotalWins())));
         normal.addData(new NPCData(this.getDisplayStatistics("totalDefeats"), account -> String.valueOf(this.getAllStatistics(account).getDefeats())));
+        normal.addData(new NPCData(this.getDisplayStatistics("finalKillsDeathRatio"), account -> String.valueOf(this.getAllStatistics(account).getFinalKillDeathRatio())));
         normal.addData(NPCData.voidData());
         normal.addData(new NPCData(this.getDisplayStatistics("games-played"), account -> String.valueOf(this.getAllStatistics(account).getPlayedGames())));
         normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriAPI.get().getServer().getType()))));

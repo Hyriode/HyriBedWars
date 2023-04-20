@@ -28,9 +28,9 @@ public class BWGameListener extends HyriListener<HyriBedWars> {
     @HyriEventHandler
     public void onReconnect(HyriGameReconnectEvent event) {
         final BWGamePlayer player = (BWGamePlayer) event.getGamePlayer();
-        final BWGameTeam team = (BWGameTeam) player.getTeam();
+        final BWGameTeam team = player.getBWTeam();
 
-        if (!team.hasBed()) {
+        if (team.isEliminated()) {
             event.disallow();
         }
     }
@@ -42,12 +42,14 @@ public class BWGameListener extends HyriListener<HyriBedWars> {
 
         this.plugin.getGame().getProtocolManager().getProtocol(HyriDeathProtocol.class)
                 .runDeath(HyriGameDeathEvent.Reason.VOID, player.getPlayer());
-        player.getScoreboard().show();
+
+        BWPlayerScoreboard scoreboard = new BWPlayerScoreboard(this.plugin, player.getPlayer());
+        player.setScoreboard(scoreboard);
+        scoreboard.show();
     }
 
     @HyriEventHandler
     public void onSpectator(HyriGameSpectatorEvent event) {
-        final BWGame game = (BWGame) event.getGame();
         final HyriGameSpectator spectator = event.getSpectator();
         final Player player = spectator.getPlayer();
 

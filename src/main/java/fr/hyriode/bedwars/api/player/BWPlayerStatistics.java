@@ -96,7 +96,7 @@ public class BWPlayerStatistics implements IHyriStatistics {
         }
 
         public long getFinalKillDeathRatio(){
-            return this.finalKills / this.deaths;
+            return this.finalKills == 0 ? 0 : this.finalKills / this.deaths;
         }
 
         public long getBestWinStreak() {

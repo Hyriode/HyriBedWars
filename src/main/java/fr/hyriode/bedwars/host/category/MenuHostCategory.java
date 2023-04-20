@@ -5,6 +5,7 @@ import fr.hyriode.bedwars.host.category.base.ShopHostCategory;
 import fr.hyriode.bedwars.host.category.base.TrapHostCategory;
 import fr.hyriode.bedwars.host.category.base.UpgradeHostCategory;
 import fr.hyriode.bedwars.host.category.base.BaseHostCategory;
+import fr.hyriode.bedwars.host.category.base.effect.EffectPermanentHostCategory;
 import fr.hyriode.bedwars.host.category.map.GeneratorManagerHostCategory;
 import fr.hyriode.bedwars.host.category.map.MapHostCategory;
 import fr.hyriode.bedwars.host.gui.BWHostGUI;
@@ -25,7 +26,9 @@ public class MenuHostCategory extends HostCategory {
         this.addSubCategory(slot(5, 3), new ShopHostCategory(ShopCategory.BLOCKS));
         this.addSubCategory(slot(6, 3), new UpgradeHostCategory());
 //        this.addSubCategory(slot(7, 3), new TrapHostCategory());
-        this.addSubCategory(slot(7, 3), new BaseHostCategory());
+//        this.addSubCategory(slot(7, 3), new BaseHostCategory());
+        this.addSubCategory(slot(7, 3), new EffectPermanentHostCategory());
+
     }
 
     private int slot(int x, int y) {
