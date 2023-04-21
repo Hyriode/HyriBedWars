@@ -27,7 +27,7 @@
   "leaderboard.victories.display": "&3Victoires &8┃ &7Classement",
   "leaderboard.beds-destroyed.display": "&3Lits cassés &8┃ &7Classement",
 
-  "host.option.percentage.formatter": "&8Valeur actuelle:\\n&8▪ &b%value%%",
+  "host.option.percentage.formatter": "&8Valeur actuelle:\n&8▪ &b%value%%",
   "game.build-limit": "§cVous avez atteint la limite de construction.",
 
   "host.category.bedwars-menu.name": "§bBedwars",
