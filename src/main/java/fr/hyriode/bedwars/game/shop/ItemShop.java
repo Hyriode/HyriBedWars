@@ -11,7 +11,7 @@ import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.api.language.HyriLanguageMessage;
-import javafx.util.Pair;
+import fr.hyriode.hyrame.utils.Pair;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
