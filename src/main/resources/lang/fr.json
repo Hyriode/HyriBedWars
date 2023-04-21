@@ -703,9 +703,11 @@
 
   "upgrade.heal-pool.name": "Régénération",
   "upgrade.heal-pool.lore": "Créée un champ de régénération\nautour de votre base.",
+  "upgrade.heal-pool.tier-1.name": "Régénération",
 
   "upgrade.dragon-buff.name": "Dragon Buff",
   "upgrade.dragon-buff.lore": "Votre équipe bénéficiera\n2 dragons au lieu de 1 à la phase\nde mort subite.",
+  "upgrade.dragon-buff.tier-1.name": "Dragon Buff",
 
   "trap.blindness.name": "C'est un piège",
   "trap.blindness.lore": "Inflige Cécité et Lenteur\npendant 8 secondes.",
