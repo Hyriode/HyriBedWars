@@ -23,7 +23,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
     public BWWaitingRoom(BWGame game, Supplier<BWConfiguration> configuration) {
         super(game,
                 Material.BED,
-                configuration);
+                () -> configuration.get().getWaitingRoom());
 
         this.addLeaderboard(new Leaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience",
                 player -> HyriLanguageMessage.get("leaderboard.experience.display").getValue(player))
