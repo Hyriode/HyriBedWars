@@ -24,8 +24,9 @@ public class TrapListener extends HyriListener<HyriBedWars> {
         if(player == null) return;
 
         for (BWGameTeam team : game.getBWTeams()) {
-            if(!player.getBWTeam().equals(team)
-                    && team.getConfig().getBaseArea().isInArea(player.getPlayer().getLocation())
+            Player p = player.getPlayer();
+            if(p != null && !player.getBWTeam().equals(team)
+                    && team.getConfig().getBaseArea().isInArea(p.getLocation())
                     && !player.hasCountdown(BWGamePlayer.TRAP_COUNTDOWN)){
                 team.getTrapTeam().trap(player);
                 break;
