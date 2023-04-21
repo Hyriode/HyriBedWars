@@ -48,25 +48,25 @@ public enum StandardGenerator {
     FORGE(
             Arrays.asList(
                     new BWGenerator.Tier(0, "forge", Arrays.asList(
-                            () -> new BWGenerator.Tier.Drop(48, 13, true, ItemMoney.IRON),
-                            () -> new BWGenerator.Tier.Drop(16, 100, true, ItemMoney.GOLD)
+                            () -> new BWGenerator.Tier.Drop(48, 30, true, ItemMoney.IRON),
+                            () -> new BWGenerator.Tier.Drop(16, 120, true, ItemMoney.GOLD)
                     )),
                     new BWGenerator.Tier(1, "forge", Arrays.asList(
-                            () -> new BWGenerator.Tier.Drop(48, 10, true, ItemMoney.IRON),
-                            () -> new BWGenerator.Tier.Drop(16, 85, true, ItemMoney.GOLD)
+                            () -> new BWGenerator.Tier.Drop(48, 26, true, ItemMoney.IRON),
+                            () -> new BWGenerator.Tier.Drop(16, 110, true, ItemMoney.GOLD)
                     )),
                     new BWGenerator.Tier(2, "forge", Arrays.asList(
-                            () -> new BWGenerator.Tier.Drop(48, 7, true, ItemMoney.IRON),
-                            () -> new BWGenerator.Tier.Drop(16, 65, true, ItemMoney.GOLD)
+                            () -> new BWGenerator.Tier.Drop(48, 18, true, ItemMoney.IRON),
+                            () -> new BWGenerator.Tier.Drop(16, 98, true, ItemMoney.GOLD)
                     )),
                     new BWGenerator.Tier(3, "forge", Arrays.asList(
-                            () -> new BWGenerator.Tier.Drop(48, 7, true, ItemMoney.IRON),
-                            () -> new BWGenerator.Tier.Drop(16, 65, true, ItemMoney.GOLD),
+                            () -> new BWGenerator.Tier.Drop(48, 18, true, ItemMoney.IRON),
+                            () -> new BWGenerator.Tier.Drop(16, 98, true, ItemMoney.GOLD),
                             () -> new BWGenerator.Tier.Drop(8, 70*20, true, ItemMoney.EMERALD)
                     )),
                     new BWGenerator.Tier(4, "forge", Arrays.asList(
-                            () -> new BWGenerator.Tier.Drop(48, 5, true, ItemMoney.IRON),
-                            () -> new BWGenerator.Tier.Drop(16, 42, true, ItemMoney.GOLD),
+                            () -> new BWGenerator.Tier.Drop(48, 11, true, ItemMoney.IRON),
+                            () -> new BWGenerator.Tier.Drop(16, 80, true, ItemMoney.GOLD),
                             () -> new BWGenerator.Tier.Drop(8, 60*20, true, ItemMoney.EMERALD)
                     ))
             ),

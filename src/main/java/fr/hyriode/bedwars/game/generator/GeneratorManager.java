@@ -88,16 +88,6 @@ public class GeneratorManager {
         });
     }
 
-    private BWGenerator.Tier getDrop(StandardGenerator standard, BWConfiguration.Generator generator) {
-        BWGenerator.Tier tier = standard.getTiers(this.gameType).get(generator.getTier());
-        return new BWGenerator.Tier(tier.getTier(), tier.getName(), generator.getDrops().stream().map(
-                d -> {
-                    BWGenerator.Tier.Drop drop = tier.getDrop(d.getItemName().toLowerCase()).get();
-                    return (Supplier<BWGenerator.Tier.Drop>) () -> new BWGenerator.Tier.Drop(drop.getName(), drop.getSpawnLimit(), d.getSpawnBetween(), drop.isSplitting(), drop.getDrop());
-                }
-        ).collect(Collectors.toList()));
-    }
-
     private void add(String name, ItemStack header, Supplier<List<BWGenerator.Tier>> tiers) {
         this.generators.add(new BWGenerator(name, header, tiers));
     }

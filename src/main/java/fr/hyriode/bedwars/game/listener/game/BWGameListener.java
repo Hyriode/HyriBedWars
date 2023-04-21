@@ -30,7 +30,7 @@ public class BWGameListener extends HyriListener<HyriBedWars> {
         final BWGamePlayer player = (BWGamePlayer) event.getGamePlayer();
         final BWGameTeam team = player.getBWTeam();
 
-        if (team.isEliminated()) {
+        if (team != null && team.isEliminated()) {
             event.disallow();
         }
     }
