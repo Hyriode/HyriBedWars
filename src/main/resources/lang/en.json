@@ -723,6 +723,8 @@
 
   "trap.next-trap": "Next Trap: %trap%",
 
+  "trap.timer.magic-milk": "Magic Milk",
+
   "first.word": "first",
   "second.word": "second",
   "third.word": "third",
@@ -752,5 +754,12 @@
   "gui.reset": "Reset",
   "gui.reset.lore": "Reset",
 
-  "message.game.end.kills": "%position% §7- %player% §7- %kills%"
+  "inventory.shop.quick-buy.choice-slot.title": "Choice Slot",
+
+  "message.game.end.kills": "%position% §7- %player% §7- %kills%",
+  "message.game.end.1": "§e1st",
+  "message.game.end.2": "§62nd",
+  "message.game.end.3": "§c3th",
+
+  "message.game.end.nobody": "Nobody"
 }

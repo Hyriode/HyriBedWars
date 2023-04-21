@@ -119,7 +119,6 @@ public class GeneratorManager {
             int percentage = BWGameValues.FORGE_GENERATOR_RATE.get();
             int spawnBetweenValue = spawnBetween.get();
             int calc = generatorName.equals(StandardGenerator.FORGE.name().toLowerCase()) ? c(percentage, spawnBetweenValue) : spawnBetweenValue;
-            System.out.println(calc + " " + spawnBetweenValue);
             return new BWGenerator.Tier.Drop(name, spawnLimit.get(), calc, splitting.get(), drop);
         }
         return new BWGenerator.Tier.Drop(name, spawnLimit.getDefaultValue(), spawnBetween.getDefaultValue(), splitting.getDefaultValue(), drop);

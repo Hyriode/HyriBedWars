@@ -47,7 +47,7 @@ public class ChoiceSlotGui extends BWGui {
                     }
                 }
                 int slot = i;
-                this.setItem(2 + x, 3 + y, itemStack != null ? itemStack : new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14).build(),
+                this.setItem(2 + x, 3 + y, itemStack != null ? itemStack : new ItemBuilder(Material.STAINED_GLASS_PANE, 1, 14).withName(" ").build(),
                         event -> {
                             account.putMaterialQuickBuy(slot, materialShop.getName());
                             GuiManager.openShopGui(this.plugin, this.owner, ShopCategory.QUICK_BUY);
@@ -62,8 +62,8 @@ public class ChoiceSlotGui extends BWGui {
         BWGamePlayer player = this.getPlayer();
         ItemShop itemShop = this.materialShop.getItemShopForPlayer(player);
 
-        return new ItemBuilder(itemShop.getItemStack(null))
-                .withName(itemShop.getDisplayName().getValue(player.getPlayer()))
+        return new ItemBuilder(itemShop.getItemStack(player))
+                .withName(ChatColor.RESET + itemShop.getDisplayName().getValue(player.getPlayer()))
                 .withLore(ChatColor.YELLOW + "Veuillez choisir un slot")
                 .build();
     }

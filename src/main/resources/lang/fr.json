@@ -723,6 +723,8 @@
 
   "trap.next-trap": "Prochain piège: %trap%",
 
+  "trap.timer.magic-milk": "Lait Magique",
+
   "first.word": "premier",
   "second.word": "second",
   "third.word": "troisième",
@@ -752,5 +754,12 @@
   "gui.reset": "Réinitialiser",
   "gui.reset.lore": "Réinitialiser",
 
-  "message.game.end.kills": "%position% §7- %player% §7- %kills%"
+  "inventory.shop.quick-buy.choice-slot.title": "Choisis ton slot",
+
+  "message.game.end.kills": "%position% §7- %player% §7- %kills%",
+  "message.game.end.1": "§e1er",
+  "message.game.end.2": "§62ème",
+  "message.game.end.3": "§c3ème",
+
+  "message.game.end.nobody": "Personne"
 }

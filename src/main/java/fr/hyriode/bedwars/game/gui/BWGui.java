@@ -32,7 +32,7 @@ public abstract class BWGui extends HyriInventory {
     }
 
     public BWGui(Player owner, HyriBedWars plugin, String name, TypeSize size, BWGui backGui, boolean autoInit) {
-        super(owner, name, size.getSize());
+        super(owner, name.length() > 30 ? name.substring(0, 29) + "..." : name, size.getSize());
 
         this.backGui = backGui;
         this.plugin = plugin;
