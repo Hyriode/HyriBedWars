@@ -703,9 +703,11 @@
 
   "upgrade.heal-pool.name": "Regeneration",
   "upgrade.heal-pool.lore": "Creates a regeneration field\naround your base.",
+  "upgrade.heal-pool.tier-1.name": "Regeneration",
 
   "upgrade.dragon-buff.name": "Dragon Buff",
   "upgrade.dragon-buff.lore": "Your team will benefit\nfrom 2 dragons instead of 1 in the\nsudden death phase.",
+  "upgrade.dragon-buff.tier-1.name": "Dragon Buff",
 
   "trap.blindness.name": "It's a Trap",
   "trap.blindness.lore": "Inflicts Blindness and Slowness\nfor 8 seconds.",

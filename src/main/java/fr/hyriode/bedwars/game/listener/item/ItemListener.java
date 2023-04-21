@@ -70,6 +70,11 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         Item itemDropped = event.getItemDrop();
         ItemStack itemStackDropped = itemDropped.getItemStack();
 
+        if(this.plugin.getGame().getPlayer(player).isSpectator()) {
+            event.setCancelled(true);
+            return;
+        }
+
         if(MetadataReferences.isPermanent(itemStackDropped)) {
             int slot = 0;
             itemDropped.remove();
