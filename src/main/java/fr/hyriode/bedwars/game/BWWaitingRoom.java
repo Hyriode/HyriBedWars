@@ -17,11 +17,13 @@ import fr.hyriode.hyrame.utils.DurationFormatter;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
+import java.util.function.Supplier;
+
 public class BWWaitingRoom extends HyriWaitingRoom {
-    public BWWaitingRoom(BWGame game, BWConfiguration configuration) {
+    public BWWaitingRoom(BWGame game, Supplier<BWConfiguration> configuration) {
         super(game,
                 Material.BED,
-                configuration::getWaitingRoom);
+                configuration);
 
         this.addLeaderboard(new Leaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience",
                 player -> HyriLanguageMessage.get("leaderboard.experience.display").getValue(player))

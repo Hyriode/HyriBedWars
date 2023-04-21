@@ -74,8 +74,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.description = HyriLanguageMessage.get("game.description");
         this.reconnectionTime = 120;
 
-
-        this.waitingRoom = new BWWaitingRoom(this, this.plugin.getConfiguration());
+        this.waitingRoom = new BWWaitingRoom(this, this.plugin::getConfiguration);
         this.waitingRoom.setup();
     }
 
