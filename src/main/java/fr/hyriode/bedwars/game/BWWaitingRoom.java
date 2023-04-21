@@ -54,7 +54,6 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         normal.addData(NPCData.voidData());
         normal.addData(new NPCData(this.getDisplayStatistics("games-played"), account -> String.valueOf(this.getStatistics(account, gameType).getPlayedGames())));
         normal.addData(new NPCData(this.getDisplayStatistics("played-time"), account -> this.formatPlayedTime(account, account.getStatistics().getPlayTime(HyriBedWars.ID + "#" + gameType.getName()))));
-        System.out.println("SSD : " + HyriAPI.get().getServer().getType());
 
         this.addNPCCategory(slot, normal);
     }

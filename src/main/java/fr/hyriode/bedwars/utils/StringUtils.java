@@ -2,7 +2,9 @@ package fr.hyriode.bedwars.utils;
 
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.api.language.HyriLanguageMessage;
+import fr.hyriode.bedwars.game.shop.ItemShop;
 import fr.hyriode.bedwars.game.type.BWGameType;
+import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -38,13 +40,33 @@ public class StringUtils {
         return min + ":" + (String.valueOf(sec).length() < 2 ? "0" + sec : sec);
     }
 
-    public static String getDisplayCostPrice(BWGameType gameType, Player player, ItemPrice price) {
+    public static String getDisplayCostPrice(Player player, ItemShop itemShop) {
         return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getValue(player)
-                + getDisplayPrice(gameType, player, price);
+                + getDisplayPrice(player, itemShop);
     }
 
-    public static String getDisplayPrice(BWGameType gameType, Player player, ItemPrice price) {
-        return price.getColor() + "" + price.getAmount().apply(gameType).get() + " " + price.getName(player);
+    public static String getDisplayCostPrice(Player player, ItemPrice itemPrice) {
+        return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getValue(player)
+                + getDisplayPrice(player, itemPrice);
+    }
+
+    public static String getDisplayCostPrice(Player player, Upgrade.Tier upgradeTier) {
+        return ChatColor.GRAY + HyriLanguageMessage.get("shop.inventory.item.cost").getValue(player)
+                + getDisplayPrice(player, upgradeTier);
+    }
+
+    public static String getDisplayPrice(Player player, ItemShop itemShop) {
+        ItemPrice itemPrice = itemShop.getPrice();
+        return itemPrice.getColor() + "" + itemShop.getPriceAmount() + " " + itemPrice.getName(player);
+    }
+
+    public static String getDisplayPrice(Player player, Upgrade.Tier upgradeTier) {
+        ItemPrice itemPrice = upgradeTier.getPrice();
+        return itemPrice.getColor() + "" + upgradeTier.getPriceAmount() + " " + itemPrice.getName(player);
+    }
+
+    public static String getDisplayPrice(Player player, ItemPrice itemPrice) {
+        return itemPrice.getColor() + "" + itemPrice.getAmount().get() + " " + itemPrice.getName(player);
     }
 
     public static HyriLanguageMessage getWordNumber(int i) {

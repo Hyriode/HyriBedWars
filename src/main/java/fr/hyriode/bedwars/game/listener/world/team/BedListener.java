@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.listener.world.team;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
@@ -42,6 +43,11 @@ public class BedListener extends HyriListener<HyriBedWars> {
                     team.breakBed(bwPlayer);
                     break;
                 }
+            }
+
+            if(!this.plugin.getGame().isCanBreakBed()) {
+                player.sendMessage(HyriLanguageMessage.get("game.bed.break.not-allowed").getValue(player));
+                event.setCancelled(true);
             }
         }
     }

@@ -6,6 +6,7 @@ import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.shop.material.upgrade.UpgradeMaterial;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import org.bukkit.Bukkit;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
@@ -19,10 +20,10 @@ public class MaterialShop {
     private final ShopCategory category;
     private final TriConsumer<BWGamePlayer, ItemStack, Integer> action;
     private boolean permanent;
-    private boolean disable;
+    private ValueProvider<Boolean> enable;
 
-    public MaterialShop(String name, ShopCategory category, boolean permanent, List<ItemShop> itemShops) {
-        this(name, category, permanent, (player, itemStack, slot) -> {
+    public MaterialShop(ValueProvider<Boolean> enable, String name, ShopCategory category, boolean permanent, List<ItemShop> itemShops) {
+        this(enable, name, category, permanent, (player, itemStack, slot) -> {
             Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> {
                 if(slot == -1) {
                     InventoryUtils.giveInSlot(player.getPlayer(), 0, itemStack);
@@ -33,7 +34,8 @@ public class MaterialShop {
         }, itemShops);
     }
 
-    public MaterialShop(String name, ShopCategory category, boolean permanent, TriConsumer<BWGamePlayer, ItemStack, Integer> action, List<ItemShop> itemShops) {
+    public MaterialShop(ValueProvider<Boolean> enable, String name, ShopCategory category, boolean permanent, TriConsumer<BWGamePlayer, ItemStack, Integer> action, List<ItemShop> itemShops) {
+        this.enable = enable;
         this.name = name;
         this.category = category;
         this.permanent = permanent;
@@ -61,12 +63,12 @@ public class MaterialShop {
         return category;
     }
 
-    public void setDisable(boolean disable) {
-        this.disable = disable;
+    public void setEnable(ValueProvider<Boolean> enable) {
+        this.enable = enable;
     }
 
-    public boolean isDisable() {
-        return disable;
+    public ValueProvider<Boolean> isEnable() {
+        return enable;
     }
 
     public boolean isPermanent() {
@@ -155,7 +157,7 @@ public class MaterialShop {
                 "name='" + name + '\'' +
                 ", category=" + category +
                 ", permanent=" + permanent +
-                ", disable=" + disable +
+                ", disable=" + enable +
                 '}';
     }
 

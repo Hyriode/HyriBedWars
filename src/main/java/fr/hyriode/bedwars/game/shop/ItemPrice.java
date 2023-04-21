@@ -16,27 +16,27 @@ import java.util.function.Function;
 public class ItemPrice {
 
     private ItemMoney itemMoney;
-    private Function<BWGameType, ValueProvider<Integer>> amount;
+    private ValueProvider<Integer> amount;
 
-    public ItemPrice(ItemMoney itemMoney, Function<BWGameType, ValueProvider<Integer>> amount){
+    public ItemPrice(ItemMoney itemMoney, ValueProvider<Integer> amount){
         this.itemMoney = itemMoney;
         this.amount = amount;
     }
 
     public ItemPrice(ItemMoney itemMoney, int amount){
-        this(itemMoney, (__) -> new ValueProvider<>(amount));
+        this(itemMoney, new ValueProvider<>(amount));
     }
 
     public ItemPrice(ItemMoney itemMoney){
-        this(itemMoney, (__) -> new ValueProvider<>(1));
+        this(itemMoney, new ValueProvider<>(1));
     }
 
     public ItemStack getItemStack() {
         return this.itemMoney.getAsItemStack();
     }
 
-    public List<ItemStack> getItemStacks(BWGameType gameType) {
-        long amount = this.amount.apply(gameType).get();
+    public List<ItemStack> getItemStacks() {
+        long amount = this.amount.get();
         List<ItemStack> itemStacks = new ArrayList<>();
         int maxStack = this.itemMoney.getAsItemStack().getMaxStackSize();
         int quotient = (int) (amount / maxStack);
@@ -50,8 +50,9 @@ public class ItemPrice {
         return itemStacks;
     }
 
-    public void setItemStack(ItemMoney itemMoney) {
+    public ItemPrice setItemStack(ItemMoney itemMoney) {
         this.itemMoney = itemMoney;
+        return this;
     }
 
     public String getName(Player player){
@@ -62,11 +63,11 @@ public class ItemPrice {
         return this.itemMoney.getDisplayName().getValue(player);
     }
 
-    public Function<BWGameType, ValueProvider<Integer>> getAmount() {
+    public ValueProvider<Integer> getAmount() {
         return amount;
     }
 
-    public void setAmount(Function<BWGameType, ValueProvider<Integer>> amount) {
+    public void setAmount(ValueProvider<Integer> amount) {
         this.amount = amount;
     }
 
@@ -74,20 +75,12 @@ public class ItemPrice {
         return this.itemMoney.getColor();
     }
 
-    public String getDisplayCostPrice(BWGameType gameType, Player player){
-        return StringUtils.getDisplayCostPrice(gameType, player, this);
-    }
-
-    public String getDisplayPrice(BWGameType gameType, Player player){
-        return StringUtils.getDisplayPrice(gameType, player, this);
-    }
-
     @Override
     public String toString() {
         return this.amount + " " + this.itemMoney.getAsItemStack();
     }
 
-    public boolean hasPrice(BWGameType gameType, Player owner) {
-        return InventoryUtils.hasPrice(gameType, owner, this);
+    public boolean hasPrice(Player owner, int amount) {
+        return InventoryUtils.hasPrice(owner, this, amount);
     }
 }

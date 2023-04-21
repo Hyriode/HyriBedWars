@@ -6,6 +6,7 @@ import fr.hyriode.bedwars.game.team.trap.TrapTeam;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.utils.StringUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
+import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import fr.hyriode.hyrame.item.ItemBuilder;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import org.bukkit.ChatColor;
@@ -17,13 +18,15 @@ import java.util.List;
 
 public class Trap {
 
+    private ValueProvider<Boolean> enable;
     private final String name;
     private final ItemStack icon;
     private final int timeSeconds;
     private final boolean showTitle;
     private final TriConsumer<BWGamePlayer, BWGameTeam, Trap> action;
 
-    public Trap(String name, ItemStack icon, int timeSeconds, TriConsumer<BWGamePlayer, BWGameTeam, Trap> action, boolean showTitle) {
+    public Trap(ValueProvider<Boolean> enable, String name, ItemStack icon, int timeSeconds, TriConsumer<BWGamePlayer, BWGameTeam, Trap> action, boolean showTitle) {
+        this.enable = enable;
         this.name = name;
         this.icon = icon;
         this.timeSeconds = timeSeconds;
@@ -55,21 +58,25 @@ public class Trap {
         return timeSeconds;
     }
 
+    public ValueProvider<Boolean> getEnable() {
+        return enable;
+    }
+
     public void active(BWGamePlayer enemy, BWGameTeam team) {
         this.action.accept(enemy, team, this);
     }
 
-    public ItemStack getIconForUpgrade(BWGameType gameType, Player player, TrapTeam trapTeam) {
+    public ItemStack getIconForUpgrade(Player player, TrapTeam trapTeam) {
         List<String> lore = new ArrayList<>(StringUtils.loreToList(this.getDisplayLore().getValue(player)));
 
         lore.add(" ");
         if(trapTeam.isFull())
             lore.add(ChatColor.RED + "Full");
         else
-            lore.add(StringUtils.getDisplayCostPrice(gameType, player, trapTeam.getPrice()));
+            lore.add(StringUtils.getDisplayCostPrice(player, trapTeam.getPrice()));
 
         return new ItemBuilder(this.icon.clone())
-                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(gameType, player)) + this.getDisplayName().getValue(player))
+                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player, trapTeam.getPrice().getAmount().get())) + this.getDisplayName().getValue(player))
                 .withLore(lore)
                 .build();
     }

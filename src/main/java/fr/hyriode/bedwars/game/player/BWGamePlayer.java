@@ -98,7 +98,6 @@ public class BWGamePlayer extends HyriGamePlayer {
     }
 
     public boolean kill() {
-        BWGameType gameType = this.plugin.getGame().getType();
         HyriLastHitterProtocol hitterProtocol = this.plugin.getGame().getProtocolManager().getProtocol(HyriLastHitterProtocol.class);
         List<HyriLastHitterProtocol.LastHitter> lastHitters = hitterProtocol.getLastHitters(this.player);
         boolean finalKill = !this.getBWTeam().hasBed();
@@ -108,11 +107,11 @@ public class BWGamePlayer extends HyriGamePlayer {
         if (lastHitters != null && !lastHitters.isEmpty()) {
             BWGamePlayer hitter = (BWGamePlayer) lastHitters.get(0).asGamePlayer();
             if(!hitter.isSpectator() && !hitter.isDead()) {
-                List<ItemPrice> itemStacks = InventoryUtils.getMoney(gameType, this.player.getInventory());
+                List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
 
                 for (ItemPrice money : itemStacks) {
-                    hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount().apply(gameType).get() + " " + money.getName(hitter));
-                    hitter.getPlayer().getInventory().addItem(money.getItemStacks(gameType).toArray(new ItemStack[0]));
+                    hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount().get() + " " + money.getName(hitter));
+                    hitter.getPlayer().getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
                 }
 
                 hitter.addKills(1);

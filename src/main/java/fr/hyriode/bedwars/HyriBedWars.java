@@ -12,7 +12,8 @@ import fr.hyriode.bedwars.game.test.TestConfiguration;
 import fr.hyriode.bedwars.game.trap.TrapManager;
 import fr.hyriode.bedwars.game.upgrade.UpgradeManager;
 import fr.hyriode.bedwars.host.BWUpgradeValues;
-import fr.hyriode.bedwars.host.category.MenuHostCategory;
+import fr.hyriode.bedwars.host.MenuShopHostCategory;
+import fr.hyriode.bedwars.host.category.MenuBedWarsHostCategory;
 import fr.hyriode.bedwars.manager.pnj.EntityInteractManager;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.HyrameLoader;
@@ -78,11 +79,12 @@ public class HyriBedWars extends JavaPlugin {
         this.hyrame.getGameManager().registerGame(() -> this.game);
 
         BWUpgradeValues.init(this.game.getType());
-        BWForgeValues.init(this.configuration, this.game.getType());
+        BWForgeValues.init(this.game.getType());
         this.initManager();
 
         if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {
-            HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuHostCategory());
+            HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuBedWarsHostCategory());
+            HyrameLoader.getHyrame().getHostController().addCategory(34, new MenuShopHostCategory());
         }
 
 
@@ -96,7 +98,7 @@ public class HyriBedWars extends JavaPlugin {
     }
 
     public void initManager() {
-        shopManager = new ShopManager();
+        shopManager = new ShopManager(this);
         upgradeManager = new UpgradeManager();
         entityManager = new EntityManager();
         trapManager = new TrapManager();

@@ -1,8 +1,11 @@
 package fr.hyriode.bedwars.game.listener.world;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.config.BWConfiguration;
+import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
+import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.bedwars.host.BWMapValues;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.NBTGetter;
@@ -31,34 +34,32 @@ public class WorldListener extends HyriListener<HyriBedWars> {
 
     @EventHandler
     public void onBreak(BlockBreakEvent event){
-        if(BWMapValues.BREAK_WORLD.get()) {
-            Location loc = event.getBlock().getLocation();
-            BWConfiguration config = this.plugin.getConfiguration();
-            List<Location> generators = new ArrayList<>(config.getDiamondGeneratorLocations());
+        Location loc = event.getBlock().getLocation();
+        BWConfiguration config = this.plugin.getConfiguration();
+        List<Location> generators = new ArrayList<>(config.getDiamondGeneratorLocations());
 
-            generators.addAll(config.getEmeraldGeneratorLocations());
+        generators.addAll(config.getEmeraldGeneratorLocations());
 
-            for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
-                if (team.getConfig().getBaseAreaProtection().isInArea(loc)) {
-                    event.setCancelled(true);
-                    break;
-                }
+        for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
+            if (team.getConfig().getBaseAreaProtection().isInArea(loc)) {
+                event.setCancelled(true);
+                break;
             }
-            for (Area area : config.getProtectionArea()) {
-                if(area.isInArea(loc)){
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-
-            for (Location locGenerator : generators) {
-                if(new Area(locGenerator.clone().subtract(3, 3, 3), locGenerator.clone().add(2, 3, 2)).isInArea(loc)){
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-            return;
         }
+        for (Area area : config.getProtectionArea()) {
+            if(area.isInArea(loc)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+
+        for (Location locGenerator : generators) {
+            if(new Area(locGenerator.clone().subtract(3, 3, 3), locGenerator.clone().add(2, 3, 2)).isInArea(loc)){
+                event.setCancelled(true);
+                return;
+            }
+        }
+        
         if(!event.getBlock().hasMetadata(MetadataReferences.PLACEBYPLAYER)){
             event.setCancelled(true);
         }
@@ -70,6 +71,14 @@ public class WorldListener extends HyriListener<HyriBedWars> {
         Block block = event.getBlock();
         Location loc = block.getLocation();
         BWConfiguration config = this.plugin.getConfiguration();
+        BWGamePlayer gamePlayer = this.plugin.getGame().getPlayer(player);
+        int limitY = BWGameValues.LIMIT_POS_Y.get();
+
+        if(limitY != 0 && loc.getBlockY() >= gamePlayer.getBWTeam().getConfig().getRespawnLocation().getBlockY() + BWGameValues.LIMIT_POS_Y.get()) {
+            player.sendMessage(HyriLanguageMessage.get("game.build-limit").getValue(player));
+            event.setCancelled(true);
+            return;
+        }
 
         for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
             if(team.getConfig().getBaseAreaProtection().isInArea(loc)){

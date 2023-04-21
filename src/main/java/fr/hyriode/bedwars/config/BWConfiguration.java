@@ -19,16 +19,12 @@ public class BWConfiguration implements IHyriConfig {
     private final AreaWrapper gameArea;
     private final List<AreaWrapper> protectionArea;
 
-    private final List<Generator> generatorsBase;
-    private final List<Generator> generatorsDiamond;
-    private final List<Generator> generatorsEmerald;
-
     private final List<LocationWrapper> diamondGeneratorLocations;
     private final List<LocationWrapper> emeraldGeneratorLocations;
 
     public BWConfiguration(HyriWaitingRoom.Config waitingRoom, AreaWrapper gameArea, List<AreaWrapper> protectionArea,
-                           List<Generator> generatorsDiamond, List<Generator> generatorsEmerald, List<LocationWrapper> diamondGeneratorLocations, List<LocationWrapper> emeraldGeneratorLocations,
-                           List<Generator> generatorsBase, List<Team> teams, double cancelInventoryY) {
+                           List<LocationWrapper> diamondGeneratorLocations, List<LocationWrapper> emeraldGeneratorLocations,
+                           List<Team> teams) {
         this.teams = teams;
 
         this.waitingRoom = waitingRoom;
@@ -37,9 +33,6 @@ public class BWConfiguration implements IHyriConfig {
 
         this.diamondGeneratorLocations = diamondGeneratorLocations;
         this.emeraldGeneratorLocations = emeraldGeneratorLocations;
-        this.generatorsDiamond = generatorsDiamond;
-        this.generatorsEmerald = generatorsEmerald;
-        this.generatorsBase = generatorsBase;
     }
 
     public List<Team> getTeams() {
@@ -68,18 +61,6 @@ public class BWConfiguration implements IHyriConfig {
 
     public List<Location> getEmeraldGeneratorLocations() {
         return this.emeraldGeneratorLocations.stream().map(LocationWrapper::asBukkit).collect(Collectors.toList());
-    }
-
-    public List<Generator> getGeneratorsBase() {
-        return generatorsBase;
-    }
-
-    public List<Generator> getGeneratorsDiamond() {
-        return generatorsDiamond;
-    }
-
-    public List<Generator> getGeneratorsEmerald() {
-        return generatorsEmerald;
     }
 
     @Override

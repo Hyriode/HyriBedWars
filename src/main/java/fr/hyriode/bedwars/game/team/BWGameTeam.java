@@ -263,7 +263,6 @@ public class BWGameTeam extends HyriGameTeam {
                         .replace("%enemy%", enemy.apply(p))
                         : HyriLanguageMessage.get("bed.broken.subtitle").getValue(p)),
                 10, 40, 10);
-        System.out.println("Broad");
         BroadcastUtil.broadcast(p -> breaker != null
                 ? HyriLanguageMessage.get("bed.broken.message.player").getValue(p)
                 .replace("%team%", team.apply(p))

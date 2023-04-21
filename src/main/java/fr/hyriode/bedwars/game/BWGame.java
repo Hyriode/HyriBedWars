@@ -13,6 +13,7 @@ import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.BWGameTeamColor;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
+import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.game.HyriGame;
@@ -50,6 +51,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     private BWGameTask task;
     private Map<UUID/*player id*/, List<UUID/*npc id*/>> npcs = new HashMap<>();
+    private boolean canBreakBed = true;
+    private BWBedTask bedTask;
+
 
     public BWGame(HyriBedWars plugin) {
         super(plugin.getHyrame(),
@@ -103,12 +107,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     public void checkNpc(Player player) {
-        System.out.println(this.npcs.get(player.getUniqueId()));
         for (UUID npcId : this.npcs.get(player.getUniqueId())) {
             NPCManager.getNPCs().stream().filter(npc -> npc.getUniqueID().equals(npcId)).forEach(npc -> {
-                System.out.println("NPC");
                 if(npc.getPlayers().isEmpty()) {
-                    System.out.println("ADD");
                     npc.addPlayer(player);
                 }
             });
@@ -233,6 +234,9 @@ public class BWGame extends HyriGame<BWGamePlayer> {
                 .withOptions(new HyriDeathProtocol.Options().withYOptions(yOptions)));
 
         this.task = new BWGameTask(this.plugin);
+        if(BWGameValues.BED_BREAKING_DELAY.get() != 0) {
+            this.bedTask = new BWBedTask(this.plugin);
+        }
 
         this.teleportTeams();
         this.createGenerators();
@@ -262,7 +266,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     private HyriDeathProtocol.Screen createDeathScreen() {
-        return new HyriDeathProtocol.Screen(5, victim -> {
+        return new HyriDeathProtocol.Screen(BWGameValues.RESPAWNING_DELAY.get(), victim -> {
             final BWGamePlayer gamePlayer = this.getPlayer(victim);
             if(gamePlayer == null || gamePlayer.isSpectator())
                 return;
@@ -346,5 +350,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     public Map<UUID, List<UUID>> getNPCs() {
         return npcs;
+    }
+
+    public void setBedBreakable(boolean canBreakBed) {
+        this.canBreakBed = canBreakBed;
+    }
+
+    public boolean isCanBreakBed() {
+        return canBreakBed;
     }
 }

@@ -3,8 +3,10 @@ package fr.hyriode.bedwars.game.generator;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
+import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
+import fr.hyriode.hyrame.item.ItemBuilder;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -89,10 +91,11 @@ public class BWGenerator {
         public Map<String, HyriGenerator> getGenerators(HyriBedWars plugin, Location loc) {
             Map<String, HyriGenerator> generators = new HashMap<>();
             BWGenerator originGenerator = this.generator.get();
+            int amount = this.getName().equals(StandardGenerator.DIAMOND.name().toLowerCase()) ? BWGameValues.DIAMOND_GENERATOR_RATE.get() : this.getName().equals(StandardGenerator.EMERALD.name().toLowerCase()) ? BWGameValues.EMERALD_GENERATOR_RATE.get() : 1;
             this.drops.forEach(drop -> {
                 Drop originDrop = drop.get();
                 HyriGenerator.Builder generator = new HyriGenerator.Builder(plugin, loc, originDrop.getTier())
-                        .withItem(originDrop.getDrop().getAsItemStack());
+                        .withItem(originDrop.getDrop().getAsItemStack(amount));
                 if(originGenerator.getHeader() != null) {
                     generator.withDefaultHeader(originGenerator.getHeader(), (player) -> ChatColor.AQUA + "" + ChatColor.BOLD + HyriLanguageMessage.get("generator." + originGenerator.getName()).getValue(player))
                             .withDefaultAnimation();

@@ -6,6 +6,7 @@ import fr.hyriode.bedwars.config.BWConfiguration;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.host.BWForgeValues;
+import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.game.HyriGameState;
 import fr.hyriode.hyrame.game.util.value.ValueProvider;
@@ -61,7 +62,7 @@ public class GeneratorManager {
                         )
                 );
             }
-            return config.getGeneratorsBase().stream().map(generator -> this.getDrop(StandardGenerator.FORGE, generator)).collect(Collectors.toList());
+            return StandardGenerator.FORGE.getTiers(gameType);//config.getGeneratorsBase().stream().map(generator -> this.getDrop(StandardGenerator.FORGE, generator)).collect(Collectors.toList());
         });
 
         this.add(DIAMOND, new ItemStack(Material.DIAMOND_BLOCK), () -> {
@@ -72,7 +73,7 @@ public class GeneratorManager {
                         new BWGenerator.Tier(2, DIAMOND, () -> this.getDrop(__ -> "III", DIAMOND, 2, ItemMoney.DIAMOND))
                 );
             }
-            return config.getGeneratorsDiamond().stream().map(generator -> this.getDrop(StandardGenerator.DIAMOND, generator)).collect(Collectors.toList());
+            return StandardGenerator.DIAMOND.getTiers(gameType);//config.getGeneratorsDiamond().stream().map(generator -> this.getDrop(StandardGenerator.DIAMOND, generator)).collect(Collectors.toList());
         });
 
         this.add(EMERALD, new ItemStack(Material.EMERALD_BLOCK), () -> {
@@ -83,7 +84,7 @@ public class GeneratorManager {
                         new BWGenerator.Tier(2, EMERALD, () -> this.getDrop(__ -> "III", EMERALD, 2, ItemMoney.EMERALD))
                 );
             }
-            return config.getGeneratorsEmerald().stream().map(generator -> this.getDrop(StandardGenerator.EMERALD, generator)).collect(Collectors.toList());
+            return StandardGenerator.EMERALD.getTiers(gameType);//config.getGeneratorsEmerald().stream().map(generator -> this.getDrop(StandardGenerator.EMERALD, generator)).collect(Collectors.toList());
         });
     }
 
@@ -115,9 +116,17 @@ public class GeneratorManager {
         ValueProvider<Integer> spawnBetween = BWForgeValues.getSpawnBetween(generatorName, tier, dropName);
         ValueProvider<Boolean> splitting = BWForgeValues.getSplitting(generatorName, tier, dropName);
         if(this.plugin.getGame().getState() == HyriGameState.PLAYING) {
-            return new BWGenerator.Tier.Drop(name, spawnLimit.get(), spawnBetween.get(), splitting.get(), drop);
+            int percentage = BWGameValues.FORGE_GENERATOR_RATE.get();
+            int spawnBetweenValue = spawnBetween.get();
+            int calc = generatorName.equals(StandardGenerator.FORGE.name().toLowerCase()) ? c(percentage, spawnBetweenValue) : spawnBetweenValue;
+            System.out.println(calc + " " + spawnBetweenValue);
+            return new BWGenerator.Tier.Drop(name, spawnLimit.get(), calc, splitting.get(), drop);
         }
         return new BWGenerator.Tier.Drop(name, spawnLimit.getDefaultValue(), spawnBetween.getDefaultValue(), splitting.getDefaultValue(), drop);
+    }
+
+    public static int c(double percentage, int dropRate) {
+        return (int) (dropRate / (percentage / 100));
     }
 
     public List<BWGenerator> getGenerators() {

@@ -5,6 +5,10 @@ import fr.hyriode.hyrame.game.util.value.HostValueModifier;
 import fr.hyriode.hyrame.game.util.value.ValueProvider;
 
 public class BWUpgradeValues {
+
+    public static final ValueProvider<Boolean> UPGRADE_ENABLED = new ValueProvider<>(true).addModifiers(new HostValueModifier<>(1, Boolean.class, "upgrades-enabled"));
+    public static final ValueProvider<Integer> UPGRADE_PRICE = new ValueProvider<>(100).addModifiers(new HostValueModifier<>(1, Integer.class, "upgrades-price"));
+
     public static final ValueProvider<Boolean> SHARPNESS_ENABLED = new ValueProvider<>(true).addModifiers(new HostValueModifier<>(1, Boolean.class, "upgrade-sharpness-enabled"));
     public static ValueProvider<Integer> SHARPNESS_PRICE_TIER_0;
 
@@ -31,7 +35,6 @@ public class BWUpgradeValues {
     public static ValueProvider<Integer> DRAGON_BUFF_PRICE_TIER_0;
 
     public static void init(BWGameType gameType) {
-        System.out.println("Initializing upgrade values for " + gameType);
         SHARPNESS_PRICE_TIER_0 = new ValueProvider<>(gameType.isForTrioSquad() ? 8 : 4).addModifiers(new HostValueModifier<>(1, Integer.class, "upgrade-sharpness-price-tier-0"));
 
         PROTECTION_PRICE_TIER_0 = new ValueProvider<>(gameType.isForTrioSquad() ? 5 : 2).addModifiers(new HostValueModifier<>(1, Integer.class, "upgrade-protection-price-tier-0"));

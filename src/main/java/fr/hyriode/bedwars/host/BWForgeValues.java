@@ -28,66 +28,56 @@ public class BWForgeValues {
     private static final Map<String, ValueProvider<Integer>> SPAWN_BETWEEN = new HashMap<>();
     private static final Map<String, ValueProvider<Boolean>> SPLITTING = new HashMap<>();
 
-    public static void init(Supplier<BWConfiguration> configurationSupplier, BWGameType gameType) {
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 0, IRON);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 0, GOLD);
+    public static void init(BWGameType gameType) {
+        addDrop(gameType, GeneratorManager.FORGE, 0, IRON);
+        addDrop(gameType, GeneratorManager.FORGE, 0, GOLD);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 1, IRON);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 1, GOLD);
+        addDrop(gameType, GeneratorManager.FORGE, 1, IRON);
+        addDrop(gameType, GeneratorManager.FORGE, 1, GOLD);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 2, IRON);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 2, GOLD);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 2, EMERALD);
+        addDrop(gameType, GeneratorManager.FORGE, 2, IRON);
+        addDrop(gameType, GeneratorManager.FORGE, 2, GOLD);
+        addDrop(gameType, GeneratorManager.FORGE, 2, EMERALD);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 3, IRON);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 3, GOLD);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 3, EMERALD);
+        addDrop(gameType, GeneratorManager.FORGE, 3, IRON);
+        addDrop(gameType, GeneratorManager.FORGE, 3, GOLD);
+        addDrop(gameType, GeneratorManager.FORGE, 3, EMERALD);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 4, IRON);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 4, GOLD);
-        addDrop(configurationSupplier, gameType, GeneratorManager.FORGE, 4, EMERALD);
+        addDrop(gameType, GeneratorManager.FORGE, 4, IRON);
+        addDrop(gameType, GeneratorManager.FORGE, 4, GOLD);
+        addDrop(gameType, GeneratorManager.FORGE, 4, EMERALD);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.DIAMOND, 0, DIAMOND);
-        addDrop(configurationSupplier, gameType, GeneratorManager.DIAMOND, 1, DIAMOND);
-        addDrop(configurationSupplier, gameType, GeneratorManager.DIAMOND, 2, DIAMOND);
+        addDrop(gameType, GeneratorManager.DIAMOND, 0, DIAMOND);
+        addDrop(gameType, GeneratorManager.DIAMOND, 1, DIAMOND);
+        addDrop(gameType, GeneratorManager.DIAMOND, 2, DIAMOND);
 
-        addDrop(configurationSupplier, gameType, GeneratorManager.EMERALD, 0, EMERALD);
-        addDrop(configurationSupplier, gameType, GeneratorManager.EMERALD, 1, EMERALD);
-        addDrop(configurationSupplier, gameType, GeneratorManager.EMERALD, 2, EMERALD);
+        addDrop(gameType, GeneratorManager.EMERALD, 0, EMERALD);
+        addDrop(gameType, GeneratorManager.EMERALD, 1, EMERALD);
+        addDrop(gameType, GeneratorManager.EMERALD, 2, EMERALD);
     }
 
-    private static void addDrop(Supplier<BWConfiguration> configurationSupplier, BWGameType gameType, String generator, int tier, String drop) {
+    private static void addDrop(BWGameType gameType, String generator, int tier, String drop) {
         addSpawnLimit(gameType, generator, tier, drop);
-        addSpawnBetween(configurationSupplier, gameType, generator, tier, drop);
+        addSpawnBetween(gameType, generator, tier, drop);
         addSplitting(gameType, generator, tier, drop);
     }
 
     private static void addSpawnLimit(BWGameType gameType, String generator, int tier, String drop) {
         String optionName = formatSpawnLimit(generator, tier, drop);
         Integer spawnLimit = StandardGenerator.getSpawnLimit(gameType, generator, tier, drop);
-        SPAWN_LIMIT.put(optionName, new ValueProvider<>(spawnLimit != null ? spawnLimit : 20)
-                .addModifiers(new HostValueModifier<>(1, Integer.class, optionName)));
+        SPAWN_LIMIT.put(optionName, new ValueProvider<>(spawnLimit != null ? spawnLimit : 20));
     }
 
-    private static void addSpawnBetween(Supplier<BWConfiguration> dropSupplier, BWGameType gameType, String generator, int tier, String dropName) {
+    private static void addSpawnBetween(BWGameType gameType, String generator, int tier, String dropName) {
         String optionName = formatSpawnBetween(generator, tier, dropName);
         Integer spawnBetween = StandardGenerator.getSpawnBetween(gameType, generator, tier, dropName);
-        BWConfiguration.Generator gen = dropSupplier.get().getGeneratorsBase().stream().filter(g -> g.getTier() == tier).findFirst().orElse(null);
-        if(gen != null) {
-            BWConfiguration.Generator.Drop drop = gen.getDrops().stream().filter(d -> d.getItemName().equals(dropName)).findFirst().orElse(null);
-            if(drop != null) {
-                spawnBetween = drop.getSpawnBetween();
-            }
-        }
-        SPAWN_BETWEEN.put(optionName, new ValueProvider<>(spawnBetween != null ? spawnBetween : 20)
-                .addModifiers(new HostValueModifier<>(1, Integer.class, optionName)));
+        SPAWN_BETWEEN.put(optionName, new ValueProvider<>(spawnBetween != null ? spawnBetween : 20));
     }
 
     private static void addSplitting(BWGameType gameType, String generator, int tier, String drop) {
         String optionName = formatSplitting(generator, tier, drop);
         Boolean splitting = StandardGenerator.getSplitting(gameType, generator, tier, drop);
-        SPLITTING.put(optionName, new ValueProvider<>(splitting != null ? splitting : false)
-                .addModifiers(new HostValueModifier<>(1, Boolean.class, optionName)));
+        SPLITTING.put(optionName, new ValueProvider<>(splitting != null ? splitting : false));
     }
 
     public static Map<String, ValueProvider<Boolean>> getSplitting() {

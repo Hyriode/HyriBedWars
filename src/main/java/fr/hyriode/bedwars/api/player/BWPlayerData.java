@@ -36,7 +36,7 @@ public class BWPlayerData implements IHyriPlayerData {
     public Map<Integer, MaterialShop> getQuickBuyShop() {
         Map<Integer, MaterialShop> finalQuickBuy = new HashMap<>();
         this.quickBuy.forEach((slot, name) -> {
-            finalQuickBuy.put(slot, HyriBedWars.getShopManager().getMaterialShopByName(name));
+            finalQuickBuy.put(slot, HyriBedWars.getShopManager().getMaterialShopByName(true, name));
         });
         return finalQuickBuy;
     }

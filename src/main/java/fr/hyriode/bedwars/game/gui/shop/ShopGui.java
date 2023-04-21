@@ -15,6 +15,7 @@ import fr.hyriode.bedwars.game.shop.*;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
+import fr.hyriode.bedwars.host.BWShopValues;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.SoundUtils;
 import fr.hyriode.bedwars.utils.StringUtils;
@@ -41,7 +42,6 @@ public class ShopGui extends BWGui {
     protected void initGui() {
         final BWGamePlayer player = this.getPlayer();
         final BWPlayerData account = player.getAccount();
-        final BWGameType gameType = this.plugin.getGame().getType();
 
         final GuiPattern pattern = DefaultGuiPattern.valueOf(account.getGameStyle().name()).getGuiPattern(this);
         final GuiPattern.Size size = pattern.getSize();
@@ -49,11 +49,11 @@ public class ShopGui extends BWGui {
         pattern.initGui();
 
         final Map<Integer, MaterialShop> materials = this.category != ShopCategory.QUICK_BUY
-                ? HyriBedWars.getShopManager().getItemShopByCategoryToMap(0, this.category)
+                ? HyriBedWars.getShopManager().getItemShopByCategoryToMap(true, 0, this.category)
                 : account.getQuickBuyShop();
 
         if(this.category == ShopCategory.MELEE && account.getGameStyle() == HyriGameStyle.HYRIODE){
-            materials.putAll(HyriBedWars.getShopManager().getItemShopByCategoryToMap(materials.size() + 3, ShopCategory.RANGED));
+            materials.putAll(HyriBedWars.getShopManager().getItemShopByCategoryToMap(true, materials.size() + 3, ShopCategory.RANGED));
         }
 
         int i = 0;
@@ -65,7 +65,7 @@ public class ShopGui extends BWGui {
                     final MaterialShop material = materials.get(slot);
                     if(material == null) continue;
                     final ItemShop itemShop = material.getItemShopForPlayer(player);
-                    this.setItem(size.getStartX() + x, size.getStartY() + y, itemShop.getForShop(gameType, player, this.category), event -> {
+                    this.setItem(size.getStartX() + x, size.getStartY() + y, itemShop.getForShop(player, this.category), event -> {
                         if(event.getClick().isShiftClick() && event.getClick().isRightClick()){
                             if(this.category != ShopCategory.QUICK_BUY){
                                 new ChoiceSlotGui(this.owner, this.plugin, material, this).open();
@@ -73,6 +73,11 @@ public class ShopGui extends BWGui {
                             }
                             account.removeSlotQuickBuy(slot);
                             this.refresh();
+                            return;
+                        }
+                        if(itemShop.getItem().getType() == Material.POTION && !BWShopValues.POTIONS_ENABLE.get()) {
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("potion.disabled").getValue(this.owner));
+                            SoundUtils.playCantBuy(player.getPlayer());
                             return;
                         }
                         if(player.isFullInventory()){
@@ -84,8 +89,8 @@ public class ShopGui extends BWGui {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.item.unlocked").getValue(this.owner));
                         } else if (player.containsMaterialUpgrade(material) && player.getMaterialUpgrade(material).isMaxed()) {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.item.maxed").getValue(this.owner));
-                        }else if (itemShop.hasPrice(gameType, this.owner)) {
-                            InventoryUtils.removeMoney(gameType, this.owner, itemShop.getPrice());
+                        }else if (itemShop.hasPrice(this.owner)) {
+                            InventoryUtils.removeMoney(this.owner, itemShop.getPrice(), itemShop.getPriceAmount());
                             material.buy(event, player);
                             SoundUtils.playBuy(owner);
                             this.owner.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased").getValue(this.owner).replace("%item%", ChatColor.GOLD + itemShop.getDisplayName().getValue(this.owner)));
@@ -93,7 +98,7 @@ public class ShopGui extends BWGui {
                             return;
                         }else {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
-                                    .replace("%name%", itemShop.getPrice().getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(gameType, this.owner, itemShop.getPrice()) + ""));
+                                    .replace("%name%", itemShop.getPrice().getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, itemShop.getPrice(), itemShop.getPriceAmount()) + ""));
                         }
                         SoundUtils.playCantBuy(owner);
                     });
