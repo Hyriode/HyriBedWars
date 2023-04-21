@@ -17,9 +17,9 @@ public class MenuBedWarsHostCategory extends HostCategory {
         this.guiProvider = player -> new BWHostGUI(player, this);
 
         this.addSubCategory(slot(3, 3), new EventTimeHostCategory());
-        this.addOption(slot(4, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("time-before-spawn", Material.MONSTER_EGG), 5, 0, 60, 10)); //secondes
-        this.addOption(slot(4, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("limit-pos-y", Material.WOOL), 0, 0, 256, 10));
-        this.addOption(slot(3, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("time-before-destroy-bed", Material.BED), 0, 0, 60, 10)); //mins
+        this.addOption(slot(4, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("time-before-spawn", Material.MONSTER_EGG), BWGameValues.RESPAWNING_DELAY.getDefaultValue(), 0, 60, 10)); //secondes
+        this.addOption(slot(4, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("limit-pos-y", Material.WOOL), BWGameValues.LIMIT_POS_Y.getDefaultValue(), 0, 256, 10));
+        this.addOption(slot(3, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("time-before-destroy-bed", Material.BED), BWGameValues.BED_BREAKING_DELAY.getDefaultValue(), 0, 60, 10)); //mins
 
         this.addOption(slot(6, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("drop-number-diamond", Material.DIAMOND), BWGameValues.DIAMOND_GENERATOR_RATE.getDefaultValue(), 1, 10, 5));
         this.addOption(slot(7, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("drop-number-emerald", Material.EMERALD), BWGameValues.EMERALD_GENERATOR_RATE.getDefaultValue(), 1, 10, 5));

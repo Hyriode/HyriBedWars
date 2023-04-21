@@ -9,7 +9,7 @@ public class BWGameValues {
             .addModifiers(new HostValueModifier<>(1, Integer.class, "time-before-destroy-bed"));
     public static final ValueProvider<Integer> RESPAWNING_DELAY = new ValueProvider<>(5)
             .addModifiers(new HostValueModifier<>(1, Integer.class, "time-before-spawn"));
-    public static final ValueProvider<Integer> LIMIT_POS_Y = new ValueProvider<>(5)
+    public static final ValueProvider<Integer> LIMIT_POS_Y = new ValueProvider<>(0)
             .addModifiers(new HostValueModifier<>(1, Integer.class, "limit-pos-y"));
 
     public static final ValueProvider<Integer> DIAMOND_GENERATOR_RATE = new ValueProvider<>(1)
