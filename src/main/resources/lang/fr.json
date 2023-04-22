@@ -726,6 +726,10 @@
   "no-trap.sub-lore": "Acheter un piège le stockera\nici. Son coût sera proportionnel\nau nombre de pièges stockés.",
 
   "trap.next-trap": "Prochain piège: %trap%",
+  "trap.title": "PIEGE DÉCLENCHÉ !",
+  "trap.subtitle": "Le %trap% a été déclenché !",
+  "trap.alarm.title": "ALARME !!!",
+  "trap.alarm.subtitle": "Piège d'alarme déclenché par l'équipe %team% !",
 
   "trap.timer.magic-milk": "Lait Magique",
 

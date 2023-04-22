@@ -726,6 +726,10 @@
   "no-trap.sub-lore": "Buying a trap will store it\nhere. Its cost will be proportional\nto the number of traps stored.",
 
   "trap.next-trap": "Next Trap: %trap%",
+  "trap.title": "TRAP TRIGGERED!",
+  "trap.subtitle": "Your %trap% has been triggered!",
+  "trap.alarm.title": "ALARM!!!",
+  "trap.alarm.subtitle": "Alarm trap set off by %team% team!",
 
   "trap.timer.magic-milk": "Magic Milk",
 
