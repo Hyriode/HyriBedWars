@@ -173,6 +173,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final boolean host = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
 
             if (!host){
+                gamePlayer.update();
                 gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
             }
 
