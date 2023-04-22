@@ -186,14 +186,16 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             final double xp = host ? 0 : hyriPlayer.getNetworkLeveling().addExperience(HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner));
             final String rewards = ChatColor.LIGHT_PURPLE + String.valueOf(hyris) + " Hyris " + ChatColor.GREEN + xp + " XP";
 
-            final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
+            if(!host) {
+                final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
 
-            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience").incrementScore(playerId, xp);
-            provider.getLeaderboard(HyriBedWars.ID, "kills").incrementScore(playerId, kills);
-            provider.getLeaderboard(HyriBedWars.ID, "beds-destroyed").incrementScore(playerId, gamePlayer.getBedsBroken());
+                provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience").incrementScore(playerId, xp);
+                provider.getLeaderboard(HyriBedWars.ID, "kills").incrementScore(playerId, kills);
+                provider.getLeaderboard(HyriBedWars.ID, "beds-destroyed").incrementScore(playerId, gamePlayer.getBedsBroken());
 
-            if (isWinner) {
-                provider.getLeaderboard(HyriBedWars.ID, "victories").incrementScore(playerId, 1);
+                if (isWinner) {
+                    provider.getLeaderboard(HyriBedWars.ID, "victories").incrementScore(playerId, 1);
+                }
             }
 
             hyriPlayer.update();
