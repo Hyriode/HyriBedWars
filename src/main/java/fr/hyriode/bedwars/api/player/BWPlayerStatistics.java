@@ -210,5 +210,19 @@ public class BWPlayerStatistics implements IHyriStatistics {
             this.bedsBroken = document.getLong("bedsBroken");
             this.playedGames = document.getLong("playedGames");
         }
+
+        @Override
+        public String toString() {
+            return "Data{" +
+                    "kills=" + kills +
+                    ", deaths=" + deaths +
+                    ", finalKills=" + finalKills +
+                    ", bestWinStreak=" + bestWinStreak +
+                    ", currentWinStreak=" + currentWinStreak +
+                    ", totalWins=" + totalWins +
+                    ", bedsBroken=" + bedsBroken +
+                    ", playedGames=" + playedGames +
+                    '}';
+        }
     }
 }

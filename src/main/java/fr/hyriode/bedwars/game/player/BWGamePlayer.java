@@ -370,18 +370,6 @@ public class BWGamePlayer extends HyriGamePlayer {
         return playerStatistics;
     }
 
-    public BWPlayerStatistics.Data getStatistic(BWGameType gameType) {
-        return this.getStatistics().getData(gameType);
-    }
-
-    public BWPlayerStatistics.Data getStatistic(HyriGameType gameType) {
-        return this.getStatistics().getData((BWGameType) gameType);
-    }
-
-    public BWPlayerStatistics.Data getAllStatistics() {
-        return this.getStatistics().getAllData();
-    }
-
     public void setKills(int kills) {
         this.kills = kills;
     }

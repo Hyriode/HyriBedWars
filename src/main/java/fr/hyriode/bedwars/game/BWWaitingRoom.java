@@ -91,11 +91,11 @@ public class BWWaitingRoom extends HyriWaitingRoom {
     }
 
     private BWPlayerStatistics.Data getStatistics(IHyriPlayer account, BWGameType gameType) {
-        return ((BWGamePlayer) this.game.getPlayer(account.getUniqueId())).getStatistic(gameType);
+        return ((BWGamePlayer) this.game.getPlayer(account.getUniqueId())).getStatistics().getData(gameType);
     }
 
     private BWPlayerStatistics.Data getAllStatistics(IHyriPlayer account) {
-        return ((BWGamePlayer) this.game.getPlayer(account.getUniqueId())).getAllStatistics();
+        return ((BWGamePlayer) this.game.getPlayer(account.getUniqueId())).getStatistics().getAllData();
     }
 
 

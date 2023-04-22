@@ -170,15 +170,16 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         }
 
         this.players.forEach(gamePlayer -> {
-            IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
             final boolean host = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
-            final UUID playerId = gamePlayer.getUniqueId();
-            final int kills = gamePlayer.getKills();
-            final boolean isWinner = winner.contains(gamePlayer);
 
             if (!host){
                 gamePlayer.updateStatistics(gamePlayer.getTeam().equals(winner));
             }
+
+            IHyriPlayer hyriPlayer = gamePlayer.asHyriPlayer();
+            final UUID playerId = gamePlayer.getUniqueId();
+            final int kills = gamePlayer.getKills();
+            final boolean isWinner = winner.contains(gamePlayer);
 
             final long hyris = host ? 0 : hyriPlayer.getHyris().add(HyriRewardAlgorithm.getHyris(kills, gamePlayer.getPlayTime(), isWinner)).withMessage(false).exec();
             final double xp = host ? 0 : hyriPlayer.getNetworkLeveling().addExperience(HyriRewardAlgorithm.getXP(kills, gamePlayer.getPlayTime(), isWinner));

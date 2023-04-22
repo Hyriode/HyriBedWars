@@ -68,8 +68,8 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration::getPoseidonTrio;
-            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
-            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
+//            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
+//            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
         } else {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
