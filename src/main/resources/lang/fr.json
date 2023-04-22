@@ -12,6 +12,7 @@
   "statistics.bedsBroken.name": "Lits détruits",
   "statistics.games-played.name": "Parties jouées",
   "statistics.played-time.name": "Temps joué",
+  "statistics.played-time.none": "Jamais",
 
   "team.blue.display": "Bleu",
   "team.red.display": "Rouge",
@@ -518,6 +519,13 @@
   "host.option.shop-item-compact-tower-enabled.description": "§7Activer ou désactiver l'item §bTour de Défense Compacte§7.",
   "host.option.shop-item-compact-tower-price.name": "§bPrix",
   "host.option.shop-item-compact-tower-price.description": "§7Fixer le prix de l'item §bTour de Défense Compacte§7.",
+
+  "host.option.type.minutes": "m",
+  "host.option.type.seconds": "s",
+  "host.option.type.multiple": "x",
+  "host.option.bedwars.limit-pos-y.no-limit": "Aucune limite",
+  "host.option.bedwars.time-before-destroy-bed.no-limit": "Dès le départ",
+  "host.option.bedwars.time-before-spawn.instant": "Instantané",
 
   "death.final": "§b§lELIMINATION FINALE",
 

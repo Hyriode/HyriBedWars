@@ -86,7 +86,7 @@ public class BWWaitingRoom extends HyriWaitingRoom {
 
     private String formatPlayedTime(IHyriPlayer account, long playedTime) {
         if(playedTime == 0)
-            return "Jamais";
+            return HyriLanguageMessage.get("statistics.played-time.none").getValue(account);
         return new DurationFormatter().format(account.getSettings().getLanguage(), playedTime);
     }
 

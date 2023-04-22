@@ -5,13 +5,14 @@
   "statistics.deaths.name": "Deaths",
   "statistics.finalKills.name": "Final kills",
   "statistics.bestWinStreak.name": "Best winning streak",
-  "statistics.currentWinStreak.name": "Série de victoire",
+  "statistics.currentWinStreak.name": "Winning streak",
   "statistics.totalWins.name": "Total wins",
   "statistics.totalDefeats.name": "Total defeats",
   "statistics.finalKillsDeathRatio.name": "FKDR",
   "statistics.bedsBroken.name": "Beds destroyed",
   "statistics.games-played.name": "Played games",
   "statistics.played-time.name": "Played time",
+  "statistics.played-time.none": "Never",
 
   "team.blue.display": "Blue",
   "team.red.display": "Red",
@@ -518,6 +519,14 @@
   "host.option.shop-item-compact-tower-enabled.description": "§7Enable or disable the item §bCompact Tower§7.",
   "host.option.shop-item-compact-tower-price.name": "§bPrice",
   "host.option.shop-item-compact-tower-price.description": "§7Set the price of the item §bCompact Tower§7.",
+
+  "host.option.type.minutes": "m",
+  "host.option.type.seconds": "s",
+  "host.option.type.multiple": "x",
+  "host.option.bedwars.limit-pos-y.no-limit": "No limit",
+  "host.option.bedwars.time-before-destroy-bed.no-limit": "From the start",
+  "host.option.bedwars.time-before-spawn.instant": "Instant",
+
 
   "death.final": "§b§lFINAL KILL",
 

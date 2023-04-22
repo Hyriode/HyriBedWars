@@ -47,8 +47,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private final List<HyriGenerator> diamondGenerators;
     private final List<HyriGenerator> emeraldGenerators;
 
-    private final HyriWaitingRoom waitingRoom;
-
     private BWGameTask task;
     private Map<UUID/*player id*/, List<UUID/*npc id*/>> npcs = new HashMap<>();
     private boolean canBreakBed = true;
@@ -75,7 +73,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         this.reconnectionTime = 120;
 
         this.waitingRoom = new BWWaitingRoom(this, this.plugin::getConfiguration);
-        this.waitingRoom.setup();
     }
 
     private void registerTeams() {
@@ -189,7 +186,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
             final IHyriLeaderboardProvider provider = HyriAPI.get().getLeaderboardProvider();
 
-            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "rotating-game-experience").incrementScore(playerId, xp);
+            provider.getLeaderboard(NetworkLeveling.LEADERBOARD_TYPE, "bedwars-experience").incrementScore(playerId, xp);
             provider.getLeaderboard(HyriBedWars.ID, "kills").incrementScore(playerId, kills);
             provider.getLeaderboard(HyriBedWars.ID, "beds-destroyed").incrementScore(playerId, gamePlayer.getBedsBroken());
 
@@ -213,8 +210,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     @Override
     public void start() {
         super.start();
-
-        this.waitingRoom.remove();
 
         final HyriDeathProtocol.Options.YOptions yOptions = new HyriDeathProtocol.Options.YOptions(20);
 
