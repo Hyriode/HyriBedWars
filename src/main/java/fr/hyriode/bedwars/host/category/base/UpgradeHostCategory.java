@@ -8,6 +8,7 @@ import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.upgrade.Upgrade;
 import fr.hyriode.bedwars.host.BWUpgradeValues;
 import fr.hyriode.bedwars.host.category.BWHostCategory;
+import fr.hyriode.bedwars.host.option.BetterIntegerOption;
 import fr.hyriode.bedwars.option.PercentageOption;
 import fr.hyriode.bedwars.utils.BWHostUtils;
 import fr.hyriode.bedwars.utils.InventoryUtils;
@@ -54,7 +55,7 @@ public class UpgradeHostCategory extends BWHostCategory {
 
             int i = 4;
             for (Upgrade.Tier tier : upgrade.getTiers()) {
-                this.addOption(slot(i++, 3), new PreciseIntegerOption(BWHostUtils.optionDisplay("upgrade-" + upgrade.getName() + "-price-tier-" + tier.getTier(), tier.getIcon()), tier.getPrice().getAmount().getDefaultValue(), 0, 1000, new int[] { 1, 10 }));
+                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("upgrade-" + upgrade.getName() + "-price-tier-" + tier.getTier(), tier.getIcon()), tier.getPrice().getAmount().getDefaultValue(), 0, 1000, 10, null));
             }
         }
     }
