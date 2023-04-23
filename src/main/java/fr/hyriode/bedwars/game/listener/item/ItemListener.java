@@ -4,6 +4,7 @@ import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.player.hotbar.HotbarCategory;
 import fr.hyriode.bedwars.game.shop.ItemMoney;
+import fr.hyriode.bedwars.game.shop.utility.TNTRunnable;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyrame.game.HyriGameState;
@@ -55,9 +56,13 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         Item itemPickup = event.getItem();
         ItemStack itemStackPickup = itemPickup.getItemStack().clone();
 
-        if(itemStackPickup.getType() == Material.WOOD_SWORD) {
-            event.setCancelled(true);
-            return;
+        switch(itemStackPickup.getType()) {
+            case WOOD_SWORD:
+                event.setCancelled(true);
+                return;
+            case TNT:
+                new TNTRunnable(bwPlayer);
+                return;
         }
 
         if(ItemUtil.isSword(itemStackPickup) && player.getInventory().contains(bwPlayer.getSword().getType())) {

@@ -4,10 +4,12 @@ import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemShop;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.shop.material.upgrade.UpgradeMaterial;
+import fr.hyriode.bedwars.game.shop.utility.TNTRunnable;
 import fr.hyriode.bedwars.utils.InventoryUtils;
 import fr.hyriode.bedwars.utils.TriConsumer;
 import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -130,6 +132,10 @@ public class MaterialShop {
                 ? hotbar
                 : event.getHotbarButton();
 
+        if(itemStack.getType() == Material.TNT) {
+            System.out.println("TNT");
+            Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> new TNTRunnable(player), 3L);
+        }
         this.action.accept(player, itemStack, slot);
         if(this.getCategory() == ShopCategory.MELEE){
             player.applySharpness();
