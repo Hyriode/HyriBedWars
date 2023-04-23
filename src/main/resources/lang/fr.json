@@ -527,7 +527,7 @@
   "host.option.bedwars.time-before-destroy-bed.no-limit": "Dès le départ",
   "host.option.bedwars.time-before-spawn.instant": "Instantané",
 
-  "death.final": "§b§lELIMINATION FINALE",
+  "death.final": "§b§lFINAL KILL",
 
   "game.bed.break.not-allowed": "§cTu ne peux pas casser un lit maintenant!",
   "game.next-event.diamond.II": "&bDiamant II",
