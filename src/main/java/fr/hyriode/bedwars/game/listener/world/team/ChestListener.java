@@ -21,6 +21,7 @@ public class ChestListener extends HyriListener<HyriBedWars> {
         Player pl = event.getPlayer();
         if(event.getClickedBlock() != null) {
             BWGamePlayer player = this.plugin.getGame().getPlayer(pl);
+            if(player == null) return;
 
             switch (event.getClickedBlock().getType()){
                 case ENDER_CHEST:
