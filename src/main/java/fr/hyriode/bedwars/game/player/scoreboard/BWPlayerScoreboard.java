@@ -59,7 +59,6 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
             if (this.gameType.getMaxTeams() > 2) {
                 this.setLine(i++, this.getLinePrefix("bedsbroken") + " " + ChatColor.AQUA + player.getBedsBroken());
             }
-            this.addBlankLine(i++);
         }
         return i;
     }
