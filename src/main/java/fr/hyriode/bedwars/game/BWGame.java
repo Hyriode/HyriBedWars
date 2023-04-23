@@ -1,6 +1,5 @@
 package fr.hyriode.bedwars.game;
 
-import com.avaje.ebean.SqlRow;
 import fr.hyriode.api.HyriAPI;
 import fr.hyriode.api.leaderboard.IHyriLeaderboardProvider;
 import fr.hyriode.api.leveling.NetworkLeveling;
@@ -27,7 +26,6 @@ import fr.hyriode.hyrame.game.protocol.HyriLastHitterProtocol;
 import fr.hyriode.hyrame.game.team.HyriGameTeam;
 import fr.hyriode.hyrame.game.util.HyriGameMessages;
 import fr.hyriode.hyrame.game.util.HyriRewardAlgorithm;
-import fr.hyriode.hyrame.game.waitingroom.HyriWaitingRoom;
 import fr.hyriode.hyrame.generator.HyriGenerator;
 import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.hyrame.npc.NPC;
@@ -54,7 +52,6 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     private Map<UUID/*player id*/, List<UUID/*npc id*/>> npcs = new HashMap<>();
     private boolean canBreakBed = true;
     private BWBedTask bedTask;
-
 
     public BWGame(HyriBedWars plugin) {
         super(plugin.getHyrame(),
