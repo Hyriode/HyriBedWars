@@ -36,7 +36,7 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         this.setLine(2, this.getCurrentEvent(), line -> line.setValue(this.getCurrentEvent()), 1);
         this.addBlankLine(3);
         int i = this.addTeamsLines(4);
-
+        this.addBlankLine(i++);
         this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new IPLine("hyriode.fr"), 2);
     }
 
