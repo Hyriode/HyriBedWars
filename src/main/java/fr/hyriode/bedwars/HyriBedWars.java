@@ -86,7 +86,6 @@ public class HyriBedWars extends JavaPlugin {
             HyrameLoader.getHyrame().getHostController().addCategory(34, new MenuShopHostCategory());
         }
 
-
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
         System.out.println("Bedwars Ready");
     }

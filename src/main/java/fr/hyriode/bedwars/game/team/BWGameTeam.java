@@ -209,7 +209,6 @@ public class BWGameTeam extends HyriGameTeam {
         }
         this.setHasBed(false);
 
-        this.plugin.getGame().updateScoreboards();
         this.plugin.getGame().getOnlinePlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
             p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         });
@@ -225,6 +224,7 @@ public class BWGameTeam extends HyriGameTeam {
                 .replace("%team%", team.apply(p))
                 .replace("%enemy%", enemy.apply(p))
                 : HyriLanguageMessage.get("bed.broken.message").getValue(p).replace("%team%", team.apply(p)));
+        this.plugin.getGame().updateScoreboards();
     }
 
     public boolean hasDragonBuff(){

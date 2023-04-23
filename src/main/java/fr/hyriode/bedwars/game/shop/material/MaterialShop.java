@@ -133,7 +133,6 @@ public class MaterialShop {
                 : event.getHotbarButton();
 
         if(itemStack.getType() == Material.TNT) {
-            System.out.println("TNT");
             Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> new TNTRunnable(player), 3L);
         }
         this.action.accept(player, itemStack, slot);

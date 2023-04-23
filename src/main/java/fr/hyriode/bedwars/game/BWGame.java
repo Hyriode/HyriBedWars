@@ -123,12 +123,14 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             player.getBWTeam().breakBedWithBlock(true);
         }
 
+        this.updateScoreboards();
         this.checkWin();
     }
 
     @Override
     public void win(HyriGameTeam winner) {
         super.win(winner);
+        this.updateScoreboards();
         List<HyriLanguageMessage> positions = Arrays.asList(
                 HyriLanguageMessage.get("message.game.end.1"),
                 HyriLanguageMessage.get("message.game.end.2"),
