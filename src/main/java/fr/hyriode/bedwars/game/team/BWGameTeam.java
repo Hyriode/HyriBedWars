@@ -253,11 +253,12 @@ public class BWGameTeam extends HyriGameTeam {
         }
         this.setHasBed(false);
 
+        this.plugin.getGame().updateScoreboards();
         this.plugin.getGame().getOnlinePlayers().stream().map(HyriGamePlayer::getPlayer).forEach(p -> {
             p.playSound(p.getLocation(), Sound.ENDERDRAGON_GROWL, 1.0F, 1.0F);
         });
 
-        this.sendTitle(p -> ChatColor.RED + HyriLanguageMessage.get("bed.broken.title").getValue(p),
+        this.sendTitle(p -> ChatColor.RED + "" + ChatColor.BOLD + HyriLanguageMessage.get("bed.broken.title").getValue(p),
                 p -> ChatColor.GRAY + (breaker != null
                         ? HyriLanguageMessage.get("bed.broken.subtitle.player").getValue(p)
                         .replace("%enemy%", enemy.apply(p))

@@ -588,7 +588,7 @@
 
   "inv.shop.click.view": "Cliquer pour voir",
 
-  "upgrade.gui.trap.full": "Full Trap",
+  "upgrade.gui.trap.full": "La file d'attente des pièges est pleine !",
 
   "item.gamestyle.title": "Style de jeu",
   "item.gamestyle.lore": "Changer le style d'interface.",
@@ -738,6 +738,9 @@
   "trap.subtitle": "Le %trap% a été déclenché !",
   "trap.alarm.title": "ALARME !!!",
   "trap.alarm.subtitle": "Piège d'alarme déclenché par l'équipe %team% !",
+
+  "trap.full": "Vous ne pouvez pas stocker plus de pièges.",
+  "trap.missing-money": "Vous n'avez pas assez de ressources pour débloquer cette amélioration !",
 
   "trap.timer.magic-milk": "Lait Magique",
 

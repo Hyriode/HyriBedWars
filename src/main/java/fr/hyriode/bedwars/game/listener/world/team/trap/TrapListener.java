@@ -21,7 +21,7 @@ public class TrapListener extends HyriListener<HyriBedWars> {
         BWGame game = this.plugin.getGame();
         if(game == null || game.getState() != HyriGameState.PLAYING) return;
         BWGamePlayer player = game.getPlayer(event.getPlayer());
-        if(player == null) return;
+        if(player == null || player.isDead() || player.isSpectator()) return;
         BWGameTeam teamPlayer = player.getBWTeam();
 
         for (BWGameTeam team : game.getBWTeams()) {

@@ -102,6 +102,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         List<HyriLastHitterProtocol.LastHitter> lastHitters = hitterProtocol.getLastHitters(this.player);
         boolean finalKill = !this.getBWTeam().hasBed();
 
+
         this.addDeaths(1);
 
         if (lastHitters != null && !lastHitters.isEmpty()) {
@@ -124,6 +125,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         if(finalKill) {
             Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.plugin.getGame().checkWin(), 1L);
         }
+        this.plugin.getGame().updateScoreboards();
         return !finalKill;
     }
 

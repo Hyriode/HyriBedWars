@@ -36,7 +36,6 @@ public class UpgradeGui extends BWGui {
     @Override
     protected void initGui() {
         BWGamePlayer player = this.getPlayer();
-        BWGameType gameType = this.plugin.getGame().getType();
 
         this.setHorizontalLine(0, 8, this.getItemDeco());
         this.setHorizontalLine(45, 53, this.getItemDeco());
@@ -94,11 +93,26 @@ public class UpgradeGui extends BWGui {
                         }
 
                         ItemPrice price = trapTeam.getPrice();
-                        if(!trapTeam.isFull() && price.hasPrice(this.owner, price.getAmount().get())) {
-                            InventoryUtils.removeMoney(this.owner, price, price.getAmount().get());
-                            trapTeam.addTrap(trap.getName());
-                            this.refresh();
+                        if(!trapTeam.isFull()) {
+                            if (price.hasPrice(this.owner, price.getAmount().get())) {
+                                InventoryUtils.removeMoney(this.owner, price, price.getAmount().get());
+                                trapTeam.addTrap(trap.getName());
+                                SoundUtils.playBuy(player.getPlayer());
+                                this.getPlayer().getBWTeam().sendMessage(p -> ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getValue(p)
+                                        .replace("%player%", player.getPlayer().getName())
+                                        .replace("%item%", ChatColor.GOLD + trap.getDisplayName().getValue(p)));
+                                this.refresh();
+                                return;
+                            }
+                            SoundUtils.playCantBuy(this.owner);
+                            this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("trap.missing-money").getValue(this.owner)
+                                    .replace("%name%", price.getName(this.owner))
+                                    .replace("%amount%", InventoryUtils.getHasPrice(this.owner, price, price.getAmount().get()) + ""));
                         }
+                        SoundUtils.playCantBuy(this.owner);
+                        this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("trap.missing-money").getValue(this.owner)
+                                .replace("%name%", price.getName(this.owner))
+                                .replace("%amount%", InventoryUtils.getHasPrice(this.owner, price, price.getAmount().get()) + ""));
                     });
                 }
             }
@@ -110,15 +124,15 @@ public class UpgradeGui extends BWGui {
         for (int x = 0; x < 3; ++x) {
             if (trapsTeam.size() > k) {
                 Trap trap = trapsTeam.get(k++);
-                this.setItem(4 + x, 6, this.getItemTrap(gameType, x, trap));
+                this.setItem(4 + x, 6, this.getItemTrap(x, trap));
                 continue;
             }
-            this.setItem(4 + x, 6, this.getItemTrap(gameType, x, null));
+            this.setItem(4 + x, 6, this.getItemTrap(x, null));
         }
 
     }
 
-    private ItemStack getItemTrap(BWGameType gameType, int trapNumber, Trap trap){
+    private ItemStack getItemTrap(int trapNumber, Trap trap){
         ItemBuilder itemBuilder;
         List<String> lore = new ArrayList<>(StringUtils.loreToList(HyriLanguageMessage.get("no-trap.lore").getValue(this.owner).replace("%word%", StringUtils.getWordNumber(trapNumber + 1).getValue(this.owner))));
         if(trap == null){

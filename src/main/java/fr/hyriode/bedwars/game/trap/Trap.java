@@ -71,7 +71,7 @@ public class Trap {
 
         lore.add(" ");
         if(trapTeam.isFull())
-            lore.add(ChatColor.RED + "Full");
+            lore.add(ChatColor.RED + HyriLanguageMessage.get("upgrade.gui.trap.full").getValue(player));
         else
             lore.add(StringUtils.getDisplayCostPrice(player, trapTeam.getPrice()));
 

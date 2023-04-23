@@ -527,7 +527,6 @@
   "host.option.bedwars.time-before-destroy-bed.no-limit": "From the start",
   "host.option.bedwars.time-before-spawn.instant": "Instant",
 
-
   "death.final": "§b§lFINAL KILL",
 
   "game.bed.break.not-allowed": "§cYou can't break a bed now!",
@@ -589,7 +588,7 @@
 
   "inv.shop.click.view": "Click to view",
 
-  "upgrade.gui.trap.full": "Full Trap",
+  "upgrade.gui.trap.full": "Traps queue full!",
 
   "item.gamestyle.title": "Game style",
   "item.gamestyle.lore": "Change the interface style.",
@@ -739,6 +738,9 @@
   "trap.subtitle": "Your %trap% has been triggered!",
   "trap.alarm.title": "ALARM!!!",
   "trap.alarm.subtitle": "Alarm trap set off by %team% team!",
+
+  "trap.full": "You cannot store more traps...",
+  "trap.missing-money": "You do not have enough resources to unlock this upgrade !",
 
   "trap.timer.magic-milk": "Magic Milk",
 

@@ -31,31 +31,35 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         this.gameType = plugin.getGame().getType();
         this.game = this.plugin.getGame();
 
-        int i = 0;
-        this.setLine(i++, this.getDateLine(), line -> line.setValue(this.getDateLine()), 20);
-        this.setLine(i++, "§1");
-        this.setLine(i++, this.getCurrentEvent(), line -> line.setValue(this.getCurrentEvent()), 1);
-        this.setLine(i++, "§2");
-        i = this.addTeamsLines(i);
+        this.setLine(0, this.getDateLine(), line -> line.setValue(this.getDateLine()), 20);
+        this.addBlankLine(1);
+        this.setLine(2, this.getCurrentEvent(), line -> line.setValue(this.getCurrentEvent()), 1);
+        this.addBlankLine(3);
+        int i = this.addTeamsLines(4);
 
         this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new IPLine("hyriode.fr"), 2);
+    }
+
+    public void update() {
+        this.addTeamsLines(4);
+        this.updateLines();
     }
 
     private int addTeamsLines(int i) {
         for (HyriGameTeam team : this.game.getTeams()) {
             if(team != null) {
-                this.setLine(i++, this.getTeamLine((BWGameTeam) team), line -> line.setValue(this.getTeamLine((BWGameTeam) team)), 1);
+                this.setLine(i++, this.getTeamLine((BWGameTeam) team));
             }
         }
         BWGamePlayer player = this.getGamePlayer();
-        this.setLine(i++, "§3");
+        this.addBlankLine(i++);
         if (this.gameType.getMaxTeams() <= 4) {
-            this.setLine(i++, this.getLinePrefix("kills") + " " + ChatColor.AQUA + player.getKills(), line -> line.setValue(this.getLinePrefix("kills") + " " + ChatColor.AQUA + player.getKills()), 1);
-            this.setLine(i++, this.getLinePrefix("finalkills") + " " + ChatColor.AQUA + player.getFinalKills(), line -> line.setValue(this.getLinePrefix("finalkills") + " " + ChatColor.AQUA + player.getFinalKills()), 1);
+            this.setLine(i++, this.getLinePrefix("kills") + " " + ChatColor.AQUA + player.getKills());
+            this.setLine(i++, this.getLinePrefix("finalkills") + " " + ChatColor.AQUA + player.getFinalKills());
             if (this.gameType.getMaxTeams() > 2) {
-                this.setLine(i++, this.getLinePrefix("bedsbroken") + " " + ChatColor.AQUA + player.getBedsBroken(), line -> line.setValue(this.getLinePrefix("bedsbroken") + " " + ChatColor.AQUA + player.getBedsBroken()), 1);
+                this.setLine(i++, this.getLinePrefix("bedsbroken") + " " + ChatColor.AQUA + player.getBedsBroken());
             }
-            this.setLine(i++, "§4");
+            this.addBlankLine(i++);
         }
         return i;
     }
