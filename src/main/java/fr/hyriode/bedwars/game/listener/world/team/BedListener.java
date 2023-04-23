@@ -31,6 +31,12 @@ public class BedListener extends HyriListener<HyriBedWars> {
                 return;
             }
 
+            if(!this.plugin.getGame().isCanBreakBed()) {
+                player.sendMessage(HyriLanguageMessage.get("game.bed.break.not-allowed").getValue(player));
+                event.setCancelled(true);
+                return;
+            }
+
             BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
             for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
                 if (team.getConfig().getBaseArea().isInArea(event.getBlock().getLocation())) {
@@ -43,11 +49,6 @@ public class BedListener extends HyriListener<HyriBedWars> {
                     team.breakBed(bwPlayer);
                     break;
                 }
-            }
-
-            if(!this.plugin.getGame().isCanBreakBed()) {
-                player.sendMessage(HyriLanguageMessage.get("game.bed.break.not-allowed").getValue(player));
-                event.setCancelled(true);
             }
         }
     }
