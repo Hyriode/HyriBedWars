@@ -7,13 +7,16 @@ import fr.hyriode.api.leveling.NetworkLeveling;
 import fr.hyriode.api.player.IHyriPlayer;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.generator.GeneratorManager;
+import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.task.BWGameTask;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
 import fr.hyriode.bedwars.game.team.BWGameTeamColor;
 import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
 import fr.hyriode.bedwars.host.BWGameValues;
+import fr.hyriode.bedwars.manager.pnj.BWNPCType;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.game.HyriGame;
@@ -273,6 +276,61 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             victim.playSound(victim.getLocation(), Sound.ORB_PICKUP, 1.0F, 1.0F);
             gamePlayer.respawn(true);
         });
+    }
+
+    public NPC getNPCUpgrade(Location loc, Player pl) {
+//        PNJ.Type skinUpgrade = player.getNPCSkin().getUpgrade().getSkinEntity();
+//            if(skinUpgrade == PNJ.Type.NPC){
+        NPC npcUpgrade = NPCManager.createNPC(loc,
+                        BWNPCType.UPGRADE.getDefaultSkin(),
+                        BWNPCType.UPGRADE.getLore(pl))
+                .setShowingToAll(false)
+                .addPlayer(pl)
+                .setInteractCallback((rightClick, p) -> {
+                    BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                    if(rightClick && bwPlayer != null && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+                        GuiManager.openUpgradeGui(this.plugin, p);
+                });
+
+//            } else {
+//                EntityInteractManager.createEntity(this.getConfig().getUpgradeNPCLocation(), skinUpgrade.getClassEntity(), BWNPCType.UPGRADE.getLore(pl))
+//                        .setVisibleAll(false)
+//                        .addPlayer(pl)
+//                        .setInteractCallback((rightClick, p) -> {
+//                            System.out.println("rightClick");
+//                            System.out.println(p);
+//                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+//                            System.out.println(bwPlayer);
+//                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
+//                        }).spawn();
+//            }
+        return npcUpgrade;
+    }
+
+    public NPC getNPCShop(Location loc, Player pl) {
+//        PNJ.Type skinShop = player.getNPCSkin().getShop().getSkinEntity();
+//            if(skinShop == PNJ.Type.NPC){
+        NPC npcShop = NPCManager.createNPC(loc,
+                        BWNPCType.SHOP.getDefaultSkin(),
+                        BWNPCType.SHOP.getLore(pl))
+                .setShowingToAll(false)
+                .addPlayer(pl)
+                .setInteractCallback((rightClick, p) -> {
+                    BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+                    if (rightClick && bwPlayer != null && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+                        GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+                });
+//            } else {
+//                EntityInteractManager.createEntity(this.getConfig().getShopNPCLocation(), skinShop.getClassEntity(), BWNPCType.SHOP.getLore(pl))
+//                        .setVisibleAll(false)
+//                        .addPlayer(pl)
+//                        .setInteractCallback((rightClick, p) -> {
+//                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
+//                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
+//                                GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
+//                        }).spawn();
+//            }
+        return npcShop;
     }
 
     public BWGameType getType(){

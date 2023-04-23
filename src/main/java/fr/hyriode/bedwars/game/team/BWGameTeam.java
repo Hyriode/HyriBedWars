@@ -115,56 +115,12 @@ public class BWGameTeam extends HyriGameTeam {
     private void spawnNPC(){
         for (BWGamePlayer player : this.plugin.getGame().getPlayers()) {
             Player pl = player.getPlayer();
-            PNJ.Type skinShop = player.getNPCSkin().getShop().getSkinEntity();
-            PNJ.Type skinUpgrade = player.getNPCSkin().getUpgrade().getSkinEntity();
-//            if(skinShop == PNJ.Type.NPC){
-            NPC npcShop = NPCManager.createNPC(this.getConfig().getShopNPCLocation(),
-                            BWNPCType.SHOP.getDefaultSkin(),
-                            BWNPCType.SHOP.getLore(pl))
-                    .setShowingToAll(false)
-                    .addPlayer(pl)
-                    .setInteractCallback((rightClick, p) -> {
-                        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
-                        if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
-                            GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
-                    });
-            NPCManager.sendNPC(npcShop);
-//            } else {
-//                EntityInteractManager.createEntity(this.getConfig().getShopNPCLocation(), skinShop.getClassEntity(), BWNPCType.SHOP.getLore(pl))
-//                        .setVisibleAll(false)
-//                        .addPlayer(pl)
-//                        .setInteractCallback((rightClick, p) -> {
-//                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
-//                            if (rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
-//                                GuiManager.openShopGui(this.plugin, p, ShopCategory.QUICK_BUY);
-//                        }).spawn();
-//            }
-//            if(skinUpgrade == PNJ.Type.NPC){
-            NPC npcUpgrade = NPCManager.createNPC(this.getConfig().getUpgradeNPCLocation(),
-                            BWNPCType.UPGRADE.getDefaultSkin(),
-                            BWNPCType.UPGRADE.getLore(pl))
-                    .setShowingToAll(false)
-                    .addPlayer(pl)
-                    .setInteractCallback((rightClick, p) -> {
-                        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
-                        if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead())
-                            GuiManager.openUpgradeGui(this.plugin, p);
-                    });
-            NPCManager.sendNPC(npcUpgrade);
+            NPC npcShop = this.plugin.getGame().getNPCShop(this.getConfig().getShopNPCLocation(), pl);
+            NPC npcUpgrade = this.plugin.getGame().getNPCUpgrade(this.getConfig().getUpgradeNPCLocation(), pl);
 
+            NPCManager.sendNPC(npcShop);
+            NPCManager.sendNPC(npcUpgrade);
             this.plugin.getGame().addNPC(pl, npcShop, npcUpgrade);
-//            } else {
-//                EntityInteractManager.createEntity(this.getConfig().getUpgradeNPCLocation(), skinUpgrade.getClassEntity(), BWNPCType.UPGRADE.getLore(pl))
-//                        .setVisibleAll(false)
-//                        .addPlayer(pl)
-//                        .setInteractCallback((rightClick, p) -> {
-//                            System.out.println("rightClick");
-//                            System.out.println(p);
-//                            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(p.getUniqueId());
-//                            System.out.println(bwPlayer);
-//                            if(rightClick && !bwPlayer.isSpectator() && !bwPlayer.isDead()) GuiManager.openUpgradeGui(this.plugin, p);
-//                        }).spawn();
-//            }
         }
     }
 
