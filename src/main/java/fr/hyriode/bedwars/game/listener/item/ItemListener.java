@@ -46,16 +46,14 @@ public class ItemListener extends HyriListener<HyriBedWars> {
         if(this.plugin.getGame().getState() != HyriGameState.PLAYING) return;
         Player player = event.getPlayer();
         BWGamePlayer bwPlayer = this.getGamePlayer(player);
-        if(bwPlayer.isSpectator()) {
+        if(bwPlayer == null) return;
+
+        if(bwPlayer.isSpectator() || bwPlayer.isDead()) {
             event.setCancelled(true);
             return;
         }
         Item itemPickup = event.getItem();
         ItemStack itemStackPickup = itemPickup.getItemStack().clone();
-
-        if(bwPlayer == null) return;
-
-        //TODO ignore condition for host
 
         if(itemStackPickup.getType() == Material.WOOD_SWORD) {
             event.setCancelled(true);
