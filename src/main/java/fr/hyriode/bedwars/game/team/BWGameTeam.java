@@ -68,17 +68,10 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public void start() {
-        GeneratorManager gm = HyriBedWars.getGeneratorManager();
-        BWGenerator.Tier tier = gm.getGeneratorByName(GeneratorManager.FORGE).getTier(0);
-        tier.getDrops().forEach(drop -> {
-            String name = drop.get().getDropName();
-            this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name));
-        });
-
+        this.createGenerator();
         if(this.isEliminated()) {
             this.breakBedWithBlock(false);
         }
-        this.createForgeGenerator();
         this.spawnNPC();
 
         this.teleportPlayers();
@@ -86,6 +79,15 @@ public class BWGameTeam extends HyriGameTeam {
             this.createScoreboard(player);
             player.respawn(false);
         });
+    }
+
+    public void createGenerator() {
+        BWGenerator.Tier tier = HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.FORGE).getTier(0);
+        tier.getDrops().forEach(drop -> {
+            String name = drop.get().getDropName();
+            this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name));
+        });
+        this.createForgeGenerator();
     }
 
     private void createScoreboard(BWGamePlayer player){

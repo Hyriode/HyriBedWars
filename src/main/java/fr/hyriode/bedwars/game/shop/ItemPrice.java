@@ -12,23 +12,24 @@ import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.function.Supplier;
 
 public class ItemPrice {
 
     private ItemMoney itemMoney;
-    private ValueProvider<Integer> amount;
+    private Supplier<ValueProvider<Integer>> amount;
 
-    public ItemPrice(ItemMoney itemMoney, ValueProvider<Integer> amount){
+    public ItemPrice(ItemMoney itemMoney, Supplier<ValueProvider<Integer>> amount){
         this.itemMoney = itemMoney;
         this.amount = amount;
     }
 
     public ItemPrice(ItemMoney itemMoney, int amount){
-        this(itemMoney, new ValueProvider<>(amount));
+        this(itemMoney, () -> new ValueProvider<>(amount));
     }
 
     public ItemPrice(ItemMoney itemMoney){
-        this(itemMoney, new ValueProvider<>(1));
+        this(itemMoney, () -> new ValueProvider<>(1));
     }
 
     public ItemStack getItemStack() {
@@ -36,7 +37,7 @@ public class ItemPrice {
     }
 
     public List<ItemStack> getItemStacks() {
-        long amount = this.amount.get();
+        long amount = this.amount.get().get();
         List<ItemStack> itemStacks = new ArrayList<>();
         int maxStack = this.itemMoney.getAsItemStack().getMaxStackSize();
         int quotient = (int) (amount / maxStack);
@@ -63,11 +64,11 @@ public class ItemPrice {
         return this.itemMoney.getDisplayName().getValue(player);
     }
 
-    public ValueProvider<Integer> getAmount() {
+    public Supplier<ValueProvider<Integer>> getAmount() {
         return amount;
     }
 
-    public void setAmount(ValueProvider<Integer> amount) {
+    public void setAmount(Supplier<ValueProvider<Integer>> amount) {
         this.amount = amount;
     }
 

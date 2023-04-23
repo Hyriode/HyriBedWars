@@ -91,7 +91,11 @@ public class BWGenerator {
         public Map<String, HyriGenerator> getGenerators(HyriBedWars plugin, Location loc) {
             Map<String, HyriGenerator> generators = new HashMap<>();
             BWGenerator originGenerator = this.generator.get();
-            int amount = this.getName().equals(StandardGenerator.DIAMOND.name().toLowerCase()) ? BWGameValues.DIAMOND_GENERATOR_RATE.get() : this.getName().equals(StandardGenerator.EMERALD.name().toLowerCase()) ? BWGameValues.EMERALD_GENERATOR_RATE.get() : 1;
+            int amount = this.getName().equals(StandardGenerator.DIAMOND.name().toLowerCase())
+                    ? BWGameValues.DIAMOND_GENERATOR_RATE.get()
+                    : this.getName().equals(StandardGenerator.EMERALD.name().toLowerCase())
+                    ? BWGameValues.EMERALD_GENERATOR_RATE.get()
+                    : 1;
             this.drops.forEach(drop -> {
                 Drop originDrop = drop.get();
                 HyriGenerator.Builder generator = new HyriGenerator.Builder(plugin, loc, originDrop.getTier())

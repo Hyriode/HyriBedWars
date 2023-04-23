@@ -31,16 +31,17 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         this.gameType = plugin.getGame().getType();
         this.game = this.plugin.getGame();
 
-        this.setLine(0, this.getDateLine(), line -> line.setValue(this.getDateLine()), 20);
+        this.setLine(0, this.getDateLine());
         this.addBlankLine(1);
-        this.setLine(2, this.getCurrentEvent(), line -> line.setValue(this.getCurrentEvent()), 1);
         this.addBlankLine(3);
         int i = this.addTeamsLines(4);
         this.addBlankLine(i++);
         this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new IPLine("hyriode.fr"), 2);
+        this.update();
     }
 
     public void update() {
+        this.setLine(2, this.getCurrentEvent());
         this.addTeamsLines(4);
         this.updateLines();
     }

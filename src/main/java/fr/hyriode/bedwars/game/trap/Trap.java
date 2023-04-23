@@ -76,7 +76,7 @@ public class Trap {
             lore.add(StringUtils.getDisplayCostPrice(player, trapTeam.getPrice()));
 
         return new ItemBuilder(this.icon.clone())
-                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player, trapTeam.getPrice().getAmount().get())) + this.getDisplayName().getValue(player))
+                .withName(StringUtils.getTitleBuy(trapTeam.isFull(), trapTeam.getPrice().hasPrice(player, trapTeam.getPrice().getAmount().get().get())) + this.getDisplayName().getValue(player))
                 .withLore(lore)
                 .build();
     }

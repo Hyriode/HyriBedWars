@@ -23,6 +23,7 @@ public class BWGameTask extends BukkitRunnable {
         final BWGame game = this.plugin.getGame();
 
         if(game.getState() == HyriGameState.ENDED) {
+            this.plugin.getGame().updateScoreboards();
             this.cancel();
             return;
         }
@@ -39,6 +40,7 @@ public class BWGameTask extends BukkitRunnable {
                 this.cancel();
             }
         }
+        this.plugin.getGame().updateScoreboards();
     }
 
     public long getTime() {

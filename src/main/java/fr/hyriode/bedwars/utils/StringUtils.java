@@ -66,7 +66,7 @@ public class StringUtils {
     }
 
     public static String getDisplayPrice(Player player, ItemPrice itemPrice) {
-        return itemPrice.getColor() + "" + itemPrice.getAmount().get() + " " + itemPrice.getName(player);
+        return itemPrice.getColor() + "" + itemPrice.getAmount().get().get() + " " + itemPrice.getName(player);
     }
 
     public static HyriLanguageMessage getWordNumber(int i) {

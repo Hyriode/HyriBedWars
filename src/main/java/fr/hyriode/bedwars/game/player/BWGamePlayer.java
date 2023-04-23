@@ -121,7 +121,6 @@ public class BWGamePlayer extends HyriGamePlayer {
             }
         }
 
-        this.plugin.getGame().updateScoreboards();
         if(finalKill) {
             Bukkit.getScheduler().runTaskLater(this.plugin, () -> this.plugin.getGame().checkWin(), 1L);
         }

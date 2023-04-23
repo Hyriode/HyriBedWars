@@ -194,7 +194,7 @@ public class Upgrade {
 
         public int getPriceAmount() {
             int percentage = BWUpgradeValues.UPGRADE_PRICE.get();
-            int amount = this.getPrice().getAmount().get() * percentage / 100;
+            int amount = this.getPrice().getAmount().get().get() * percentage / 100;
             if (percentage == 50 && amount == 0) {
                 amount = 1;
             }

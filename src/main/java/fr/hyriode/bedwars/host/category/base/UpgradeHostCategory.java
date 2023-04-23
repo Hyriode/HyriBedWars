@@ -55,7 +55,7 @@ public class UpgradeHostCategory extends BWHostCategory {
 
             int i = 4;
             for (Upgrade.Tier tier : upgrade.getTiers()) {
-                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("upgrade-" + upgrade.getName() + "-price-tier-" + tier.getTier(), tier.getIcon()), tier.getPrice().getAmount().getDefaultValue(), 0, 1000, 10, null));
+                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("upgrade-" + upgrade.getName() + "-price-tier-" + tier.getTier(), tier.getIcon()), tier.getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));
             }
         }
     }

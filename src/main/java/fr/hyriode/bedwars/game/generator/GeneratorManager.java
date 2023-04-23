@@ -9,6 +9,7 @@ import fr.hyriode.bedwars.host.BWForgeValues;
 import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.hyggdrasil.api.server.HyggServer;
 import fr.hyriode.hyrame.game.HyriGameState;
+import fr.hyriode.hyrame.game.HyriGameType;
 import fr.hyriode.hyrame.game.util.value.ValueProvider;
 import fr.hyriode.hyrame.generator.IHyriGeneratorTier;
 import org.bukkit.Material;
@@ -34,8 +35,7 @@ public class GeneratorManager {
 
     public GeneratorManager(HyriBedWars plugin) {
         this.plugin = plugin;
-        this.gameType = this.plugin.getGame().getType();
-        BWConfiguration config = this.plugin.getConfiguration();
+        this.gameType = (BWGameType) HyriGameType.getFromData(BWGameType.values());
         boolean isHost = HyriAPI.get().getServer().getAccessibility() == HyggServer.Accessibility.HOST;
 
         this.add(FORGE, () -> {

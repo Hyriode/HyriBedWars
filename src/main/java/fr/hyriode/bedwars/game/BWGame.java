@@ -238,8 +238,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
             this.bedTask = new BWBedTask(this.plugin);
         }
 
-        this.teleportTeams();
         this.createGenerators();
+        this.teleportTeams();
     }
 
     private void teleportTeams(){

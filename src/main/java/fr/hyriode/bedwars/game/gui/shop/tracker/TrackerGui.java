@@ -73,8 +73,8 @@ public class TrackerGui extends BWGui {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("tracker.already.have.team").getValue(this.owner));
                         } else if(hasBed){
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("tracker.team.have.bed").getValue(this.owner));
-                        } else if(InventoryUtils.hasPrice(this.owner, price, price.getAmount().get())) {
-                            InventoryUtils.removeMoney(this.owner, price, price.getAmount().get());
+                        } else if(InventoryUtils.hasPrice(this.owner, price, price.getAmount().get().get())) {
+                            InventoryUtils.removeMoney(this.owner, price, price.getAmount().get().get());
                             tracker.setTrackedTeam(team);
                             tracker.start();
                             SoundUtils.playBuy(this.owner);
@@ -84,7 +84,7 @@ public class TrackerGui extends BWGui {
                         }else {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
                                     .replace("%name%", price.getName(this.owner))
-                                    .replace("%amount%", InventoryUtils.getHasPrice(this.owner, price, price.getAmount().get()) + ""));
+                                    .replace("%amount%", InventoryUtils.getHasPrice(this.owner, price, price.getAmount().get().get()) + ""));
                         }
                         SoundUtils.playCantBuy(this.owner);
                     });

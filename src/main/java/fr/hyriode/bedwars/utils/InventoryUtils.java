@@ -308,8 +308,8 @@ public class InventoryUtils {
                 }else {
                     money.stream().filter(price -> price.getItemStack().getType() == itemStack.getType()).findFirst()
                             .ifPresent(price -> {
-                                int amount = price.getAmount().get() + itemStack.getAmount();
-                                price.setAmount(new ValueProvider<>(amount));
+                                int amount = price.getAmount().get().get() + itemStack.getAmount();
+                                price.setAmount(() -> new ValueProvider<>(amount));
                             });
                 }
             }

@@ -19,10 +19,10 @@ public class ShopItemHostCategory extends BWHostCategory {
             int i = 5;
             for (int j = 0; j < materialShop.getItems().size(); j++) {
                 ItemShop item = materialShop.getItems().get(j);
-                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-" + j + "-price", item.getItem()), item.getPrice().getAmount().getDefaultValue(), 0, 1000, 10, null));
+                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-" + j + "-price", item.getItem()), item.getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));
             }
         } else {
-            this.addOption(slot(5, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-price", Material.GOLD_INGOT), materialShop.getFirstItem().getPrice().getAmount().getDefaultValue(), 0, 1000, 10, null));
+            this.addOption(slot(5, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-price", Material.GOLD_INGOT), materialShop.getFirstItem().getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));
         }
         this.addOption(slotEnable, new BooleanOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-enabled", Material.LEVER), materialShop.isEnable().getDefaultValue()));
     }
