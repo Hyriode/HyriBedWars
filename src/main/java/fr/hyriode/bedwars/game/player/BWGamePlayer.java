@@ -159,8 +159,9 @@ public class BWGamePlayer extends HyriGamePlayer {
 
         team.getUpgradeTeam().getUpgrades().forEach(upgradeLite -> {
             Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(upgradeLite.getName());
+
             if(upgrade.isForPlayer()) {
-                upgrade.upgrade(this, upgrade.getTier(team.getUpgradeTeam().getTier(upgradeLite.getName())), false);
+                Bukkit.getScheduler().runTaskLater(this.plugin, () -> upgrade.upgrade(this, upgrade.getTier(team.getUpgradeTeam().getTier(upgradeLite.getName())), false), 2L);
             }
         });
     }
