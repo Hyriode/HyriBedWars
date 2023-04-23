@@ -52,8 +52,8 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
             }
         }
         BWGamePlayer player = this.getGamePlayer();
-        this.addBlankLine(i++);
-        if (this.gameType.getMaxTeams() <= 4) {
+        if (player != null && this.gameType.getMaxTeams() <= 4) {
+            this.addBlankLine(i++);
             this.setLine(i++, this.getLinePrefix("kills") + " " + ChatColor.AQUA + player.getKills());
             this.setLine(i++, this.getLinePrefix("finalkills") + " " + ChatColor.AQUA + player.getFinalKills());
             if (this.gameType.getMaxTeams() > 2) {
