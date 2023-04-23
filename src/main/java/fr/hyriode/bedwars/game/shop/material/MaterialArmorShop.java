@@ -35,6 +35,7 @@ public class MaterialArmorShop extends MaterialShop{
     public void buy(InventoryClickEvent event, BWGamePlayer player) {
         player.setArmor(this.getAsArmor());
         player.giveArmor();
+        player.applyProtection();
     }
 
     public int getLevel() {

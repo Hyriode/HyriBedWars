@@ -136,6 +136,7 @@ public class MaterialShop {
             Bukkit.getScheduler().runTaskLater(player.getPlugin(), () -> new TNTRunnable(player), 3L);
         }
         this.action.accept(player, itemStack, slot);
+
         if(this.getCategory() == ShopCategory.MELEE){
             player.applySharpness();
         }

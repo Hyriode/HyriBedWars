@@ -96,7 +96,7 @@ public class ShopGui extends BWGui {
                             this.owner.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased").getValue(this.owner).replace("%item%", ChatColor.GOLD + itemShop.getDisplayName().getValue(this.owner)));
                             this.refresh();
                             return;
-                        }else {
+                        } else {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("shop.missing").getValue(this.owner)
                                     .replace("%name%", itemShop.getPrice().getName(this.owner)).replace("%amount%", InventoryUtils.getHasPrice(this.owner, itemShop.getPrice(), itemShop.getPriceAmount()) + ""));
                         }

@@ -110,7 +110,7 @@ public class BWGamePlayer extends HyriGamePlayer {
                 List<ItemPrice> itemStacks = InventoryUtils.getMoney(this.player.getInventory());
 
                 for (ItemPrice money : itemStacks) {
-                    hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount().get() + " " + money.getName(hitter));
+                    hitter.getPlayer().sendMessage(money.getColor() + "+" + money.getAmount().get().get() + " " + money.getName(hitter));
                     hitter.getPlayer().getInventory().addItem(money.getItemStacks().toArray(new ItemStack[0]));
                 }
 
@@ -190,7 +190,18 @@ public class BWGamePlayer extends HyriGamePlayer {
                 Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.SHARPNESS);
                 upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.SHARPNESS)), false);
             }
-        }, 1L);
+        }, 3L);
+    }
+
+    public void applyProtection(){
+        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
+            UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
+
+            if(upgradeTeam.hasUpgrade(UpgradeManager.PROTECTION)){
+                Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.PROTECTION);
+                upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.PROTECTION)), false);
+            }
+        }, 3L);
     }
 
     public void giveTracker() {
