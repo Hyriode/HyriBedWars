@@ -26,7 +26,7 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
     private final BWGameType gameType;
 
     public BWPlayerScoreboard(HyriBedWars plugin, Player player) {
-        super(plugin, plugin.getGame(), player.getPlayer(), "scbbedwars");
+        super(plugin, plugin.getGame(), player.getPlayer(), "sbbedwars");
         this.plugin = plugin;
         this.gameType = plugin.getGame().getType();
         this.game = this.plugin.getGame();
@@ -37,7 +37,6 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
         int i = this.addTeamsLines(4);
         this.addBlankLine(i++);
         this.setLine(i, ChatColor.DARK_AQUA + "hyriode.fr", new IPLine("hyriode.fr"), 2);
-        this.update();
     }
 
     public void update() {
