@@ -26,7 +26,7 @@ public class BWPlayerScoreboard extends HyriGameScoreboard<BWGame> {
     private final BWGameType gameType;
 
     public BWPlayerScoreboard(HyriBedWars plugin, Player player) {
-        super(plugin, plugin.getGame(), player.getPlayer(), "sbbedwars");
+        super(plugin, plugin.getGame(), player.getPlayer(), "scbbedwars");
         this.plugin = plugin;
         this.gameType = plugin.getGame().getType();
         this.game = this.plugin.getGame();
