@@ -235,13 +235,13 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         }, this.createDeathScreen(), HyriDeathProtocol.ScreenHandler.Default.class)
                 .withOptions(new HyriDeathProtocol.Options().withYOptions(yOptions)));
 
+        this.teleportTeams();
+        this.createGenerators();
+
         this.task = new BWGameTask(this.plugin);
         if(BWGameValues.BED_BREAKING_DELAY.get() != 0) {
             this.bedTask = new BWBedTask(this.plugin);
         }
-
-        this.teleportTeams();
-        this.createGenerators();
     }
 
     private void teleportTeams(){
