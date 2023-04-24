@@ -184,24 +184,27 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public void applySharpness(){
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
+            BWGameTeam team = this.getBWTeam();
+            if(team == null || team.getUpgradeTeam() == null) return;
+            UpgradeTeam upgradeTeam = team.getUpgradeTeam();
 
             if(upgradeTeam.hasUpgrade(UpgradeManager.SHARPNESS)){
                 Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.SHARPNESS);
                 upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.SHARPNESS)), false);
             }
+            this.getPlayer().updateInventory();
         }, 3L);
     }
 
     public void applyProtection(){
-        Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
-            UpgradeTeam upgradeTeam = this.getBWTeam().getUpgradeTeam();
+        BWGameTeam team = this.getBWTeam();
+        if(team == null || team.getUpgradeTeam() == null) return;
+        UpgradeTeam upgradeTeam = team.getUpgradeTeam();
 
-            if(upgradeTeam.hasUpgrade(UpgradeManager.PROTECTION)){
-                Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.PROTECTION);
-                upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.PROTECTION)), false);
-            }
-        }, 3L);
+        if(upgradeTeam.hasUpgrade(UpgradeManager.PROTECTION)){
+            Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.PROTECTION);
+            upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.PROTECTION)), false);
+        }
     }
 
     public void giveTracker() {

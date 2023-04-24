@@ -13,7 +13,6 @@ import fr.hyriode.bedwars.game.gui.shop.tracker.TrackerGui;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.*;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
-import fr.hyriode.bedwars.game.type.BWGameType;
 import fr.hyriode.bedwars.game.waiting.BWGamePlayItem;
 import fr.hyriode.bedwars.host.BWShopValues;
 import fr.hyriode.bedwars.utils.InventoryUtils;
@@ -65,6 +64,7 @@ public class ShopGui extends BWGui {
                     final MaterialShop material = materials.get(slot);
                     if(material == null) continue;
                     final ItemShop itemShop = material.getItemShopForPlayer(player);
+                    //TODO fix en host les items disable en verre rouge pour le theme hypixel
                     this.setItem(size.getStartX() + x, size.getStartY() + y, itemShop.getForShop(player, this.category), event -> {
                         if(event.getClick().isShiftClick() && event.getClick().isRightClick()){
                             if(this.category != ShopCategory.QUICK_BUY){
@@ -92,7 +92,7 @@ public class ShopGui extends BWGui {
                         }else if (itemShop.hasPrice(this.owner)) {
                             InventoryUtils.removeMoney(this.owner, itemShop.getPrice(), itemShop.getPriceAmount());
                             material.buy(event, player);
-                            SoundUtils.playBuy(owner);
+                            SoundUtils.playBuy(this.owner);
                             this.owner.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased").getValue(this.owner).replace("%item%", ChatColor.GOLD + itemShop.getDisplayName().getValue(this.owner)));
                             this.refresh();
                             return;

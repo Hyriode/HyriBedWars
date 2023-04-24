@@ -36,6 +36,7 @@ public class MaterialArmorShop extends MaterialShop{
         player.setArmor(this.getAsArmor());
         player.giveArmor();
         player.applyProtection();
+        player.getPlayer().updateInventory();
     }
 
     public int getLevel() {

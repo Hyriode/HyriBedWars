@@ -8,6 +8,7 @@ import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.generator.GeneratorManager;
 import fr.hyriode.bedwars.game.gui.manager.GuiManager;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
+import fr.hyriode.bedwars.game.player.scoreboard.BWPlayerScoreboard;
 import fr.hyriode.bedwars.game.shop.ShopCategory;
 import fr.hyriode.bedwars.game.task.BWGameTask;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
@@ -118,13 +119,14 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         player.update();
         super.handleLogout(p);
 
-        if(this.getState() == HyriGameState.PLAYING
-                && player.getBWTeam().hasBed() && player.getBWTeam().getOnlinePlayers().isEmpty()) {
-            player.getBWTeam().breakBedWithBlock(true);
-        }
+        if(this.getState() == HyriGameState.PLAYING) {
+            if(player.getBWTeam().hasBed() && player.getBWTeam().getOnlinePlayers().isEmpty()) {
+                player.getBWTeam().breakBedWithBlock(true);
+            }
 
-        this.updateScoreboards();
-        this.checkWin();
+            this.updateScoreboards();
+            this.checkWin();
+        }
     }
 
     @Override
@@ -417,7 +419,11 @@ public class BWGame extends HyriGame<BWGamePlayer> {
 
     public void updateScoreboards() {
         for (BWGamePlayer onlinePlayer : this.getOnlinePlayers()) {
-            onlinePlayer.getScoreboard().update();
+            BWPlayerScoreboard scoreboard = onlinePlayer.getScoreboard();
+
+            if(scoreboard != null) {
+                scoreboard.update();
+            }
         }
     }
 }
