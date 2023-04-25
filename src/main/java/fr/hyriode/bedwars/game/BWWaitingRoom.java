@@ -32,7 +32,6 @@ public class BWWaitingRoom extends HyriWaitingRoom {
         this.addLeaderboard(new Leaderboard(HyriBedWars.ID, "victories", player -> HyriLanguageMessage.get("leaderboard.victories.display").getValue(player)));
         this.addLeaderboard(new Leaderboard(HyriBedWars.ID, "beds-destroyed", player -> HyriLanguageMessage.get("leaderboard.beds-destroyed.display").getValue(player)));
 
-
         int i = 0;
         for (BWGameType gameType : BWGameType.values()) {
             this.addStatistics(21 + i++, gameType);

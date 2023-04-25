@@ -69,7 +69,7 @@ public class HyriBedWars extends JavaPlugin {
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration::getPoseidonTrio;
 //            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
-//            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
+//            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("699d8736-b9cb-36af-b6c4-67f551956e2a"/*"b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
         } else {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
