@@ -24,20 +24,21 @@ public class BedListener extends HyriListener<HyriBedWars> {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBedBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
+        BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
+
+
+        if(player == null || !player.isOnline() || bwPlayer == null) {
+            event.setCancelled(true);
+            return;
+        }
 
         if(event.getBlock().getType() == Material.BED_BLOCK) {
-            if(player == null) {
-                event.setCancelled(true);
-                return;
-            }
-
             if(!this.plugin.getGame().isCanBreakBed()) {
-                player.sendMessage(HyriLanguageMessage.get("game.bed.break.not-allowed").getValue(player));
                 event.setCancelled(true);
+                player.sendMessage(HyriLanguageMessage.get("game.bed.break.not-allowed").getValue(player));
                 return;
             }
 
-            BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
             for (BWGameTeam team : this.plugin.getGame().getBWTeams()) {
                 if (team.getConfig().getBaseArea().isInArea(event.getBlock().getLocation())) {
                     if(bwPlayer.getBWTeam().equals(team)){

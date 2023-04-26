@@ -260,6 +260,7 @@ public class BWGamePlayer extends HyriGamePlayer {
 
     public void giveArmor(){
         Color color = this.getTeam().getColor().getDyeColor().getColor();
+        if(this.player == null || !this.player.isOnline()) return;
         this.player.getInventory().setHelmet(new ItemBuilder(Material.LEATHER_HELMET)
                 .withLeatherArmorColor(color).withEnchant(Enchantment.WATER_WORKER)
                 .unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).build());

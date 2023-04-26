@@ -58,8 +58,8 @@ public class BWGame extends HyriGame<BWGamePlayer> {
         super(plugin.getHyrame(),
                 plugin,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
-                        HyriAPI.get().getGameManager().createGameInfo("bedwars", "BedWars")
-                        : HyriAPI.get().getGameManager().getGameInfo("bedwars"),
+                        HyriAPI.get().getGameManager().createGameInfo(HyriBedWars.ID, HyriBedWars.NAME)
+                        : HyriAPI.get().getGameManager().getGameInfo(HyriBedWars.ID),
                 BWGamePlayer.class,
                 HyriAPI.get().getConfig().isDevEnvironment() ?
                         BWGameType.SOLO
