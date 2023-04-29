@@ -87,13 +87,13 @@ public class ItemListener extends HyriListener<HyriBedWars> {
             itemDropped.remove();
 
             if(MetadataReferences.isMetaItem(MetadataReferences.COMPASS, itemStackDropped)){
-                BWGamePlayer bwPlayer = this.getGamePlayer(player);
-                List<Integer> compass = bwPlayer.getAccount().getSlotByHotbar(HotbarCategory.COMPASS);
-                if(compass.size() > 0) {
-                    slot = compass.get(0);
-                } else {
-                    slot = 17;
-                }
+//                BWGamePlayer bwPlayer = this.getGamePlayer(player);
+//                List<Integer> compass = bwPlayer.getAccount().getSlotByHotbar(HotbarCategory.COMPASS);
+//                if(compass.size() > 0) {
+//                    slot = compass.get(0);
+//                } else {
+                slot = 17;
+//                }
             }
 
             InventoryUtils.giveInSlot(player, slot, itemStackDropped);

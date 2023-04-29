@@ -105,7 +105,7 @@ public enum StandardGenerator {
     }
 
     public List<BWGenerator.Tier> getTiers(BWGameType gameType) {
-        return gameType == BWGameType.SOLO || gameType == BWGameType.DOUBLES ? this.tiersSolo : this.tiersTrio;
+        return gameType == BWGameType.TRIO || gameType == BWGameType.SQUAD ? this.tiersTrio : this.tiersSolo;
     }
 
     public static Integer getSpawnLimit(BWGameType gameType, String generator, int tier, String nameDrop) {
