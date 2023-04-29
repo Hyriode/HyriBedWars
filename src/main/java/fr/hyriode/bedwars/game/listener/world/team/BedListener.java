@@ -26,7 +26,6 @@ public class BedListener extends HyriListener<HyriBedWars> {
         Player player = event.getPlayer();
         BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
 
-
         if(player == null || !player.isOnline() || bwPlayer == null) {
             event.setCancelled(true);
             return;
