@@ -9,6 +9,7 @@ import fr.hyriode.bedwars.host.BWGameValues;
 import fr.hyriode.bedwars.host.BWMapValues;
 import fr.hyriode.bedwars.utils.MetadataReferences;
 import fr.hyriode.bedwars.utils.NBTGetter;
+import fr.hyriode.hyrame.IHyrame;
 import fr.hyriode.hyrame.item.ItemNBT;
 import fr.hyriode.hyrame.listener.HyriListener;
 import fr.hyriode.hyrame.utils.Area;
@@ -16,6 +17,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -114,6 +116,16 @@ public class WorldListener extends HyriListener<HyriBedWars> {
             block.setMetadata(MetadataReferences.PLACEBYPLAYER, new FixedMetadataValue(this.plugin, player.getUniqueId()));
             NBTGetter nbt = new NBTGetter(event.getItemInHand());
             nbt.getNBTMap().forEach((tag, value) -> block.setMetadata(tag, new FixedMetadataValue(this.plugin, value)));
+
+            this.onPlacedTNT(event);
+        }
+    }
+
+    public void onPlacedTNT(BlockPlaceEvent event){
+        Block block = event.getBlock();
+        if(block.getType() == Material.TNT){
+            block.setType(Material.AIR);
+            IHyrame.WORLD.get().spawnEntity(block.getLocation().add(0.5D, 0.5D, 0.5D), EntityType.PRIMED_TNT);
         }
     }
 

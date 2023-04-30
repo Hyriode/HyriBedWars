@@ -24,9 +24,12 @@ public class BedListener extends HyriListener<HyriBedWars> {
     @EventHandler(priority = EventPriority.HIGH)
     public void onBedBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
+        if(player == null || !player.isOnline()) {
+            event.setCancelled(true);
+            return;
+        }
         BWGamePlayer bwPlayer = this.plugin.getGame().getPlayer(player);
-
-        if(player == null || !player.isOnline() || bwPlayer == null) {
+        if(bwPlayer == null) {
             event.setCancelled(true);
             return;
         }
