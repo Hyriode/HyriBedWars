@@ -64,15 +64,18 @@ public class BWGamePlayer extends HyriGamePlayer {
         this.countdowns = new ArrayList<>();
         this.npcSkin = new NPCSkin(new NPCSkin.Skin(PNJ.Type.BLAZE), new NPCSkin.Skin(PNJ.Type.VILLAGER));
 
-        this.account = this.asHyriPlayer().getData().read("bedwars", new BWPlayerData());
 
-        if(this.account == null) {
-            this.account = new BWPlayerData();
-        }
     }
 
     public void handleLogin(HyriBedWars plugin){
         this.plugin = plugin;
+
+        this.account = this.asHyriPlayer().getData().read(HyriBedWars.ID, new BWPlayerData(plugin));
+
+        if(this.account == null) {
+            this.account = new BWPlayerData(plugin);
+        }
+
         this.teamTracker = new TeamTraker(plugin, this);
     }
 
@@ -157,7 +160,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         BWGameTeam team = this.getBWTeam();
 
         team.getUpgradeTeam().getUpgrades().forEach(upgradeLite -> {
-            Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(upgradeLite.getName());
+            Upgrade upgrade = this.plugin.getUpgradeManager().getUpgradeByName(upgradeLite.getName());
 
             if(upgrade.isForPlayer()) {
                 Bukkit.getScheduler().runTaskLater(this.plugin, () -> upgrade.upgrade(this, upgrade.getTier(team.getUpgradeTeam().getTier(upgradeLite.getName())), false), 2L);
@@ -189,7 +192,7 @@ public class BWGamePlayer extends HyriGamePlayer {
             UpgradeTeam upgradeTeam = team.getUpgradeTeam();
 
             if(upgradeTeam.hasUpgrade(UpgradeManager.SHARPNESS)){
-                Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.SHARPNESS);
+                Upgrade upgrade = this.plugin.getUpgradeManager().getUpgradeByName(UpgradeManager.SHARPNESS);
                 upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.SHARPNESS)), false);
             }
             this.getPlayer().updateInventory();
@@ -202,7 +205,7 @@ public class BWGamePlayer extends HyriGamePlayer {
         UpgradeTeam upgradeTeam = team.getUpgradeTeam();
 
         if(upgradeTeam.hasUpgrade(UpgradeManager.PROTECTION)){
-            Upgrade upgrade = HyriBedWars.getUpgradeManager().getUpgradeByName(UpgradeManager.PROTECTION);
+            Upgrade upgrade = this.plugin.getUpgradeManager().getUpgradeByName(UpgradeManager.PROTECTION);
             upgrade.upgrade(this, upgrade.getTier(upgradeTeam.getTier(UpgradeManager.PROTECTION)), false);
         }
     }

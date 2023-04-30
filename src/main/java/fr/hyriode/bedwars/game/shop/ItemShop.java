@@ -76,13 +76,13 @@ public class ItemShop {
         return materialName;
     }
 
-    public ItemStack getItem() {
+    public ItemStack getItem(ShopManager shopManager) {
         if(this.item.build().getType().isBlock()){
             return this.item.build();
         }
         ItemMeta itemMeta = this.item.build().getItemMeta();
 
-        if(this.getMaterialShop().isPermanent()) {
+        if(shopManager.getMaterialByItemShop(false, this).isPermanent()) {
             this.item = item.nbt().setBoolean(MetadataReferences.ISPERMANENT, true).toBuilder();
         }
         ItemStack output = this.item.unbreakable().withItemFlags(ItemFlag.HIDE_UNBREAKABLE).nbt().setString(MetadataReferences.MATERIAL, this.materialName).build();
@@ -91,17 +91,17 @@ public class ItemShop {
     }
 
     @SuppressWarnings("deprecation")
-    public ItemStack getItemColored(HyriGameTeam team){
-        ItemStack itemStack = this.getItem().clone();
+    public ItemStack getItemColored(ShopManager shopManager, HyriGameTeam team){
+        ItemStack itemStack = this.getItem(shopManager).clone();
         itemStack.setDurability(team.getColor().getDyeColor().getWoolData());
         return itemStack;
     }
 
     public ItemStack getItemStack(BWGamePlayer player){
         if(this.isColorable() && player != null) {
-            return this.getItemColored(player.getTeam());
+            return this.getItemColored(player.getPlugin().getShopManager(), player.getTeam());
         }
-        return this.getItem().clone();
+        return this.getItem(player.getPlugin().getShopManager()).clone();
     }
 
     public ItemPrice getPrice() {
@@ -121,7 +121,8 @@ public class ItemShop {
         if(this.item == null || this.item.build().getType() == Material.AIR)
             return null;
         Player player = bwPlayer.getPlayer();
-        MaterialShop material = this.getMaterialShop();
+        ShopManager shopManager = bwPlayer.getPlugin().getShopManager();
+        MaterialShop material = shopManager.getMaterialByItemShop(false, this);
         final long missingPrice = InventoryUtils.getHasPrice(player, this.getPrice(), this.getPriceAmount());
         final boolean canBuy = missingPrice <= 0;
         final Pair<String, HyriLanguageMessage> description = this.getDescription();
@@ -164,14 +165,11 @@ public class ItemShop {
             lore.add(ChatColor.AQUA + "Shift right click to add in quick buy");
         }
 
-        return new ItemBuilder(this.getItemStack(null))
+        return new ItemBuilder(this.getItemStack(bwPlayer))
+                .withData((short) 0)
                 .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + this.getDisplayName().getValue(player))
                 .withLore(lore).withAllItemFlags()
                 .build();
-    }
-
-    private MaterialShop getMaterialShop() {
-        return HyriBedWars.getShopManager().getMaterialByItemShop(true, this);
     }
 
     public boolean hasPrice(Player player) {

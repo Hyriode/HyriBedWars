@@ -14,10 +14,10 @@ import org.bukkit.Material;
 import java.util.List;
 
 public class TrapHostCategory extends BWHostCategory {
-    public TrapHostCategory() {
+    public TrapHostCategory(HyriBedWars plugin) {
         super(BWHostUtils.categoryDisplay("trap", Material.TRIPWIRE_HOOK));
 
-        List<Trap> traps = HyriBedWars.getTrapManager().getTraps();
+        List<Trap> traps = plugin.getTrapManager().getTraps();
 
         this.addOption(slot(2, 3), new BooleanOption(BWHostUtils.optionDisplay("traps-enabled", Material.LEVER), BWTrapValues.TRAP_ENABLED.getDefaultValue()));
 

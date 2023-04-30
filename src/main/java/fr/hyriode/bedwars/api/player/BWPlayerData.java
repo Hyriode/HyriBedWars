@@ -23,8 +23,10 @@ public class BWPlayerData implements IHyriPlayerData {
     private Map<Integer, HotbarCategory> hotBar = new HashMap<>();
     private Map<Integer, String> quickBuy = new HashMap<>();
     private HyriGameStyle gameStyle = HyriGameStyle.HYRIODE;
+    private transient HyriBedWars plugin;
 
-    public BWPlayerData() {
+    public BWPlayerData(HyriBedWars plugin) {
+        this.plugin = plugin;
         this.resetQuickBuy();
         this.resetHotbar();
     }
@@ -36,7 +38,7 @@ public class BWPlayerData implements IHyriPlayerData {
     public Map<Integer, MaterialShop> getQuickBuyShop() {
         Map<Integer, MaterialShop> finalQuickBuy = new HashMap<>();
         this.quickBuy.forEach((slot, name) -> {
-            finalQuickBuy.put(slot, HyriBedWars.getShopManager().getMaterialShopByName(true, name));
+            finalQuickBuy.put(slot, this.plugin.getShopManager().getMaterialShopByName(true, name));
         });
         return finalQuickBuy;
     }

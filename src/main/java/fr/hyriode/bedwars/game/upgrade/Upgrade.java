@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.upgrade;
 
+import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.shop.ItemPrice;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
@@ -114,7 +115,9 @@ public class Upgrade {
 
             if (upgradeTeam.hasUpgrade(this.name)) {
                 UpgradeTeam.Upgrade upgrade = upgradeTeam.getUpgradeByName(this.name);
-                upgrade.addTier();
+                if(upgrade.getTier() + 1 <= player.getPlugin().getUpgradeManager().getUpgradeByName(this.name).getMaxTier()) {
+                    upgrade.addTier();
+                }
                 return;
             }
             upgradeTeam.addUpgrade(this.name);

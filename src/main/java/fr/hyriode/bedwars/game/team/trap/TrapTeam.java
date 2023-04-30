@@ -51,7 +51,7 @@ public class TrapTeam {
 
     public void trap(BWGamePlayer player) {
         if(this.traps.isEmpty()) return;
-        Trap trap = HyriBedWars.getTrapManager().getTrapByName(this.traps.get(0));
+        Trap trap = player.getPlugin().getTrapManager().getTrapByName(this.traps.get(0));
 
         trap.active(player, this.team);
         if(trap.isShowTitle()){

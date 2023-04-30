@@ -40,7 +40,7 @@ public class UpgradeGui extends BWGui {
         this.setHorizontalLine(0, 8, this.getItemDeco());
         this.setHorizontalLine(45, 53, this.getItemDeco());
 
-        List<Upgrade> upgrades = HyriBedWars.getUpgradeManager().getUpgrades().stream().filter(Upgrade::isEnabled).collect(Collectors.toList());
+        List<Upgrade> upgrades = this.plugin.getUpgradeManager().getUpgrades().stream().filter(Upgrade::isEnabled).collect(Collectors.toList());
 
         int i = 0;
         for(int y = 0; y < 2; ++y) {
@@ -81,7 +81,7 @@ public class UpgradeGui extends BWGui {
                 }
             }
         }
-        List<Trap> traps = HyriBedWars.getTrapManager().getTraps().stream().filter(trap -> trap.getEnable().get()).collect(Collectors.toList());
+        List<Trap> traps = this.plugin.getTrapManager().getTraps().stream().filter(trap -> trap.getEnable().get()).collect(Collectors.toList());
         TrapTeam trapTeam = player.getBWTeam().getTrapTeam();
 
         int j = 0;
@@ -123,7 +123,7 @@ public class UpgradeGui extends BWGui {
         }
 
         List<Trap> trapsTeam = trapTeam.getTraps().stream()
-                .map(name -> HyriBedWars.getTrapManager().getTrapByName(name)).collect(Collectors.toList());
+                .map(name -> this.plugin.getTrapManager().getTrapByName(name)).collect(Collectors.toList());
         int k = 0;
         for (int x = 0; x < 3; ++x) {
             if (trapsTeam.size() > k) {

@@ -35,7 +35,7 @@ public class EntityListener extends HyriListener<HyriBedWars> {
 
         if(damager instanceof Player && (entity instanceof Silverfish || entity instanceof Golem)){
             BWGamePlayer player = this.plugin.getGame().getPlayer((Player) damager);
-            EntityLiving entityLiving = HyriBedWars.getEntityManager().getEntityByUUID(entity.getUniqueId());
+            EntityLiving entityLiving = this.plugin.getEntityManager().getEntityByUUID(entity.getUniqueId());
 
             if(entityLiving == null) return;
             if(entityLiving instanceof BedBugEntity) {

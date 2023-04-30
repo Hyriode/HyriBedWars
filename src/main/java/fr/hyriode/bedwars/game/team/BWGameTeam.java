@@ -82,10 +82,10 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public void createGenerator() {
-        BWGenerator.Tier tier = HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.FORGE).getTier(0);
+        BWGenerator.Tier tier = this.plugin.getGeneratorManager().getGeneratorByName(GeneratorManager.FORGE).getTier(0);
         tier.getDrops().forEach(drop -> {
             String name = drop.get().getDropName();
-            this.forgeGenerator.put(name, tier.getGenerators(plugin, this.getConfig().getGeneratorLocation()).get(name));
+            this.forgeGenerator.put(name, tier.getGenerators(this.plugin, this.getConfig().getGeneratorLocation()).get(name));
         });
         this.createForgeGenerator();
     }
@@ -234,7 +234,7 @@ public class BWGameTeam extends HyriGameTeam {
     }
 
     public void upgradeGenerator(int tier) {
-        GeneratorManager gm = HyriBedWars.getGeneratorManager();
+        GeneratorManager gm = this.plugin.getGeneratorManager();
 
         BWGenerator bwGenerator = gm.getGeneratorByName(GeneratorManager.FORGE);
 

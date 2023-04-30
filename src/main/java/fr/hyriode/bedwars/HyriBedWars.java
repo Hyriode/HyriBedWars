@@ -40,11 +40,11 @@ public class HyriBedWars extends JavaPlugin {
     private BWGame game;
     private Supplier<BWConfiguration> configuration;
 
-    private static ShopManager shopManager;
-    private static UpgradeManager upgradeManager;
-    private static EntityManager entityManager;
-    private static TrapManager trapManager;
-    private static GeneratorManager generatorManager;
+    private ShopManager shopManager;
+    private UpgradeManager upgradeManager;
+    private EntityManager entityManager;
+    private TrapManager trapManager;
+    private GeneratorManager generatorManager;
 
     @Override
     public void onEnable() {
@@ -68,8 +68,8 @@ public class HyriBedWars extends JavaPlugin {
         EntityInteractManager.init(this);
         if(HyriAPI.get().getConfig().isDevEnvironment()) {
             this.configuration = TestConfiguration::getPoseidonTrio;
-//            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
-//            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("699d8736-b9cb-36af-b6c4-67f551956e2a"/*"b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
+            Reflection.setField("accessibility", HyriAPI.get().getServer(), HyggServer.Accessibility.HOST);
+            Reflection.setField("hostData", HyriAPI.get().getServer(), new HostData(HostType.PUBLIC, UUID.fromString("86c1c509-3c11-3a3b-ad24-ce883f84c8de"/*"b0bdcb68-a0f2-3bfb-9d4a-c7665fbb2da0"/*"cb1a7fdb-346e-460f-b4a2-2596f7b8468d"*/), "HostCool"));
         } else {
             this.configuration = () -> HyriAPI.get().getServer().getConfig(BWConfiguration.class);
         }
@@ -83,7 +83,7 @@ public class HyriBedWars extends JavaPlugin {
 
         if(HyriAPI.get().getServer().getAccessibility().equals(HyggServer.Accessibility.HOST)) {
             HyrameLoader.getHyrame().getHostController().addCategory(25, new MenuBedWarsHostCategory());
-            HyrameLoader.getHyrame().getHostController().addCategory(34, new MenuShopHostCategory());
+            HyrameLoader.getHyrame().getHostController().addCategory(34, new MenuShopHostCategory(this));
         }
 
         HyriAPI.get().getServer().setState(HyggServer.State.READY);
@@ -111,24 +111,24 @@ public class HyriBedWars extends JavaPlugin {
         return game;
     }
 
-    public static ShopManager getShopManager() {
-        return shopManager;
+    public ShopManager getShopManager() {
+        return this.shopManager;
     }
 
-    public static UpgradeManager getUpgradeManager() {
-        return upgradeManager;
+    public UpgradeManager getUpgradeManager() {
+        return this.upgradeManager;
     }
 
-    public static EntityManager getEntityManager() {
-        return entityManager;
+    public EntityManager getEntityManager() {
+        return this.entityManager;
     }
 
-    public static TrapManager getTrapManager() {
-        return trapManager;
+    public TrapManager getTrapManager() {
+        return this.trapManager;
     }
 
-    public static GeneratorManager getGeneratorManager() {
-        return generatorManager;
+    public GeneratorManager getGeneratorManager() {
+        return this.generatorManager;
     }
 
     public BWConfiguration getConfiguration() {

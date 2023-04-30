@@ -249,7 +249,7 @@ public class BWGame extends HyriGame<BWGamePlayer> {
     }
 
     private void createGenerators(){
-        GeneratorManager gm = HyriBedWars.getGeneratorManager();
+        GeneratorManager gm = this.plugin.getGeneratorManager();
         this.plugin.getConfiguration().getDiamondGeneratorLocations().forEach(loc -> {
             for (HyriGenerator generator : gm.getGeneratorByName(GeneratorManager.DIAMOND).getTier(0)
                     .getGenerators(this.plugin, loc).values()) {

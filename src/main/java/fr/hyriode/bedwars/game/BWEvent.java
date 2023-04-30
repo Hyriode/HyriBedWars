@@ -21,24 +21,24 @@ public enum BWEvent {
 
     DIAMOND_GENERATOR_TIER_II(0, "diamond.II", () -> BWEventValues.EVENT_TIME_DIAMOND_II, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
+                generator -> generator.upgrade(plugin.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(1).getTierGenerator().get(0)));
     }, new ItemBuilder(Material.DIAMOND, 2).build()),
     DIAMOND_GENERATOR_TIER_III(1, "diamond.III", () -> BWEventValues.EVENT_TIME_DIAMOND_III, plugin -> {
         plugin.getGame().getDiamondGenerators().forEach(
-                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
+                generator -> generator.upgrade(plugin.getGeneratorManager().getGeneratorByName(GeneratorManager.DIAMOND)
                         .getTier(2).getTierGenerator().get(0)));
     }, new ItemBuilder(Material.DIAMOND, 3).build()),
     EMERALD_GENERATOR_TIER_II(2, "emerald.II", () -> BWEventValues.EVENT_TIME_EMERALD_II, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
                 generator -> {
-                    generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
+                    generator.upgrade(plugin.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                             .getTier(1).getTierGenerator().get(0));
                 });
     }, new ItemBuilder(Material.EMERALD, 2).build()),
     EMERALD_GENERATOR_TIER_III(3, "emerald.III", () -> BWEventValues.EVENT_TIME_EMERALD_III, plugin -> {
         plugin.getGame().getEmeraldGenerators().forEach(
-                generator -> generator.upgrade(HyriBedWars.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
+                generator -> generator.upgrade(plugin.getGeneratorManager().getGeneratorByName(GeneratorManager.EMERALD)
                         .getTier(2).getTierGenerator().get(0)));
     }, new ItemBuilder(Material.EMERALD, 3).build()),
     BEDS_DESTROY(4, "beds-destroy", () -> BWEventValues.EVENT_TIME_BEDS_DESTROY, plugin -> {

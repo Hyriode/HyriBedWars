@@ -1,6 +1,8 @@
 package fr.hyriode.bedwars.host.category.shop;
 
+import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.shop.ItemShop;
+import fr.hyriode.bedwars.game.shop.ShopManager;
 import fr.hyriode.bedwars.game.shop.material.MaterialShop;
 import fr.hyriode.bedwars.host.category.BWHostCategory;
 import fr.hyriode.bedwars.host.option.BetterIntegerOption;
@@ -10,8 +12,8 @@ import fr.hyriode.hyrame.item.ItemBuilder;
 import org.bukkit.Material;
 
 public class ShopItemHostCategory extends BWHostCategory {
-    public ShopItemHostCategory(MaterialShop materialShop) {
-        super(BWHostUtils.categoryDisplay("shop-category-" + materialShop.getCategory().getId() + "-" + materialShop.getName(), new ItemBuilder(materialShop.getFirstItem().getItem()).withAllItemFlags().build()));
+    public ShopItemHostCategory(ShopManager shopManager, MaterialShop materialShop) {
+        super(BWHostUtils.categoryDisplay("shop-category-" + materialShop.getCategory().getId() + "-" + materialShop.getName(), new ItemBuilder(materialShop.getFirstItem().getItem(shopManager)).withAllItemFlags().build()));
 
         int slotEnable = slot(5, 3);
         if(materialShop.getItems().size() > 1) {
@@ -19,7 +21,7 @@ public class ShopItemHostCategory extends BWHostCategory {
             int i = 5;
             for (int j = 0; j < materialShop.getItems().size(); j++) {
                 ItemShop item = materialShop.getItems().get(j);
-                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-" + j + "-price", item.getItem()), item.getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));
+                this.addOption(slot(i++, 3), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-" + j + "-price", item.getItem(shopManager)), item.getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));
             }
         } else {
             this.addOption(slot(5, 4), new BetterIntegerOption(BWHostUtils.optionDisplay("shop-item-" + materialShop.getName() + "-price", Material.GOLD_INGOT), materialShop.getFirstItem().getPrice().getAmount().get().getDefaultValue(), 0, 1000, 10, null));

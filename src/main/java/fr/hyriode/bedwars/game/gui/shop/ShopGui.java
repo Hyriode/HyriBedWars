@@ -48,11 +48,11 @@ public class ShopGui extends BWGui {
         pattern.initGui();
 
         final Map<Integer, MaterialShop> materials = this.category != ShopCategory.QUICK_BUY
-                ? HyriBedWars.getShopManager().getItemShopByCategoryToMap(true, 0, this.category)
+                ? this.plugin.getShopManager().getItemShopByCategoryToMap(true, 0, this.category)
                 : account.getQuickBuyShop();
 
         if(this.category == ShopCategory.MELEE && account.getGameStyle() == HyriGameStyle.HYRIODE){
-            materials.putAll(HyriBedWars.getShopManager().getItemShopByCategoryToMap(true, materials.size() + 3, ShopCategory.RANGED));
+            materials.putAll(this.plugin.getShopManager().getItemShopByCategoryToMap(true, materials.size() + 3, ShopCategory.RANGED));
         }
 
         int i = 0;
@@ -75,7 +75,7 @@ public class ShopGui extends BWGui {
                             this.refresh();
                             return;
                         }
-                        if(itemShop.getItem().getType() == Material.POTION && !BWShopValues.POTIONS_ENABLE.get()) {
+                        if(itemShop.getItem(player.getPlugin().getShopManager()).getType() == Material.POTION && !BWShopValues.POTIONS_ENABLE.get()) {
                             this.owner.sendMessage(ChatColor.RED + HyriLanguageMessage.get("potion.disabled").getValue(this.owner));
                             SoundUtils.playCantBuy(player.getPlayer());
                             return;

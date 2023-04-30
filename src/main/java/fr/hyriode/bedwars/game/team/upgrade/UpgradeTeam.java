@@ -35,10 +35,6 @@ public class UpgradeTeam {
         return this.getUpgradeByName(name) != null;
     }
 
-    public void addTier(String name){
-        this.getUpgradeByName(name).addTier();
-    }
-
     public Upgrade addUpgrade(String name) {
         Upgrade upgrade = new Upgrade(name, 0);
         this.upgrades.add(upgrade);
@@ -64,9 +60,7 @@ public class UpgradeTeam {
         }
 
         public void addTier(int tier){
-            if(this.tier + tier <= HyriBedWars.getUpgradeManager().getUpgradeByName(this.name).getMaxTier()) {
-                this.tier += tier;
-            }
+            this.tier += tier;
         }
 
         public void addTier(){

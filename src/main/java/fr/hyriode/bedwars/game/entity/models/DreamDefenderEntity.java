@@ -74,7 +74,7 @@ public class DreamDefenderEntity extends EntityIronGolem {
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
         new Despawnable((LivingEntity) customEnt.getBukkitEntity(),
                 plugin, team, BWEntityValues.DREAM_DEFENDER_TIME_ALIVE.get()).startTime();
-        HyriBedWars.getEntityManager().addEntity(customEnt);
+        plugin.getEntityManager().addEntity(customEnt);
     }
 
     public static EntityCustom getEntityCustom() {

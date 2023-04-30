@@ -24,13 +24,13 @@ import org.bukkit.inventory.ItemStack;
 import java.util.List;
 
 public class UpgradeHostCategory extends BWHostCategory {
-    public UpgradeHostCategory() {
+    public UpgradeHostCategory(HyriBedWars plugin) {
         super(BWHostUtils.categoryDisplay("upgrade",
                 ItemBuilder.asHead(() -> "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubm" +
                         "V0L3RleHR1cmUvZjQxZjFlZjQzOWY5MTA2OWE0MzY3OGQyMjdhZDQ1OGQ2NjNlYzA0MzYzYmNlOWM3YzAxOWM1Njc5Z" +
                         "ThjZjAwNCJ9fX0=").build()));
 
-        List<Upgrade> upgrades = HyriBedWars.getUpgradeManager().getUpgrades();
+        List<Upgrade> upgrades = plugin.getUpgradeManager().getUpgrades();
 
         this.addOption(slot(2, 3), new BooleanOption(BWHostUtils.optionDisplay("upgrades-enabled", Material.LEVER), BWUpgradeValues.UPGRADE_ENABLED.getDefaultValue()));
         this.addOption(slot(2, 4), new PercentageOption(BWHostUtils.optionDisplay("upgrades-price", Material.GOLD_INGOT), BWUpgradeValues.UPGRADE_PRICE.getDefaultValue(), 50, 1000, 50));

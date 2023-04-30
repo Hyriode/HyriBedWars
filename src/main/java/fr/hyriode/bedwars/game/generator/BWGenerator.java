@@ -49,7 +49,7 @@ public class BWGenerator {
 
         private final int tier;
         private final String name;
-        private final Supplier<BWGenerator> generator;
+        private final Function<HyriBedWars, BWGenerator> generator;
         private final List<Supplier<Drop>> drops = new ArrayList<>();
 
         @SafeVarargs
@@ -61,7 +61,7 @@ public class BWGenerator {
             this.tier = tier;
             this.name = name;
             this.drops.addAll(drops);
-            this.generator = () -> HyriBedWars.getGeneratorManager().getGeneratorByName(this.name);
+            this.generator = (plugin) -> plugin.getGeneratorManager().getGeneratorByName(this.name);
         }
 
         public int getTier() {
@@ -90,7 +90,7 @@ public class BWGenerator {
 
         public Map<String, HyriGenerator> getGenerators(HyriBedWars plugin, Location loc) {
             Map<String, HyriGenerator> generators = new HashMap<>();
-            BWGenerator originGenerator = this.generator.get();
+            BWGenerator originGenerator = this.generator.apply(plugin);
             int amount = this.getName().equals(StandardGenerator.DIAMOND.name().toLowerCase())
                     ? BWGameValues.DIAMOND_GENERATOR_RATE.get()
                     : this.getName().equals(StandardGenerator.EMERALD.name().toLowerCase())
@@ -118,7 +118,7 @@ public class BWGenerator {
             return "Tier{" +
                     "tier=" + tier +
                     ", name='" + name + '\'' +
-                    ", generator=" + generator.get() +
+                    ", generator=" + generator +
                     ", drops=" + drops +
                     '}';
         }

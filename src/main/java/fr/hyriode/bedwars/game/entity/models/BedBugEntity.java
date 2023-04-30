@@ -72,7 +72,7 @@ public class BedBugEntity extends EntitySilverfish {
         mcWorld.addEntity(customEnt, CreatureSpawnEvent.SpawnReason.CUSTOM);
 
         new Despawnable((LivingEntity) customEnt.getBukkitEntity(), plugin, team, BWEntityValues.BED_BUG_TIME_ALIVE.get()).startTime();
-        HyriBedWars.getEntityManager().addEntity(customEnt);
+        plugin.getEntityManager().addEntity(customEnt);
     }
 
     public static EntityCustom getEntityCustom() {

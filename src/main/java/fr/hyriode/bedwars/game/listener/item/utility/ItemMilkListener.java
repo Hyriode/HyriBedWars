@@ -19,7 +19,7 @@ public class ItemMilkListener extends HyriListener<HyriBedWars> {
         BWGamePlayer player = this.plugin.getGame().getPlayer(event.getPlayer());
         ItemStack itemStack = event.getItem();
 
-        if(itemStack.isSimilar(HyriBedWars.getShopManager().getItemShopByName(true, "magic-milk").getItem())){
+        if(itemStack.isSimilar(this.plugin.getShopManager().getItemShopByName(true, "magic-milk").getItem(this.plugin.getShopManager()))){
             player.addCountdown(BWGamePlayer.TRAP_COUNTDOWN, 30*20, "trap.timer.magic-milk");
         }
     }
