@@ -296,8 +296,15 @@ public class InventoryUtils {
         return amount >= money;
     }
 
-    public static List<ItemPrice> getMoney(PlayerInventory inventory) {
+    public static List<ItemPrice> getMoney(Player player) {
         List<ItemPrice> money = new ArrayList<>();
+
+        PlayerInventory inventory = player.getInventory();
+        ItemStack itemOnCursor = player.getItemOnCursor();
+
+        if(itemOnCursor != null && ItemMoney.contains(itemOnCursor)) {
+            money.add(new ItemPrice(ItemMoney.asMoney(itemOnCursor), itemOnCursor.getAmount()));
+        }
 
         for (int slot = 0; slot < inventory.getSize(); slot++) {
             ItemStack itemStack = inventory.getItem(slot);

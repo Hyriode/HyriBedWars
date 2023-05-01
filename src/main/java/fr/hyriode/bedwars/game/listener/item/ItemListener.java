@@ -87,13 +87,7 @@ public class ItemListener extends HyriListener<HyriBedWars> {
             itemDropped.remove();
 
             if(MetadataReferences.isMetaItem(MetadataReferences.COMPASS, itemStackDropped)){
-//                BWGamePlayer bwPlayer = this.getGamePlayer(player);
-//                List<Integer> compass = bwPlayer.getAccount().getSlotByHotbar(HotbarCategory.COMPASS);
-//                if(compass.size() > 0) {
-//                    slot = compass.get(0);
-//                } else {
                 slot = 17;
-//                }
             }
 
             InventoryUtils.giveInSlot(player, slot, itemStackDropped);
@@ -104,18 +98,21 @@ public class ItemListener extends HyriListener<HyriBedWars> {
             this.getGamePlayer(player).giveSword();
         }
 
-        if(ItemMoney.contains(itemStackDropped)) {
-            Location loc = player.getLocation();
-            Cuboid cuboid = new Cuboid(loc.clone().subtract(1, 2, 1), loc.clone().add(1, 1, 1));
-
-            for (Block block : cuboid) {
-                if (block.getType() != Material.AIR) {
-                    return;
-                }
-            }
-
+        if(ItemMoney.contains(itemStackDropped) && this.inVoid(player)) {
             event.setCancelled(true);
         }
+    }
+
+    private boolean inVoid(Player player) {
+        Location loc = player.getLocation();
+        Cuboid cuboid = new Cuboid(loc.clone().subtract(1, 2, 1), loc.clone().add(1, 1, 1));
+
+        for (Block block : cuboid) {
+            if (block.getType() != Material.AIR) {
+                return false;
+            }
+        }
+        return true;
     }
 
     @EventHandler
