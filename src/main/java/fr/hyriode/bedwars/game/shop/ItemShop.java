@@ -160,13 +160,12 @@ public class ItemShop {
         }
 
         if(quickbuy) {
-            lore.add(ChatColor.AQUA + "Shift right click to remove from quick buy");
+            lore.add(ChatColor.AQUA + "Shift right click to remove from quick buy");//TODO unhardcoder
         } else {
             lore.add(ChatColor.AQUA + "Shift right click to add in quick buy");
         }
 
         return new ItemBuilder(this.getItemStack(bwPlayer))
-                .withData((short) 0)
                 .withName(StringUtils.getTitleBuy(maxed || unlocked, canBuy) + this.getDisplayName().getValue(player))
                 .withLore(lore).withAllItemFlags()
                 .build();

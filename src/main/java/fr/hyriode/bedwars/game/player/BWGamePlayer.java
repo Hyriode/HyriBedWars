@@ -37,9 +37,10 @@ import java.util.List;
 
 public class BWGamePlayer extends HyriGamePlayer {
 
-    public static final String RESPAWN_COUNTDOWN = "respawn";
+    public static final String RESPAWN_COUNTDOWN = "respawn"; //anti spawn kill
     public static final String FIREBALL_COUNTDOWN = "fireball";
     public static final String TRAP_COUNTDOWN = "trap";
+    public static final String INVISIBILITY = "invisibility"; //for step particle
 
     private HyriBedWars plugin;
     private BWPlayerScoreboard scoreboard;

@@ -10,6 +10,8 @@ import org.bukkit.Effect;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.potion.PotionEffectType;
 
@@ -30,10 +32,19 @@ public class InvisibilityListener extends HyriListener<HyriBedWars> {
         BWGamePlayer bwPlayer = game.getPlayer(player);
         if(bwPlayer == null || game.getState() != HyriGameState.PLAYING ||
                 (bwPlayer.isSpectator() || bwPlayer.isDead() || !player.hasPotionEffect(PotionEffectType.INVISIBILITY))) return;
-        if(!bwPlayer.hasCountdown("invisibility")) {
-            bwPlayer.addCountdown("invisibility", 10);
+        if(!bwPlayer.hasCountdown(BWGamePlayer.INVISIBILITY)) {
+            bwPlayer.addCountdown(BWGamePlayer.INVISIBILITY, 10);
             IHyrame.WORLD.get().playEffect(player.getLocation().add(0, 0.05, 0), Effect.FOOTSTEP, 2);
         }
+    }
 
+    @EventHandler
+    public void onAttack(EntityDamageByEntityEvent event) {
+        if(!(event.getEntity() instanceof Player) || !(event.getDamager() instanceof Player)) return;
+        Player playerVictim = (Player) event.getEntity();
+
+        if(playerVictim.hasPotionEffect(PotionEffectType.INVISIBILITY)) {
+            playerVictim.removePotionEffect(PotionEffectType.INVISIBILITY);
+        }
     }
 }
