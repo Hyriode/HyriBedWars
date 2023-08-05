@@ -44,7 +44,7 @@ public class BedListener extends HyriListener<HyriBedWars> {
                 if (team.getConfig().getBaseArea().isInArea(event.getBlock().getLocation())) {
                     if(bwPlayer.getBWTeam().equals(team)){
                         event.setCancelled(true);
-                        player.sendMessage(ChatColor.RED + "Vous ne pouvez pas détruire votre lit !");
+                        player.sendMessage(ChatColor.RED + HyriLanguageMessage.get("bed.cant-break.self").getValue(player));
                         break;
                     }
                     event.setCancelled(false);

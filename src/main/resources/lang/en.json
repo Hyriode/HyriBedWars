@@ -23,6 +23,9 @@
   "team.white.display": "White",
   "team.gray.display": "Grey",
 
+  "game.wait": "Wait...",
+  "game.loading": "Loading...",
+
   "leaderboard.experience.display": "&3Experience &8┃ &7Leaderboard",
   "leaderboard.kills.display": "&3Kills &8┃ &7Leaderboard",
   "leaderboard.victories.display": "&3Victories &8┃ &7Leaderboard",
@@ -565,6 +568,9 @@
   "shop.inventory.item.missing": "%s %s missing",
   "shop.inventory.item.unlocked": "UNLOCKED",
   "shop.inventory.item.maxed": "MAXED",
+  "shop.tier": "Tier",
+  "shop.quickbuy.remove": "Shift right click to remove from quick buy",
+  "shop.quickbuy.add": "Shift right click to add in quick buy",
 
   "shop.inventory.item.cost": "Price: ",
   "shop.purchased": "You have purchased %item%",
@@ -585,6 +591,7 @@
   "tracker.already.have.team": "You already have a tracker for a team!",
   "tracker.team.have.bed": "Not all enemy beds are destroyed yet!",
   "tracker.inv.item.name": "Compass",
+  "tracker.team.text": "§bTracker§3§l > §fTarget: %target% §fDistance: §b%distance%m",
 
   "inv.shop.click.view": "Click to view",
 
@@ -753,6 +760,8 @@
   "bed.broken.subtitle.player": "Your bed was broken by %enemy%.",
   "bed.broken.message": "\n§lBED DESTROYED >§7 The %team%'s bed has been broken\n ",
   "bed.broken.message.player": "\n§lBED DESTROYED >§7 The %team%'s bed has been broken by %enemy%\n ",
+  "bed.cant-break.self": "You cannot break your own bed!",
+
   "chest.cant-open.team": "You cannot open the chest until the team is eliminated!",
 
   "generator.diamond": "DIAMOND",
@@ -773,7 +782,9 @@
   "gui.reset": "Reset",
   "gui.reset.lore": "Reset",
 
-  "inventory.shop.quick-buy.choice-slot.title": "Choice Slot",
+  "gui.choice-slot.lore": "Please choose a slot",
+  "gui.choice-slot.title": "Choose your slot",
+  "gui.choice-slot.items.lore": "Click to choose this slot",
 
   "message.game.end.kills": "%position% §7- %player% §7- %kills%",
   "message.game.end.1": "§e1st",

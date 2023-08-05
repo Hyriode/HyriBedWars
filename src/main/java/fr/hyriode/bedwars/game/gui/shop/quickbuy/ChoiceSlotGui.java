@@ -22,7 +22,7 @@ public class ChoiceSlotGui extends BWGui {
     private final MaterialShop materialShop;
 
     public ChoiceSlotGui(Player owner, HyriBedWars plugin, MaterialShop materialShop, BWGui backGui) {
-        super(owner, plugin, HyriLanguageMessage.get("inventory.shop.quick-buy.choice-slot.title"), TypeSize.LINE_6, backGui, false);
+        super(owner, plugin, HyriLanguageMessage.get("gui.choice-slot.title"), TypeSize.LINE_6, backGui, false);
         this.materialShop = materialShop;
         this.initGui();
     }
@@ -43,7 +43,10 @@ public class ChoiceSlotGui extends BWGui {
                     MaterialShop material = quickBuy.get(i);
                     if (material != null) {
                         ItemShop itemShop = material.getItemShopForPlayer(player);
-                        itemStack = itemShop.getItemStack(player);
+                        itemStack = new ItemBuilder(itemShop.getItemStack(player))
+                                .withName(ChatColor.AQUA + itemShop.getDisplayName().getValue(player))
+                                .withLore(ChatColor.YELLOW + HyriLanguageMessage.get("gui.choice-slot.items.lore").getValue(player))
+                                .build();
                     }
                 }
                 int slot = i;
@@ -63,8 +66,8 @@ public class ChoiceSlotGui extends BWGui {
         ItemShop itemShop = this.materialShop.getItemShopForPlayer(player);
 
         return new ItemBuilder(itemShop.getItemStack(player))
-                .withName(ChatColor.RESET + itemShop.getDisplayName().getValue(player.getPlayer()))
-                .withLore(ChatColor.YELLOW + "Veuillez choisir un slot")
+                .withName(ChatColor.RESET + itemShop.getDisplayName().getValue(player))
+                .withLore(ChatColor.YELLOW + HyriLanguageMessage.get("gui.choice-slot.lore").getValue(player))
                 .build();
     }
 

@@ -109,7 +109,7 @@ public class Upgrade {
                     SoundUtils.playBuy(pl);
                     pl.sendMessage(ChatColor.GREEN + HyriLanguageMessage.get("shop.purchased.team").getValue(pl)
                             .replace("%item%", ChatColor.GOLD + this.getDisplayName(pl) + (tier.getDisplayName() != null ? " (" + tier.getDisplayName().getValue(pl) + ")" : ""))
-                            .replace("%player%", pl.getName()));
+                            .replace("%player%", player.getPlayer().getName()));
                 }
             });
 
@@ -145,13 +145,13 @@ public class Upgrade {
         } else {
             this.tiers.forEach(tier -> {
                 boolean hasTier = upgradeTeam.hasUpgrade(this.name) && currentTier.getTier() >= tier.getTier();
-                lore.add((hasTier ? ChatColor.GREEN : ChatColor.GRAY) + "Tier " + (tier.getTier() + 1) + ": " +
+                lore.add((hasTier ? ChatColor.GREEN : ChatColor.GRAY) + HyriLanguageMessage.get("shop.tier").getValue(player) + " " + (tier.getTier() + 1) + ": " +
                         tier.getDisplayName().getValue(player) + ", " + StringUtils.getDisplayPrice(player, tier));
             });
         }
         if(unlocked) {
             lore.add(" ");
-            lore.add(ChatColor.GREEN + "UNLOCKED");
+            lore.add(ChatColor.GREEN + HyriLanguageMessage.get("shop.inventory.item.unlocked").getValue(player));
             itemBuilder.withGlow();
         }
 

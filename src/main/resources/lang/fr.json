@@ -23,6 +23,9 @@
   "team.white.display": "Blanc",
   "team.gray.display": "Gris",
 
+  "game.wait": "Patientez...",
+  "game.loading": "Chargement...",
+
   "leaderboard.experience.display": "&3Expérience &8┃ &7Classement",
   "leaderboard.kills.display": "&3Kills &8┃ &7Classement",
   "leaderboard.victories.display": "&3Victoires &8┃ &7Classement",
@@ -565,6 +568,9 @@
   "shop.inventory.item.missing": "%s %s manquants",
   "shop.inventory.item.unlocked": "DEBLOQUÉ",
   "shop.inventory.item.maxed": "MAXÉ",
+  "shop.tier": "Tier",
+  "shop.quickbuy.remove": "Shift clique droit pour le supprimer de l'achat rapide",
+  "shop.quickbuy.add": "Shift clique droit pour l'ajouter à l'achat rapide",
 
   "shop.inventory.item.cost": "Prix: ",
   "shop.purchased": "Vous avez acheté %item%",
@@ -585,6 +591,7 @@
   "tracker.already.have.team": "Vous possédez déjà un traqueur pour une équipe !",
   "tracker.team.have.bed": "Tous les lits ennemis n'ont pas encore été détruits !",
   "tracker.inv.item.name": "Boussole",
+  "tracker.team.text": "§bTraqueur§3§l > §fCible : %target% §fDistance : §b%distance%m",
 
   "inv.shop.click.view": "Cliquer pour voir",
 
@@ -753,6 +760,8 @@
   "bed.broken.subtitle.player": "Votre lit a été cassé par %enemy%.",
   "bed.broken.message": "\n§lLIT DETRUIT >§7 Le lit des %team% a été cassé\n ",
   "bed.broken.message.player": "\n§lLIT DETRUIT >§7 Le lit des %team% a été cassé par %enemy%\n ",
+  "bed.cant-break.self": "Vous ne pouvez pas détruire votre propre lit !",
+
   "chest.cant-open.team": "Vous ne pouvez pas ouvrir le coffre tant que la team n'est pas éliminée !",
 
   "generator.diamond": "DIAMANT",
@@ -773,7 +782,9 @@
   "gui.reset": "Réinitialiser",
   "gui.reset.lore": "Réinitialiser",
 
-  "inventory.shop.quick-buy.choice-slot.title": "Choisis ton slot",
+  "gui.choice-slot.lore": "Veuillez choisir un slot",
+  "gui.choice-slot.title": "Choisis ton slot",
+  "gui.choice-slot.items.lore": "Cliquez pour choisir ce slot",
 
   "message.game.end.kills": "%position% §7- %player% §7- %kills%",
   "message.game.end.1": "§e1er",

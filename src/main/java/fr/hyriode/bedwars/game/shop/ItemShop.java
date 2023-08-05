@@ -137,7 +137,7 @@ public class ItemShop {
             if(bwPlayer.containsMaterialUpgrade(material)){
                 tier = bwPlayer.getMaterialUpgrade(material).getNextTier();
             }
-            lore.add(ChatColor.GRAY + "Tier: " + ChatColor.AQUA + StringUtils.getLevelLang(tier+ 1));
+            lore.add(ChatColor.GRAY + HyriLanguageMessage.get("shop.tier").getValue(player) + ": " + ChatColor.AQUA + StringUtils.getLevelLang(tier+ 1));
         }
         lore.add(this.getDisplayPrice(player));
         lore.add(" ");
@@ -160,9 +160,9 @@ public class ItemShop {
         }
 
         if(quickbuy) {
-            lore.add(ChatColor.AQUA + "Shift right click to remove from quick buy");//TODO unhardcoder
+            lore.add(ChatColor.AQUA + HyriLanguageMessage.get("shop.quickbuy.remove").getValue(player));
         } else {
-            lore.add(ChatColor.AQUA + "Shift right click to add in quick buy");
+            lore.add(ChatColor.AQUA + HyriLanguageMessage.get("shop.quickbuy.add").getValue(player));
         }
 
         return new ItemBuilder(this.getItemStack(bwPlayer))

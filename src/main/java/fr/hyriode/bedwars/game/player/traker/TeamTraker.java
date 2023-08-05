@@ -1,5 +1,6 @@
 package fr.hyriode.bedwars.game.player.traker;
 
+import fr.hyriode.api.language.HyriLanguageMessage;
 import fr.hyriode.bedwars.HyriBedWars;
 import fr.hyriode.bedwars.game.player.BWGamePlayer;
 import fr.hyriode.bedwars.game.team.BWGameTeam;
@@ -47,7 +48,7 @@ public class TeamTraker {
                 }
 
                 if(lastDistance != null) {
-                    String text = "Tracker : ?m";
+                    String text = HyriLanguageMessage.get("game.wait").getValue(player);
                     BWGameTeam teamTarget = lastDistance.getPlayer().getBWTeam();
                     int distance = lastDistance.getDistance();
                     if (teamTarget != null) {
@@ -56,7 +57,11 @@ public class TeamTraker {
 
                         lastDistance.trackCompass();
 
-                        text = ChatColor.AQUA + "Tracker" + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " > " + ChatColor.WHITE + "Target: " + color + target.getPlayer().getName() + ChatColor.WHITE + " Distance: " + distance + "m";
+                        text = HyriLanguageMessage.get("tracker.team.text").getValue(player)
+                                .replace("%target%", color + target.getPlayer().getName())
+                                .replace("%distance%", distance+"");
+
+                    //ChatColor.AQUA + "Tracker" + ChatColor.DARK_AQUA + "" + ChatColor.BOLD + " > " + ChatColor.WHITE + "Target: " + color + target.getPlayer().getName() + ChatColor.WHITE + " Distance: " + distance + "m";
 
                     }
                     new ActionBar(text).send(player.getPlayer());
